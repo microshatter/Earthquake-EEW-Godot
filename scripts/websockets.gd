@@ -9,13 +9,38 @@ var p2pq = WebSocketPeer.new()
 var news_message_scene = preload("res://scenes/newswindow.tscn")
 
 var fan_attempts = 0
+var fan_url = 0
+var wolfx_pinged = false
 
-func add_notification(message, sec):
+func fan_con_type(full = false):
+	var t
+	if full:
+		t = "[Backup URL]"
+	else:
+		t = "[B]"
+	if fan_url == 1:
+		return t
+	else:
+		return ""
+
+func add_notification(message, sec=5):
 	var msg = news_message_scene.instantiate()
 	msg.clear_text()
 	msg.add_text(message)
 	$"../Flipping-Text-Window/VBoxContainer".add_child(msg)
 	msg.start_different_hidden_timer(sec)
+	
+func send_eew(header, title, desc):
+	$"../EEW-Popup-Window/EEW-Popup".set_header(header)
+	$"../EEW-Popup-Window/EEW-Popup".set_text(title)
+	$"../EEW-Popup-Window/EEW-Popup".set_affected_cities(desc)
+	$"../EEW-Popup-Window".show()
+
+func print_eew(header, title, desc, reportnum):
+	print("=====%s(Report #%s)=====" % [header, reportnum])
+	print(title)
+	print(desc)
+	print("========================")
 
 func connect_wolfx():
 	wolfx.connect_to_url(api_sources.eqUrls.wolfx_ws[0])
@@ -25,9 +50,12 @@ func connect_wolfx():
 func connect_fan():
 	fan_attempts += 1
 	if fan_attempts > 5:
-		pass
-	fan.connect_to_url(api_sources.eqUrls.fan_ws[0])
-	$"../StatContainer/FanStudio".text = "FAN(Connecting)"
+		fan_url += 1
+		if fan_url >= len(api_sources.eqUrls.fan_ws):
+			fan_url = 0
+		print("Switching to " + api_sources.eqUrls.fan_ws[fan_url])
+	fan.connect_to_url(api_sources.eqUrls.fan_ws[fan_url])
+	$"../StatContainer/FanStudio".text = "FAN%s(Connecting)" % fan_con_type()
 	$"../StatContainer/FanStudio".add_theme_color_override("font_color", Color("ffff00"))
 
 func connect_p2pq():
@@ -56,10 +84,73 @@ func poll_wolfx():
 			var message_type = json_message.type
 			if message_type == "heartbeat":
 				print("Heartbeat recieved from wolfx.")
+				wolfx.send_text("ping")
+			elif message_type == "pong":
+				pass
+			elif message_type == "jma_eew":
+				var msg = news_message_scene.instantiate()
+				var title = json_message.Title
+				var location = json_message.Hypocenter
+				var warnarea = json_message.WarnArea
+				var wa_str: Array[String] = []
+				for i in warnarea:
+					wa_str.append(i.Chiiki)
+				var w: String
+				if len(warnarea) > 0:
+					w = "  ".join(wa_str)
+				else:
+					w = "No warn areas"
+				send_eew(title, "%sで地震 強い揺れに警戒" % location, w)
+				print_eew(title, "%sで地震 強い揺れに警戒" % location, w, json_message.Serial)
+			elif message_type == "jma_eqlist":
+				var data = json_message["No1"]
+				var title = data.Title
+				var eqtime = data.time
+				var location = data.location
+				var latitude = data.latitude
+				var longitude = data.longitude
+				var depth = data.depth
+				var magnitude = data.magnitude
+				var tsunami_info = data.info
+				var msg = news_message_scene.instantiate()
+				msg.clear_text()
+				msg.add_text("日本地震%s" % title)
+				msg.add_text("%s\n%sに地震が発生しました。" % [eqtime, location])
+				if len(tsunami_info) > 0:
+					msg.add_text(tsunami_info)
+				msg.add_text("地震発生場所：%s | 緯度：%s | 経度：%s\nマグニチュード%s | 震源の深さ：%s" % [location, latitude, longitude, magnitude, depth])
+				$"../Flipping-Text-Window/VBoxContainer".add_child(msg)
+			elif message_type == "cenc_eew":
+				var shocktime = json_message.OriginTime
+				var location = json_message.HypoCenter
+				var latitude = json_message.Latitude
+				var longitude = json_message.Longitude
+				var magnitude = json_message.Magnitude
+				var depth = json_message.Depth
+				var estint = json_message.MaxIntensity
+				var eew_header = "Wolfx紧急地震速报（中国地震预警网）"
+				var eew_title = "%s发生了地震  请注意强烈摇晃" % location
+				var eew_desc = "M%s | 预估最大烈度：%s | 深度：%s | 纬度: %s | 经度: %s\n发生时间： %s" % [magnitude, estint, depth, latitude, longitude, shocktime]
+				send_eew(eew_header, eew_title, eew_desc)
+				print_eew(eew_header, eew_title, eew_desc, json_message.ReportNum)
+			elif message_type == "cenc_eqlist":
+				var data = json_message["No1"]
+				var shocktime = data.time
+				var location = data.location
+				var latitude = data.latitude
+				var longitude = data.longitude
+				var magnitude = data.magnitude
+				var depth = data.depth
+				var msg = news_message_scene.instantiate()
+				msg.clear_text()
+				msg.add_text("中国地震局地震情报(FAN Studio)\nChina Earthquake Networks Center Earthquake Report\n以下内容将使用中文 The follow content will using Chinese")
+				msg.add_text("%s\n在%s发生了地震" % [shocktime, location])
+				msg.add_text("震源: %s | 纬度: %s | 经度: %s\nM%s | 深度: %s" % [location, latitude, longitude, magnitude, depth])
+				$"../Flipping-Text-Window/VBoxContainer".add_child(msg)
 			else:
 				var msg = news_message_scene.instantiate()
 				msg.clear_text()
-				msg.add_text("Received from Wolfx")
+				msg.add_text("Received from Wolfx\ntype: %s" % message_type)
 				msg.add_text(message)
 				$"../Flipping-Text-Window/VBoxContainer".add_child(msg)
 				print("Received from wolfx: %s" % message) # placeholder for future wolfx websocket message handling
@@ -82,18 +173,20 @@ func poll_fan():
 	fan.poll()
 	var state = fan.get_ready_state()
 	if state == WebSocketPeer.STATE_OPEN:
-		$"../StatContainer/FanStudio".text = "FAN"
+		$"../StatContainer/FanStudio".text = "FAN%s" % fan_con_type()
 		$"../StatContainer/FanStudio".add_theme_color_override("font_color", Color("00ff00"))
+		fan_attempts = 0
 		while fan.get_available_packet_count():
 			var packet = fan.get_packet()
 			var message = packet.get_string_from_utf8()
 			var json_message = JSON.parse_string(message)
 			var message_type = json_message.type
 			if message_type == "heartbeat":
-				print("Heartbeat recieved from FanStudio.")
-				fan.send("ping".to_utf8_buffer())
+				print("Heartbeat recieved from FAN Studio.")
+				fan.send_text("ping")
 			elif message_type == "initial_all":
 				pass # placeholder for more initial info
+				print(message)
 			elif message_type == "query_response":
 				pass # not used
 			elif message_type == "pong":
@@ -109,7 +202,7 @@ func poll_fan():
 					var desc = data.description
 					var msg = news_message_scene.instantiate()
 					msg.clear_text()
-					msg.add_text("中国气象局气象预警\nChina Meteorological Administration Weather Warning")
+					msg.add_text("中国气象局气象预警(FAN Studio)\nChina Meteorological Administration Weather Warning")
 					msg.add_text("在%s\n%s" % [time, title])
 					msg.add_text(desc)
 					$"../Flipping-Text-Window/VBoxContainer".add_child(msg)
@@ -122,7 +215,7 @@ func poll_fan():
 					var depth = data.depth
 					var msg = news_message_scene.instantiate()
 					msg.clear_text()
-					msg.add_text("中国地震局地震速报\nChina Earthquake Networks Center Earthquake Report\n以下内容将使用中文 The follow content will using Chinese")
+					msg.add_text("中国地震局地震情报(FAN Studio)\nChina Earthquake Networks Center Earthquake Report\n以下内容将使用中文 The follow content will using Chinese")
 					msg.add_text("%s\n在%s发生了地震" % [shocktime, location])
 					msg.add_text("震源: %s | 纬度: %s | 经度: %s\nM%s | 深度: %s" % [location, latitude, longitude, magnitude, depth])
 					$"../Flipping-Text-Window/VBoxContainer".add_child(msg)
@@ -134,38 +227,43 @@ func poll_fan():
 					var magnitude = data.magnitude
 					var depth = data.depth
 					var estint = data.epiIntensity
-					$"../EEW-Popup-Window/EEW-Popup".set_header("紧急地震速报（中国地震预警网）")
-					$"../EEW-Popup-Window/EEW-Popup".set_text("%s发生了地震  请注意强烈摇晃" % location)
-					# Below is not cities affected, but some information
-					$"../EEW-Popup-Window/EEW-Popup".set_affected_cities("M%s | 预估最大烈度：%s | 深度：%s | 纬度: %s | 经度: %s\n发生时间： %s" % [magnitude, estint, depth, latitude, longitude, shocktime])
-					$"../EEW-Popup-Window".show()
+					var eew_header = "紧急地震速报（中国地震预警网）"
+					var eew_title = "%s发生了地震  请注意强烈摇晃" % location
+					var eew_desc = "M%s | 预估最大烈度：%s | 深度：%s | 纬度: %s | 经度: %s\n发生时间： %s" % [magnitude, estint, depth, latitude, longitude, shocktime]
+					send_eew(eew_header, eew_title, eew_desc)
 				elif data_source == "cwa-eew":
 					var location = data.placeName
 					var affected = PackedStringArray(data.locationDesc)
-					$"../EEW-Popup-Window/EEW-Popup".set_header("紧急地震速报（台湾省气象署）")
-					$"../EEW-Popup-Window/EEW-Popup".set_text("%s发生了地震  请注意强烈摇晃" % location)
-					$"../EEW-Popup-Window/EEW-Popup".set_affected_cities(affected.join("  "))
-					$"../EEW-Popup-Window".show()
+					var eew_header = "紧急地震速报（台湾省气象署）"
+					var eew_title = "%s发生了地震  请注意强烈摇晃" % location
+					var eew_desc = affected.join("  ")
+					send_eew(eew_header, eew_title, eew_desc)
 				else:
 					var msg = news_message_scene.instantiate()
 					msg.clear_text()
-					msg.add_text("Received from FanStudio\nSource: %s" % data_source)
-					msg.add_text(message)
+					msg.add_text("Received from FAN Studio\nSource: %s" % data_source)
+					msg.add_text(JSON.stringify(data))
 					$"../Flipping-Text-Window/VBoxContainer".add_child(msg)
-					print("Received from fan: %s" % message) # placeholder for future fanstudio websocket message handling
+					print("Received from %s(FAN Studio): %s" % [data_source, JSON.stringify(data)]) 
+					
 			else:
-				add_notification("Received from FanStudio\n%s" % message, 30)
+				add_notification("Received from FAN Studio\n%s" % message, 30)
 				print("Received from fan: %s" % message) 
 	elif state == WebSocketPeer.STATE_CLOSING:
-		add_notification("FanStudio connection is closing!", 10)
+		add_notification("FAN Studio connection is closing!", 10)
 	elif state == WebSocketPeer.STATE_CLOSED:
-		$"../StatContainer/FanStudio".text = "FAN(Disconnected)"
+		$"../StatContainer/FanStudio".text = "FAN%s(Disconnected)" % fan_con_type()
 		$"../StatContainer/FanStudio".add_theme_color_override("font_color", Color("ff0000"))
 		var code = fan.get_close_code()
 		var reason = fan.get_close_reason()
-		print("FanStudio WebSocket closed with code: %d, reason %s. Clean: %s" % [code, reason, code != -1])
-		add_notification("Connect to FanStudio Lost\n" + ("FanStudio WebSocket closed with code: %d, reason: %s. Clean: %s" % [code, reason, code != -1]) + "\nReconnect in 5s", 5)
-		$"../Reconnect Timer/FanStudio".start()
+		print("FAN Studio WebSocket closed with code: %d, reason %s. Clean: %s" % [code, reason, code != -1])
+		if code == 1008:
+			add_notification("Max IP connection reached for FAN Studio%s.\nWait for a minute to try again" % fan_con_type(true), 60)
+			fan_attempts -= 1
+			$"../Reconnect Timer/FanStudio".start(60)
+		else:
+			add_notification(("Connect to FAN Studio%s Lost\n" % fan_con_type(true)) + ("FAN Studio WebSocket closed with code: %d, reason: %s. Clean: %s" % [code, reason, code != -1]) + "\nReconnect in 5s", 5)
+			$"../Reconnect Timer/FanStudio".start()
 
 func poll_p2pq():
 	if $"../Reconnect Timer/P2P".time_left > 0: # Don't pull if connection lost
@@ -178,11 +276,11 @@ func poll_p2pq():
 		while p2pq.get_available_packet_count():
 			var packet = p2pq.get_packet()
 			var message = packet.get_string_from_utf8()
-			#var msg = news_message_scene.instantiate()
-			#msg.clear_text()
-			#msg.add_text("Received from P2PQuake")
-			#msg.add_text(message)
-			#$"../Flipping-Text-Window/VBoxContainer".add_child(msg)
+			var msg = news_message_scene.instantiate()
+			msg.clear_text()
+			msg.add_text("Received from P2PQuake")
+			msg.add_text(message)
+			$"../Flipping-Text-Window/VBoxContainer".add_child(msg)
 			print("Received from p2pquake: %s" % message) # placeholder for future p2pquake websocket message handling
 	elif state == WebSocketPeer.STATE_CLOSING:
 		add_notification("P2PQuake connection is closing!", 10)
