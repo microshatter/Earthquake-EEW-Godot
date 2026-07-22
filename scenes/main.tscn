@@ -1,0 +1,138 @@
+[gd_scene format=3 uid="uid://mhteu7l8jc"]
+
+[ext_resource type="Script" uid="uid://xw65t8841emu" path="res://scripts/main.gd" id="1_0wfyh"]
+[ext_resource type="Script" uid="uid://dqd6cq5eek0i4" path="res://scripts/api_sources.gd" id="1_o5qli"]
+[ext_resource type="PackedScene" uid="uid://bhl7wlfwwwfbm" path="res://scenes/eew_popup.tscn" id="2_sugp2"]
+[ext_resource type="PackedScene" uid="uid://cweo8dp4fg2xk" path="res://scenes/options.tscn" id="3_jyhfs"]
+[ext_resource type="Script" uid="uid://bhf6jwajolacb" path="res://scripts/websockets.gd" id="3_tbgi4"]
+[ext_resource type="Script" uid="uid://c7hpjx3qidthv" path="res://scripts/eew_popup_window.gd" id="4_85g3d"]
+[ext_resource type="Script" uid="uid://cjo67pptx1wdv" path="res://scripts/flipping_text_window.gd" id="5_tefeu"]
+[ext_resource type="AudioStream" uid="uid://baau6vabl42nr" path="res://assets/audio/misc/Untitled.mp3" id="6_85g3d"]
+[ext_resource type="AudioStream" uid="uid://hrhehhs4q4vu" path="res://assets/audio/misc/nhk eew.mp3" id="6_choun"]
+
+[node name="Main" type="Node" unique_id=1409934259]
+script = ExtResource("1_0wfyh")
+
+[node name="API-sources" type="Node" parent="." unique_id=1979285615]
+script = ExtResource("1_o5qli")
+
+[node name="Websockets" type="Node" parent="." unique_id=1498491870]
+script = ExtResource("3_tbgi4")
+
+[node name="Reconnect Timer" type="Node" parent="." unique_id=2111712214]
+
+[node name="Wolfx" type="Timer" parent="Reconnect Timer" unique_id=1569185851]
+wait_time = 5.0
+one_shot = true
+
+[node name="FanStudio" type="Timer" parent="Reconnect Timer" unique_id=162330161]
+wait_time = 5.0
+one_shot = true
+
+[node name="P2P" type="Timer" parent="Reconnect Timer" unique_id=1465826629]
+wait_time = 5.0
+one_shot = true
+
+[node name="EEW-Popup-Window" type="Window" parent="." unique_id=2040913522]
+transparent_bg = true
+oversampling_override = 1.0
+size = Vector2i(800, 300)
+visible = false
+borderless = true
+always_on_top = true
+transparent = true
+script = ExtResource("4_85g3d")
+
+[node name="EEW-Popup" parent="EEW-Popup-Window" unique_id=1677442648 instance=ExtResource("2_sugp2")]
+
+[node name="eew" type="AudioStreamPlayer" parent="EEW-Popup-Window" unique_id=12138998]
+stream = ExtResource("6_choun")
+
+[node name="shakealert" type="AudioStreamPlayer" parent="EEW-Popup-Window" unique_id=2061236957]
+stream = ExtResource("6_85g3d")
+
+[node name="hidetimer" type="Timer" parent="EEW-Popup-Window" unique_id=556104475]
+wait_time = 180.0
+one_shot = true
+
+[node name="Flipping-Text-Window" type="Window" parent="." unique_id=402798098]
+transparent_bg = true
+oversampling_override = 1.0
+visible = false
+borderless = true
+always_on_top = true
+transparent = true
+script = ExtResource("5_tefeu")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Flipping-Text-Window" unique_id=602997996]
+offset_right = 40.0
+offset_bottom = 40.0
+theme_override_constants/separation = 0
+
+[node name="Options" type="Window" parent="." unique_id=1621207996]
+oversampling_override = 1.0
+title = "Config Menu"
+size = Vector2i(640, 480)
+visible = false
+
+[node name="Options" parent="Options" unique_id=113722268 instance=ExtResource("3_jyhfs")]
+
+[node name="Label" type="Label" parent="." unique_id=1763767071]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -557.0
+offset_top = -43.0
+offset_right = 557.0
+offset_bottom = 43.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_font_sizes/font_size = 56
+text = "You can hide this window now!
+你现在可以隐藏此窗口了！
+このウィンドウを非表示にできます！"
+horizontal_alignment = 1
+
+[node name="StatContainer" type="HBoxContainer" parent="." unique_id=421206161]
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -20.0
+offset_top = -40.0
+offset_right = 20.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_constants/separation = 16
+
+[node name="Label" type="Label" parent="StatContainer" unique_id=1408072562]
+layout_mode = 2
+theme_override_font_sizes/font_size = 32
+text = "STATUS >>"
+
+[node name="Wolfx" type="Label" parent="StatContainer" unique_id=252531457]
+layout_mode = 2
+theme_override_font_sizes/font_size = 32
+text = "Wolfx(disabled)"
+
+[node name="FanStudio" type="Label" parent="StatContainer" unique_id=1343439604]
+layout_mode = 2
+theme_override_font_sizes/font_size = 32
+text = "FAN(Disabled)"
+
+[node name="P2P" type="Label" parent="StatContainer" unique_id=182336624]
+layout_mode = 2
+theme_override_font_sizes/font_size = 32
+text = "P2P(Disabled)"
+
+[connection signal="timeout" from="Reconnect Timer/Wolfx" to="Websockets" method="_on_wolfx_timeout"]
+[connection signal="timeout" from="Reconnect Timer/FanStudio" to="Websockets" method="_on_fan_studio_timeout"]
+[connection signal="timeout" from="Reconnect Timer/P2P" to="Websockets" method="_on_p2p_timeout"]
+[connection signal="visibility_changed" from="EEW-Popup-Window" to="EEW-Popup-Window" method="_on_visibility_changed"]
+[connection signal="text_changed" from="EEW-Popup-Window/EEW-Popup" to="EEW-Popup-Window" method="_on_eew_popup_text_changed"]
+[connection signal="timeout" from="EEW-Popup-Window/hidetimer" to="EEW-Popup-Window" method="_on_hidetimer_timeout"]
+[connection signal="close_requested" from="Flipping-Text-Window" to="Flipping-Text-Window" method="_on_close_requested"]
+[connection signal="close_requested" from="Options" to="Options/Options" method="_on_options_close_requested"]

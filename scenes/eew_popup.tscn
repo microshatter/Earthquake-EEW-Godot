@@ -1,0 +1,66 @@
+[gd_scene format=3 uid="uid://bhl7wlfwwwfbm"]
+
+[ext_resource type="Script" uid="uid://c66f274dxi8o1" path="res://scripts/eew_popup.gd" id="1_3cp8q"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_fjcr2"]
+bg_color = Color(0.6, 0.6, 0.6, 0)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_bawds"]
+bg_color = Color(1, 0, 0, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_frbco"]
+bg_color = Color(0, 0.4627451, 1, 1)
+
+[node name="EEW-Popup" type="PanelContainer" unique_id=667266164]
+offset_right = 800.0
+offset_bottom = 300.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_fjcr2")
+script = ExtResource("1_3cp8q")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="." unique_id=218197810]
+layout_mode = 2
+theme_override_constants/separation = 0
+
+[node name="Title" type="PanelContainer" parent="VBoxContainer" unique_id=799668492]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_styles/panel = SubResource("StyleBoxFlat_bawds")
+
+[node name="Label" type="Label" parent="VBoxContainer/Title" unique_id=4818480]
+layout_mode = 2
+theme_override_font_sizes/font_size = 32
+text = "EARTHQUAKE EARLY WARNING"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="BodyContent" type="PanelContainer" parent="VBoxContainer" unique_id=233110541]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_styles/panel = SubResource("StyleBoxFlat_frbco")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer/BodyContent" unique_id=1540600322]
+custom_minimum_size = Vector2(0, 250)
+layout_mode = 2
+theme_override_constants/separation = 0
+
+[node name="Label" type="Label" parent="VBoxContainer/BodyContent/VBoxContainer" unique_id=73905269]
+custom_minimum_size = Vector2(800, 50)
+custom_maximum_size = Vector2(800, -1)
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 0, 1)
+theme_override_font_sizes/font_size = 24
+text = "南寧で地震 強い揺れに警戒"
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 3
+
+[node name="RichTextLabel" type="RichTextLabel" parent="VBoxContainer/BodyContent/VBoxContainer" unique_id=1016756316]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_font_sizes/normal_font_size = 28
+theme_override_font_sizes/bold_font_size = 28
+theme_override_font_sizes/bold_italics_font_size = 28
+theme_override_font_sizes/italics_font_size = 28
+theme_override_font_sizes/mono_font_size = 28
+text = "Enter affected city here"
+scroll_active = false

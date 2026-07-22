@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://hrhehhs4q4vu"
+path="res://.godot/imported/nhk eew.mp3-77b968a65b4d37f0b06957c3e5c5ac2b.mp3str"
+
+[deps]
+
+source_file="res://assets/audio/misc/nhk eew.mp3"
+dest_files=["res://.godot/imported/nhk eew.mp3-77b968a65b4d37f0b06957c3e5c5ac2b.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

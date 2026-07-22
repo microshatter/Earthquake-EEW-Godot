@@ -1,0 +1,49 @@
+[gd_scene format=3 uid="uid://bm7xc8ecymns2"]
+
+[ext_resource type="Script" uid="uid://x3m7qpc8ytd3" path="res://scripts/newswindow.gd" id="1_738my"]
+[ext_resource type="AudioStream" uid="uid://c7m31s2kdv8o2" path="res://assets/audio/srev/prompt.mp3" id="2_dgl3u"]
+
+[node name="newswindow" type="Control" unique_id=1445901088]
+custom_minimum_size = Vector2(0, 150)
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_bottom = -548.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_738my")
+
+[node name="ColorRect" type="ColorRect" parent="." unique_id=1482437262]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+color = Color(0, 0, 0, 0.627451)
+
+[node name="Label" type="Label" parent="." unique_id=192862653]
+custom_minimum_size = Vector2(1152, 0)
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -576.0
+offset_right = 576.0
+offset_bottom = 43.0
+grow_horizontal = 2
+theme_override_font_sizes/font_size = 32
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 3
+
+[node name="CycleTimer" type="Timer" parent="." unique_id=887025274]
+wait_time = 5.0
+
+[node name="HiddenTimer" type="Timer" parent="." unique_id=1823038655]
+wait_time = 300.0
+one_shot = true
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="." unique_id=1905250452]
+stream = ExtResource("2_dgl3u")
+
+[connection signal="timeout" from="CycleTimer" to="." method="_on_cycle_timer_timeout"]
+[connection signal="timeout" from="HiddenTimer" to="." method="_on_hidden_timer_timeout"]
