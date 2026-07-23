@@ -24,6 +24,7 @@ layout_mode = 2
 text = "Latitude"
 
 [node name="LatitudeSpinBox" type="SpinBox" parent="VBoxContainer/Settings/GeoLocation" unique_id=2092512546]
+custom_minimum_size = Vector2(100, 0)
 layout_mode = 2
 min_value = -90.0
 max_value = 90.0
@@ -34,6 +35,7 @@ layout_mode = 2
 text = "Longitude"
 
 [node name="LongitudeSpinBox" type="SpinBox" parent="VBoxContainer/Settings/GeoLocation" unique_id=221531876]
+custom_minimum_size = Vector2(100, 0)
 layout_mode = 2
 min_value = -180.0
 max_value = 180.0
@@ -62,6 +64,19 @@ text = "Min Intensity"
 layout_mode = 2
 value = 5.0
 
+[node name="FanApi" type="HBoxContainer" parent="VBoxContainer/Settings" unique_id=35183253]
+layout_mode = 2
+alignment = 1
+
+[node name="Label" type="Label" parent="VBoxContainer/Settings/FanApi" unique_id=62292584]
+layout_mode = 2
+text = "FAN Studio API Key"
+
+[node name="LineEdit" type="LineEdit" parent="VBoxContainer/Settings/FanApi" unique_id=415794163]
+custom_minimum_size = Vector2(400, 0)
+layout_mode = 2
+placeholder_text = "Enter API key here..."
+
 [node name="Actions" type="HBoxContainer" parent="VBoxContainer" unique_id=1295576382]
 layout_mode = 2
 theme_override_constants/separation = 30
@@ -85,7 +100,7 @@ text = "Reload"
 
 [node name="QuitButton" type="Button" parent="VBoxContainer/Actions" unique_id=761183445]
 layout_mode = 2
-text = "Quit" 
+text = "Quit"
 
 [node name="HTTPRequest" type="HTTPRequest" parent="." unique_id=217248521]
 
