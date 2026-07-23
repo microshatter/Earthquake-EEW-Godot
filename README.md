@@ -7,7 +7,7 @@ This project is currently made with Godot 4.7, may update engine later
 * FAN Studio: Now only provide 2 endpoint... :(
 
 # Data Source
-> Copied from [https://github.com/Lipomoea/kanameishi/blob/dev/README.md]
+> Copied from [https://github.com/Lipomoea/kanameishi/blob/dev/README.md#数据来源]
 * 地震预警（CEA/SC/FJ/CWA/JMA）、地震信息（CENC）、地震列表（JMA）、IP定位：[Wolfx Open API](https://wolfx.jp/apidoc)（请注意参考接口文档）
 * 地震信息（JMA）、海啸信息（JMA）：[P2PQuake](https://www.p2pquake.net/develop/json_api_v2/#/P2P%E5%9C%B0%E9%9C%87%E6%83%85%E5%A0%B1%20API/get_history)
 * 地震预警（CEA/SC/FJ/CWA/JMA）、地震信息（CENC/CWA/USGS/FSSN）、地震列表（CENC/FSSN）、CENC烈度速报、台风信息、NTP时间：[FAN Studio API](https://api.fanstudio.tech)
