@@ -258,7 +258,7 @@ func poll_fan():
 		var reason = fan.get_close_reason()
 		print("FAN Studio WebSocket closed with code: %d, reason %s. Clean: %s" % [code, reason, code != -1])
 		if code == 1008:
-			add_notification("Max IP connection reached for FAN Studio%s.\nWait for a minute to try again" % fan_con_type(true), 60)
+			add_notification("Max IP connection reached for FAN Studio%s.\nWait for a minute to try again\n%s" % [fan_con_type(true), reason], 60)
 			fan_attempts -= 1
 			$"../Reconnect Timer/FanStudio".start(60)
 		else:
