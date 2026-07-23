@@ -1,5 +1,6 @@
 extends Control
 
+var config_file = "user://config.json"
 @onready var http_request = $HTTPRequest
 
 # Called when the node enters the scene tree for the first time.
