@@ -192,6 +192,10 @@ func poll_fan():
 			elif message_type == "pong":
 				#print("Server received ping")
 				pass
+			elif message_type == "auth_required":
+				#fan.send_text() # No authencation key obtained
+				
+				pass
 			elif message_type == "update":
 				# Fetch from data
 				var data = json_message.Data
