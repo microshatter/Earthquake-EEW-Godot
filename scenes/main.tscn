@@ -74,6 +74,7 @@ oversampling_override = 1.0
 title = "Config Menu"
 size = Vector2i(640, 480)
 visible = false
+unresizable = true
 
 [node name="Options" parent="Options" unique_id=113722268 instance=ExtResource("3_jyhfs")]
 

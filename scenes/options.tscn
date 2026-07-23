@@ -24,7 +24,7 @@ layout_mode = 2
 text = "Latitude"
 
 [node name="LatitudeSpinBox" type="SpinBox" parent="VBoxContainer/Settings/GeoLocation" unique_id=2092512546]
-custom_minimum_size = Vector2(100, 0)
+custom_minimum_size = Vector2(130, 0)
 layout_mode = 2
 min_value = -90.0
 max_value = 90.0
@@ -35,7 +35,7 @@ layout_mode = 2
 text = "Longitude"
 
 [node name="LongitudeSpinBox" type="SpinBox" parent="VBoxContainer/Settings/GeoLocation" unique_id=221531876]
-custom_minimum_size = Vector2(100, 0)
+custom_minimum_size = Vector2(140, 0)
 layout_mode = 2
 min_value = -180.0
 max_value = 180.0
@@ -105,5 +105,8 @@ text = "Quit"
 [node name="HTTPRequest" type="HTTPRequest" parent="." unique_id=217248521]
 
 [connection signal="pressed" from="VBoxContainer/Settings/GeoLocation/LocateButton" to="." method="_on_locate_button_pressed"]
+[connection signal="pressed" from="VBoxContainer/Actions/SaveButton" to="." method="_on_save_button_pressed"]
 [connection signal="pressed" from="VBoxContainer/Actions/SaveOnlyButton" to="." method="_on_save_only_button_pressed"]
+[connection signal="pressed" from="VBoxContainer/Actions/DiscardButton" to="." method="_on_discard_button_pressed"]
+[connection signal="pressed" from="VBoxContainer/Actions/ReloadButton" to="." method="_on_reload_button_pressed"]
 [connection signal="pressed" from="VBoxContainer/Actions/QuitButton" to="." method="_on_quit_button_pressed"]

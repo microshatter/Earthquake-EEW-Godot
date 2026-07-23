@@ -193,8 +193,8 @@ func poll_fan():
 				#print("Server received ping")
 				pass
 			elif message_type == "auth_required":
-				#fan.send_text() # No authencation key obtained
-				
+				if len($"../Options/Options/VBoxContainer/Settings/FanApi/LineEdit".text) > 0:
+					fan.send_text($"../Options/Options/VBoxContainer/Settings/FanApi/LineEdit".text) # No authencation key obtained
 				pass
 			elif message_type == "update":
 				# Fetch from data
