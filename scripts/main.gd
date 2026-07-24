@@ -51,3 +51,8 @@ func _on_indicator_clicked(mouse_button: int, _mouse_position: Vector2i):
 func _exit_tree() -> void:
 	if indicator_id != -1:
 		DisplayServer.delete_status_indicator(indicator_id)
+
+
+func _on_button_pressed() -> void:
+	$Options.visible = not $Options.visible
+	$Options.move_to_center()
