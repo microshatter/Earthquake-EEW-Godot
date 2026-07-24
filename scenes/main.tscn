@@ -20,11 +20,11 @@ script = ExtResource("1_o5qli")
 script = ExtResource("3_tbgi4")
 
 [node name="Wolfx-Ping" type="Timer" parent="Websockets" unique_id=687242202]
-wait_time = 15.0
+wait_time = 20.0
 autostart = true
 
 [node name="FanStudio-Ping" type="Timer" parent="Websockets" unique_id=272677208]
-wait_time = 15.0
+wait_time = 20.0
 autostart = true
 
 [node name="Reconnect Timer" type="Node" parent="." unique_id=2111712214]
