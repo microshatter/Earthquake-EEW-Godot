@@ -165,6 +165,8 @@ func poll_wolfx():
 	elif state == WebSocketPeer.STATE_CLOSING:
 		add_notification("Wolfx connection is closing!", 10)
 	elif state == WebSocketPeer.STATE_CLOSED:
+		if $"Wolfx-Ping".time_left > 0:
+			$"Wolfx-Ping".stop()
 		$"../StatContainer/Wolfx".text = 'Wolfx(Disconnected)'
 		$"../StatContainer/Wolfx".add_theme_color_override("font_color", Color("ff0000"))
 		var code = wolfx.get_close_code()
@@ -266,6 +268,8 @@ func poll_fan():
 	elif state == WebSocketPeer.STATE_CLOSING:
 		add_notification("FAN Studio connection is closing!", 10)
 	elif state == WebSocketPeer.STATE_CLOSED:
+		if $"FanStudio-Ping".time_left > 0:
+			$"FanStudio-Ping".stop()
 		$"../StatContainer/FanStudio".text = "FAN%s(Disconnected)" % fan_con_type()
 		$"../StatContainer/FanStudio".add_theme_color_override("font_color", Color("ff0000"))
 		var code = fan.get_close_code()
@@ -329,8 +333,8 @@ func _on_p2p_timeout() -> void:
 
 
 func _on_wolfx_ping_timeout() -> void:
-	wolfx.close()
+	wolfx.close(1000, "Connection Time Out")
 
 
 func _on_fan_studio_ping_timeout() -> void:
-	fan.close()
+	fan.close(1000, "Connection Time Out")
