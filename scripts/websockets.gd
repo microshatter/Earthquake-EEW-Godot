@@ -312,6 +312,8 @@ func _process(delta: float) -> void:
 	poll_wolfx()
 	#poll_fan()
 	#poll_p2pq()
+	$"../StatContainer/wolfx-timer".text = "(%d)" % $"Wolfx-Ping".time_left
+	$"../StatContainer/fanstudio-timer".text = "(%d)" % $"FanStudio-Ping".time_left
 
 
 func _on_wolfx_timeout() -> void:
