@@ -31,6 +31,7 @@ func save_settings():
 func _ready() -> void:
 	$VBoxContainer/Settings/GeoLocation/LatitudeSpinBox.step = 0.000001
 	$VBoxContainer/Settings/GeoLocation/LongitudeSpinBox.step = 0.000001
+	load_settings()
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
