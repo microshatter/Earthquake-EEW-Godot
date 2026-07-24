@@ -11,6 +11,10 @@ var news_message_scene = preload("res://scenes/newswindow.tscn")
 var fan_attempts = 0
 var fan_url = 0
 var wolfx_pinged = false
+var pings = {
+	"wolfx": 0,
+	"fan": 0
+}
 
 func fan_con_type(full = false):
 	var t
@@ -46,6 +50,7 @@ func connect_wolfx():
 	wolfx.connect_to_url(api_sources.eqUrls.wolfx_ws[0])
 	$"../StatContainer/Wolfx".text = "Wolfx(Connecting)"
 	$"../StatContainer/Wolfx".add_theme_color_override("font_color", Color("ffff00"))
+	$"Wolfx-Ping".start()
 
 func connect_fan():
 	fan_attempts += 1
@@ -57,6 +62,7 @@ func connect_fan():
 	fan.connect_to_url(api_sources.eqUrls.fan_ws[fan_url])
 	$"../StatContainer/FanStudio".text = "FAN%s(Connecting)" % fan_con_type()
 	$"../StatContainer/FanStudio".add_theme_color_override("font_color", Color("ffff00"))
+	$"FanStudio-Ping".start()
 
 func connect_p2pq():
 	p2pq.connect_to_url(api_sources.eqUrls.p2pquake_ws[0])
@@ -66,7 +72,7 @@ func connect_p2pq():
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	connect_wolfx()
-	connect_fan()
+	#connect_fan()
 	#connect_p2pq()
 
 func poll_wolfx():
@@ -83,10 +89,12 @@ func poll_wolfx():
 			var json_message = JSON.parse_string(message)
 			var message_type = json_message.type
 			if message_type == "heartbeat":
-				print("Heartbeat recieved from wolfx.")
+				print("Heartbeat recieved from wolfx. Reset wolfx ping counter to 0")
+				$"Wolfx-Ping".start()
 				wolfx.send_text("ping")
 			elif message_type == "pong":
-				pass
+				print("Wolfx pong recieved!")
+				$"Wolfx-Ping".start()
 			elif message_type == "jma_eew":
 				var msg = news_message_scene.instantiate()
 				var title = json_message.Title
@@ -99,7 +107,7 @@ func poll_wolfx():
 				if len(warnarea) > 0:
 					w = "  ".join(wa_str)
 				else:
-					w = "No warn areas"
+					w = "警報区域はありません"
 				send_eew(title, "%sで地震 強い揺れに警戒" % location, w)
 				print_eew(title, "%sで地震 強い揺れに警戒" % location, w, json_message.Serial)
 			elif message_type == "jma_eqlist":
@@ -183,14 +191,16 @@ func poll_fan():
 			var message_type = json_message.type
 			if message_type == "heartbeat":
 				print("Heartbeat recieved from FAN Studio.")
-				fan.send_text("ping")
+				$"FanStudio-Ping".start()
+				fan.send_text('ping')
 			elif message_type == "initial_all":
 				pass # placeholder for more initial info
 				print(message)
 			elif message_type == "query_response":
 				pass # not used
 			elif message_type == "pong":
-				#print("Server received ping")
+				print("FAN Studio Server received ping")
+				$"FanStudio-Ping".start()
 				pass
 			elif message_type == "auth_required":
 				if len($"../Options/Options/VBoxContainer/Settings/FanApi/LineEdit".text) > 0:
@@ -300,7 +310,7 @@ func poll_p2pq():
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
 	poll_wolfx()
-	poll_fan()
+	#poll_fan()
 	#poll_p2pq()
 
 
@@ -314,3 +324,11 @@ func _on_fan_studio_timeout() -> void:
 
 func _on_p2p_timeout() -> void:
 	connect_p2pq()
+
+
+func _on_wolfx_ping_timeout() -> void:
+	wolfx.close()
+
+
+func _on_fan_studio_ping_timeout() -> void:
+	fan.close()
