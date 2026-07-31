@@ -26,7 +26,7 @@ func _process(delta: float) -> void:
 		position = Vector2i(0, 0)
 		$VBoxContainer.size = size
 		for i in $VBoxContainer.get_children():
-			if not i.visible:
+			if (not i.visible) or $VBoxContainer.get_child_count() > 5:
 				$VBoxContainer.remove_child(i)
 	else:
 		hide()
