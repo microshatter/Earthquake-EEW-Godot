@@ -65,7 +65,8 @@ func connect_fan():
 	$"FanStudio-Ping".start()
 
 func connect_p2pq():
-	p2pq.connect_to_url(api_sources.eqUrls.p2pquake_ws[0])
+	#p2pq.connect_to_url(api_sources.eqUrls.p2pquake_ws[0])
+	p2pq.connect_to_url("ws://localhost:3000/_ws")
 	$"../StatContainer/P2P".text = "P2P(Connecting)"
 	$"../StatContainer/P2P".add_theme_color_override("font_color", Color("ffff00"))
 
@@ -151,7 +152,7 @@ func poll_wolfx():
 				var depth = data.depth
 				var msg = news_message_scene.instantiate()
 				msg.clear_text()
-				msg.add_text("中国地震局地震情报(FAN Studio)\nChina Earthquake Networks Center Earthquake Report\n以下内容将使用中文 The follow content will using Chinese")
+				msg.add_text("中国地震局地震情报(Wolfx)\nChina Earthquake Networks Center Earthquake Report\n以下内容将使用中文 The follow content will using Chinese")
 				msg.add_text("%s\n在%s发生了地震" % [shocktime, location])
 				msg.add_text("震源: %s | 纬度: %s | 经度: %s\nM%s | 深度: %s" % [location, latitude, longitude, magnitude, depth])
 				$"../Flipping-Text-Window/VBoxContainer".add_child(msg)
@@ -163,7 +164,8 @@ func poll_wolfx():
 				$"../Flipping-Text-Window/VBoxContainer".add_child(msg)
 				print("Received from wolfx: %s" % message) # placeholder for future wolfx websocket message handling
 	elif state == WebSocketPeer.STATE_CLOSING:
-		add_notification("Wolfx connection is closing!", 10)
+		$"../StatContainer/Wolfx".text = 'Wolfx(Closing)'
+		$"../StatContainer/Wolfx".add_theme_color_override("font_color", Color("ff8000"))
 	elif state == WebSocketPeer.STATE_CLOSED:
 		if $"Wolfx-Ping".time_left > 0:
 			$"Wolfx-Ping".stop()
@@ -266,7 +268,8 @@ func poll_fan():
 				add_notification("Received from FAN Studio\n%s" % message, 30)
 				print("Received from fan: %s" % message) 
 	elif state == WebSocketPeer.STATE_CLOSING:
-		add_notification("FAN Studio connection is closing!", 10)
+		$"../StatContainer/FanStudio".text = "FAN%s(Disconnected)" % fan_con_type()
+		$"../StatContainer/FanStudio".add_theme_color_override("font_color", Color("ff8000"))
 	elif state == WebSocketPeer.STATE_CLOSED:
 		if $"FanStudio-Ping".time_left > 0:
 			$"FanStudio-Ping".stop()
@@ -294,11 +297,11 @@ func poll_p2pq():
 		while p2pq.get_available_packet_count():
 			var packet = p2pq.get_packet()
 			var message = packet.get_string_from_utf8()
-			var msg = news_message_scene.instantiate()
-			msg.clear_text()
-			msg.add_text("Received from P2PQuake")
-			msg.add_text(message)
-			$"../Flipping-Text-Window/VBoxContainer".add_child(msg)
+			#var msg = news_message_scene.instantiate()
+			#msg.clear_text()
+			#msg.add_text("Received from P2PQuake")
+			#msg.add_text(message)
+			#$"../Flipping-Text-Window/VBoxContainer".add_child(msg)
 			print("Received from p2pquake: %s" % message) # placeholder for future p2pquake websocket message handling
 	elif state == WebSocketPeer.STATE_CLOSING:
 		add_notification("P2PQuake connection is closing!", 10)
