@@ -1,6 +1,7 @@
 extends PanelContainer
 
 signal text_changed()
+signal shakealert()
 
 func set_header(text):
 	$VBoxContainer/Title/Label.text = text
@@ -12,6 +13,12 @@ func set_text(text):
 	
 func set_affected_cities(text):
 	$VBoxContainer/BodyContent/VBoxContainer/RichTextLabel.text = text
+	text_changed.emit()
+
+func set_local_eq_info(distance: float, local_intensity: float):
+	$VBoxContainer/BodyContent/VBoxContainer/RichTextLabel.text = "震源からの距離: %s km | 推定現地震度: %s" % [distance, local_intensity]
+	if local_intensity >= 1:
+		shakealert.emit()
 	text_changed.emit()
 
 

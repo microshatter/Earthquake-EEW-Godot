@@ -26,6 +26,26 @@ func fan_con_type(full = false):
 		return t
 	else:
 		return ""
+		
+func calculate_distance(lat1: float, long1: float, lat2: float, long2: float) -> float:
+	# Earth's radius in kilometers
+	var R: float = 6371.0
+
+	# Convert degrees to radians
+	var lat1_rad: float = deg_to_rad(lat1)
+	var long1_rad: float = deg_to_rad(long1)
+	var lat2_rad: float = deg_to_rad(lat2)
+	var long2_rad: float = deg_to_rad(long2)
+
+	# Differences in coordinates
+	var dlat: float = lat2_rad - lat1_rad
+	var dlong: float = long2_rad - long1_rad
+
+	# Haversine formula
+	var a: float = sin(dlat / 2) ** 2 + cos(lat1_rad) * cos(lat2_rad) * sin(dlong / 2) ** 2
+	var c: float = 2 * atan2(sqrt(a), sqrt(1 - a))
+
+	return R * c
 
 func add_notification(message, sec=5):
 	var msg = news_message_scene.instantiate()
@@ -337,7 +357,9 @@ func _on_p2p_timeout() -> void:
 
 func _on_wolfx_ping_timeout() -> void:
 	wolfx.close(1000, "Connection Time Out")
+	wolfx = WebSocketPeer.new()
 
 
 func _on_fan_studio_ping_timeout() -> void:
 	fan.close(1000, "Connection Time Out")
+	fan = WebSocketPeer.new()

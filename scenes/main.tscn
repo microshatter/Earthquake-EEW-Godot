@@ -9,6 +9,7 @@
 [ext_resource type="Script" uid="uid://cjo67pptx1wdv" path="res://scripts/flipping_text_window.gd" id="5_tefeu"]
 [ext_resource type="AudioStream" uid="uid://baau6vabl42nr" path="res://assets/audio/misc/Untitled.mp3" id="6_85g3d"]
 [ext_resource type="AudioStream" uid="uid://hrhehhs4q4vu" path="res://assets/audio/misc/nhk eew.mp3" id="6_choun"]
+[ext_resource type="Script" uid="uid://c040ea5amhptl" path="res://scripts/shakealert.gd" id="8_choun"]
 
 [node name="Main" type="Node" unique_id=1409934259]
 script = ExtResource("1_0wfyh")
@@ -44,7 +45,7 @@ one_shot = true
 [node name="EEW-Popup-Window" type="Window" parent="." unique_id=2040913522]
 transparent_bg = true
 oversampling_override = 1.0
-size = Vector2i(800, 300)
+size = Vector2i(800, 350)
 visible = false
 borderless = true
 always_on_top = true
@@ -58,6 +59,7 @@ stream = ExtResource("6_choun")
 
 [node name="shakealert" type="AudioStreamPlayer" parent="EEW-Popup-Window" unique_id=2061236957]
 stream = ExtResource("6_85g3d")
+script = ExtResource("8_choun")
 
 [node name="hidetimer" type="Timer" parent="EEW-Popup-Window" unique_id=556104475]
 wait_time = 180.0
@@ -159,6 +161,7 @@ text = "P2P(Disabled)"
 [connection signal="timeout" from="Reconnect Timer/FanStudio" to="Websockets" method="_on_fan_studio_timeout"]
 [connection signal="timeout" from="Reconnect Timer/P2P" to="Websockets" method="_on_p2p_timeout"]
 [connection signal="visibility_changed" from="EEW-Popup-Window" to="EEW-Popup-Window" method="_on_visibility_changed"]
+[connection signal="shakealert" from="EEW-Popup-Window/EEW-Popup" to="EEW-Popup-Window/shakealert" method="_on_eew_popup_shakealert"]
 [connection signal="text_changed" from="EEW-Popup-Window/EEW-Popup" to="EEW-Popup-Window" method="_on_eew_popup_text_changed"]
 [connection signal="timeout" from="EEW-Popup-Window/hidetimer" to="EEW-Popup-Window" method="_on_hidetimer_timeout"]
 [connection signal="close_requested" from="Flipping-Text-Window" to="Flipping-Text-Window" method="_on_close_requested"]

@@ -13,7 +13,7 @@ bg_color = Color(0, 0.4627451, 1, 1)
 
 [node name="EEW-Popup" type="PanelContainer" unique_id=667266164]
 offset_right = 800.0
-offset_bottom = 300.0
+offset_bottom = 350.0
 theme_override_styles/panel = SubResource("StyleBoxFlat_fjcr2")
 script = ExtResource("1_3cp8q")
 
@@ -39,7 +39,7 @@ size_flags_vertical = 3
 theme_override_styles/panel = SubResource("StyleBoxFlat_frbco")
 
 [node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer/BodyContent" unique_id=1540600322]
-custom_minimum_size = Vector2(0, 250)
+custom_minimum_size = Vector2(0, 300)
 layout_mode = 2
 theme_override_constants/separation = 0
 
@@ -50,6 +50,17 @@ layout_mode = 2
 theme_override_colors/font_color = Color(1, 1, 0, 1)
 theme_override_font_sizes/font_size = 24
 text = "南寧で地震 強い揺れに警戒"
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 3
+
+[node name="Local" type="Label" parent="VBoxContainer/BodyContent/VBoxContainer" unique_id=393074091]
+custom_minimum_size = Vector2(800, 50)
+custom_maximum_size = Vector2(800, -1)
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 0, 1)
+theme_override_font_sizes/font_size = 24
+text = "Distance from epicenter: 9 km | Estimated local seismic intensity: 6-"
 horizontal_alignment = 1
 vertical_alignment = 1
 autowrap_mode = 3
