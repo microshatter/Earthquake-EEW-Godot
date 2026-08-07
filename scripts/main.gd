@@ -12,7 +12,10 @@ var indicator_menu: PopupMenu
 
 
 func load_option():
-	pass
+	if FileAccess.file_exists(config_path):
+		var f = FileAccess.open(config_path, FileAccess.READ)
+		var options = f.get_var()
+		return options
 
 func initialize_window():
 	$"EEW-Popup-Window".move_to_center()

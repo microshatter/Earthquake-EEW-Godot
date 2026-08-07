@@ -13,6 +13,8 @@ func load_settings():
 		$VBoxContainer/Settings/MagnitudeIntensity/IntenSpinBox.value = options.minintensity
 		$VBoxContainer/Settings/FanApi/LineEdit.text = options.fanapi
 		print("Config loaded!")
+	else:
+		save_settings()
 
 func save_settings():
 	var options = {
@@ -62,7 +64,7 @@ func _locate_complete(result, response_code, headers, body):
 
 
 func _on_options_close_requested() -> void:
-	$"..".hide()
+	_on_discard_button_pressed()
 
 
 func _on_save_button_pressed() -> void:

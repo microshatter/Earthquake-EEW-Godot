@@ -55,6 +55,7 @@ text = "Min Magnitude"
 
 [node name="MagSpinBox" type="SpinBox" parent="VBoxContainer/Settings/MagnitudeIntensity" unique_id=1068096392]
 layout_mode = 2
+value = 1.0
 
 [node name="IntenLabel" type="Label" parent="VBoxContainer/Settings/MagnitudeIntensity" unique_id=1627747439]
 layout_mode = 2

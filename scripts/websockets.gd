@@ -47,6 +47,12 @@ func calculate_distance(lat1: float, long1: float, lat2: float, long2: float) ->
 
 	return R * c
 
+func get_distance_from_source(latitude, longtitude):
+	var opt = $"..".load_option()
+	var lat = opt.latitude
+	var long = opt.longitude
+	return calculate_distance(lat, long, latitude, longtitude)
+
 func add_notification(message, sec=5):
 	var msg = news_message_scene.instantiate()
 	msg.clear_text()
@@ -54,10 +60,11 @@ func add_notification(message, sec=5):
 	$"../Flipping-Text-Window/VBoxContainer".add_child(msg)
 	msg.start_different_hidden_timer(sec)
 	
-func send_eew(header, title, desc):
+func send_eew(header, title, desc, distance = 0, intensity = 0):
 	$"../EEW-Popup-Window/EEW-Popup".set_header(header)
 	$"../EEW-Popup-Window/EEW-Popup".set_text(title)
 	$"../EEW-Popup-Window/EEW-Popup".set_affected_cities(desc)
+	$"../EEW-Popup-Window/EEW-Popup".set_local_eq_info(distance, intensity)
 	$"../EEW-Popup-Window".show()
 
 func print_eew(header, title, desc, reportnum):
@@ -117,9 +124,14 @@ func poll_wolfx():
 				print("Wolfx pong recieved!")
 				$"Wolfx-Ping".start()
 			elif message_type == "jma_eew":
-				var msg = news_message_scene.instantiate()
 				var title = json_message.Title
 				var location = json_message.Hypocenter
+				var latitude = json_message.Latitude
+				var longitude = json_message.Longitude
+				var distance = get_distance_from_source(latitude, longitude)
+				var depth = json_message.Depth
+				if depth == null:
+					depth = 0
 				var warnarea = json_message.WarnArea
 				var wa_str: Array[String] = []
 				for i in warnarea:
@@ -129,7 +141,7 @@ func poll_wolfx():
 					w = "  ".join(wa_str)
 				else:
 					w = "警報区域はありません"
-				send_eew(title, "%sで地震 強い揺れに警戒" % location, w)
+				send_eew(title, "%sで地震 強い揺れに警戒" % location, w, distance)
 				print_eew(title, "%sで地震 強い揺れに警戒" % location, w, json_message.Serial)
 			elif message_type == "jma_eqlist":
 				var data = json_message["No1"]
@@ -154,13 +166,16 @@ func poll_wolfx():
 				var location = json_message.HypoCenter
 				var latitude = json_message.Latitude
 				var longitude = json_message.Longitude
+				var distance = get_distance_from_source(latitude, longitude)
 				var magnitude = json_message.Magnitude
 				var depth = json_message.Depth
+				if depth == null:
+					depth = 0
 				var estint = json_message.MaxIntensity
 				var eew_header = "Wolfx紧急地震速报（中国地震预警网）"
 				var eew_title = "%s发生了地震  请注意强烈摇晃" % location
 				var eew_desc = "M%s | 预估最大烈度：%s | 深度：%s | 纬度: %s | 经度: %s\n发生时间： %s" % [magnitude, estint, depth, latitude, longitude, shocktime]
-				send_eew(eew_header, eew_title, eew_desc)
+				send_eew(eew_header, eew_title, eew_desc, distance)
 				print_eew(eew_header, eew_title, eew_desc, json_message.ReportNum)
 			elif message_type == "cenc_eqlist":
 				var data = json_message["No1"]
