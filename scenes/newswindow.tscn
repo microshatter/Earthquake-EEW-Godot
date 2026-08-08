@@ -2,6 +2,7 @@
 
 [ext_resource type="Script" uid="uid://x3m7qpc8ytd3" path="res://scripts/newswindow.gd" id="1_738my"]
 [ext_resource type="AudioStream" uid="uid://c7m31s2kdv8o2" path="res://assets/audio/srev/prompt.mp3" id="2_dgl3u"]
+[ext_resource type="Script" uid="uid://dvpps0l66yo24" path="res://scripts/node_2d.gd" id="2_kdjx6"]
 
 [node name="newswindow" type="Control" unique_id=1445901088]
 custom_minimum_size = Vector2(0, 150)
@@ -23,16 +24,24 @@ color = Color(0, 0, 0, 0.627451)
 [node name="Label" type="Label" parent="." unique_id=192862653]
 custom_minimum_size = Vector2(1152, 0)
 layout_mode = 1
-anchors_preset = 5
+anchors_preset = 8
 anchor_left = 0.5
+anchor_top = 0.5
 anchor_right = 0.5
+anchor_bottom = 0.5
 offset_left = -576.0
+offset_top = -21.5
 offset_right = 576.0
-offset_bottom = 43.0
+offset_bottom = 21.5
 grow_horizontal = 2
+grow_vertical = 2
 theme_override_font_sizes/font_size = 32
 horizontal_alignment = 1
 autowrap_mode = 3
+max_lines_visible = 3
+
+[node name="Node2D" type="Node2D" parent="." unique_id=274699220]
+script = ExtResource("2_kdjx6")
 
 [node name="CycleTimer" type="Timer" parent="." unique_id=887025274]
 wait_time = 5.0
