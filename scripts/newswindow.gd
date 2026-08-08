@@ -46,8 +46,8 @@ func retuen_fixed_message_content():
 		else:
 			fixed_texts.append(text)
 		print("Text %d: Lines = %d, Visible Lines = %d, Overload = %s" % [i + 1, lines, visible_lines, lines > visible_lines])
-		print($Label)
 	$Label.text = text_lines[current_line]
+	return fixed_texts
 	
 func start_different_hidden_timer(sec):
 	$HiddenTimer.start(sec)
