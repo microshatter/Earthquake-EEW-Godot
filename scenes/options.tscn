@@ -74,9 +74,81 @@ layout_mode = 2
 text = "FAN Studio API Key"
 
 [node name="LineEdit" type="LineEdit" parent="VBoxContainer/Settings/FanApi" unique_id=415794163]
+custom_minimum_size = Vector2(300, 0)
+layout_mode = 2
+placeholder_text = "Enter API key here..."
+secret = true
+
+[node name="Button" type="Button" parent="VBoxContainer/Settings/FanApi" unique_id=124445181]
+layout_mode = 2
+text = "Get a Key"
+
+[node name="AIOption" type="VBoxContainer" parent="VBoxContainer/Settings" unique_id=1490057211]
+layout_mode = 2
+alignment = 1
+
+[node name="ToggleLang" type="HBoxContainer" parent="VBoxContainer/Settings/AIOption" unique_id=802473719]
+layout_mode = 2
+alignment = 1
+
+[node name="CheckButton" type="CheckButton" parent="VBoxContainer/Settings/AIOption/ToggleLang" unique_id=1422650922]
+layout_mode = 2
+tooltip_text = "Using AI is NOT RECOMMENDED and it WILL WASTE your token as it report a new earthquake information"
+text = "Use AI and AI Language (Not Recommended)"
+
+[node name="OptionButton" type="OptionButton" parent="VBoxContainer/Settings/AIOption/ToggleLang" unique_id=1477203371]
+layout_mode = 2
+selected = 0
+item_count = 3
+popup/item_0/text = "English"
+popup/item_0/id = 0
+popup/item_1/text = "Chinese(中文)"
+popup/item_1/id = 1
+popup/item_2/text = "Japanese(日本語)"
+popup/item_2/id = 2
+
+[node name="URL" type="HBoxContainer" parent="VBoxContainer/Settings/AIOption" unique_id=23352277]
+layout_mode = 2
+alignment = 1
+
+[node name="Label" type="Label" parent="VBoxContainer/Settings/AIOption/URL" unique_id=883780526]
+layout_mode = 2
+text = "AI API Endpoint"
+
+[node name="LineEdit" type="LineEdit" parent="VBoxContainer/Settings/AIOption/URL" unique_id=407356131]
+custom_minimum_size = Vector2(400, 0)
+layout_mode = 2
+placeholder_text = "e.g. https://api.openai.com/v1"
+
+[node name="APIKey" type="HBoxContainer" parent="VBoxContainer/Settings/AIOption" unique_id=1289685766]
+layout_mode = 2
+alignment = 1
+
+[node name="Label" type="Label" parent="VBoxContainer/Settings/AIOption/APIKey" unique_id=2095186238]
+layout_mode = 2
+text = "AI API Key"
+
+[node name="LineEdit" type="LineEdit" parent="VBoxContainer/Settings/AIOption/APIKey" unique_id=955136648]
 custom_minimum_size = Vector2(400, 0)
 layout_mode = 2
 placeholder_text = "Enter API key here..."
+secret = true
+
+[node name="Model" type="HBoxContainer" parent="VBoxContainer/Settings/AIOption" unique_id=275520174]
+layout_mode = 2
+alignment = 1
+
+[node name="Label" type="Label" parent="VBoxContainer/Settings/AIOption/Model" unique_id=357071082]
+layout_mode = 2
+text = "Select Model"
+
+[node name="OptionButton" type="OptionButton" parent="VBoxContainer/Settings/AIOption/Model" unique_id=1051316642]
+layout_mode = 2
+search_bar_enabled = true
+
+[node name="Button" type="Button" parent="VBoxContainer/Settings/AIOption/Model" unique_id=548034811]
+layout_mode = 2
+text = "Fetch Model"
 
 [node name="Actions" type="HBoxContainer" parent="VBoxContainer" unique_id=1295576382]
 layout_mode = 2
@@ -106,6 +178,7 @@ text = "Quit"
 [node name="HTTPRequest" type="HTTPRequest" parent="." unique_id=217248521]
 
 [connection signal="pressed" from="VBoxContainer/Settings/GeoLocation/LocateButton" to="." method="_on_locate_button_pressed"]
+[connection signal="pressed" from="VBoxContainer/Settings/FanApi/Button" to="." method="_on_fan_key_button_pressed"]
 [connection signal="pressed" from="VBoxContainer/Actions/SaveButton" to="." method="_on_save_button_pressed"]
 [connection signal="pressed" from="VBoxContainer/Actions/SaveOnlyButton" to="." method="_on_save_only_button_pressed"]
 [connection signal="pressed" from="VBoxContainer/Actions/DiscardButton" to="." method="_on_discard_button_pressed"]

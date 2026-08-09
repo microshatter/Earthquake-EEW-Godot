@@ -79,3 +79,7 @@ func _on_discard_button_pressed() -> void:
 
 func _on_reload_button_pressed() -> void:
 	load_settings()
+
+
+func _on_fan_key_button_pressed() -> void:
+	OS.shell_open("https://api.fanstudio.tech/dev-platform/")
