@@ -1,0 +1,375 @@
+{
+  "type": "initial_all",
+  "weatheralarm": {
+    "Data": {
+      "id": "51042241600000_20260702161500",
+      "headline": "盐边县气象台发布暴雨蓝色灾害预警[IV级/一般]",
+      "effective": "2026/07/02 20:00",
+      "description": "盐边县气象台2026年07月02日16时15分发布暴雨蓝色预警：根据最新气象资料分析，预计今天晚上到明天白天我县将出现一次暴雨天气过程。大部地区雨量50~70毫米，最大小时雨量20~30毫米。防灾减灾建议:1.近期我县已频繁出现强降雨天气过程，土壤饱和度高，叠加此次强降雨天气过程持续时间较长，将导致发生中小河流洪水、山洪、滑坡、泥石流等次生灾害的风险骤升，需切实做好防范应对工作。2.过程期间可能伴有短时强降水、雷电、大风等强对流天气，需防范其带来的不利影响。未来24小时县城气温20～25℃，相对湿度65～95%，紫外线强度为中等。3日夜间至4日白天中到大雨，4日夜间至5日白天阵雨转多云间晴。",
+      "longitude": 101.8518,
+      "latitude": 26.6776,
+      "type": "p0002004",
+      "title": "四川省攀枝花市盐边县发布暴雨蓝色预警"
+    },
+    "md5": "049818e7254032b0cfc1dad2d62b0ab9"
+  },
+  "tsunami": {
+    "Data": {
+      "id": "0473aee7180643c7ab69d8b0c0f7601f",
+      "code": "202606250630",
+      "warningInfo": {
+        "title": "海啸信息",
+        "level": "信息",
+        "subtitle": "日本本州东部附近海域",
+        "orgUnit": "自然资源部海啸预警中心"
+      },
+      "timeInfo": {
+        "alarmDate": "2026-06-25 09:50:46",
+        "updateDate": "2026-06-25 09:21:40"
+      },
+      "shockInfo": {
+        "shockTime": "2026-06-25 06:30",
+        "latitude": 40.2,
+        "longitude": 142.4,
+        "depth": 50,
+        "magnitude": 6.9,
+        "placeName": "日本本州东部附近海域"
+      },
+      "details": {
+        "batch": "3",
+        "logoUrl": "http://obs.nmefc.cn/CMS/warnLogo/海啸消息灰.png",
+        "htmlUrl": "https://obs.nmefc.cn/Warning/TsunamiAdvice/202606250630_3_file/202606250630_3.html",
+        "maps": {
+          "earthquakeMapUrl": "https://obs.nmefc.cn/Warning/TsunamiAdvice/202606250630_3_file/Earthquake_Pos.jpg",
+          "amplitudeMapUrl": "",
+          "coastalMapUrl": ""
+        }
+      },
+      "forecasts": [],
+      "waterLevelMonitoring": []
+    },
+    "md5": "21f4c30961b3b97758868211d5fd45e9"
+  },
+  "cenc": {
+    "Data": {
+      "id": 2103811,
+      "eventId": "AU.20260702103811.3",
+      "shockTime": "2026-07-02 10:38:08",
+      "createTime": "2026-07-02 10:44:44",
+      "latitude": 29.91,
+      "longitude": 101.95,
+      "depth": 7,
+      "magnitude": 2.8,
+      "placeName": "四川甘孜州康定市",
+      "infoTypeName": "[正式测定]"
+    },
+    "md5": "c2afd72b9b8e39243b187f989d543bc4"
+  },
+  "cea": {
+    "Data": {
+      "id": "b3oae99fmacyy",
+      "eventId": "202607021038.0001",
+      "shockTime": "2026-07-02 10:38:07",
+      "longitude": 101.96,
+      "latitude": 29.914,
+      "placeName": "四川甘孜州康定市",
+      "magnitude": 4,
+      "epiIntensity": 5.6,
+      "depth": 11,
+      "updates": 2
+    },
+    "md5": "06da3a2e6a6b256573df3c7c1fb4361f"
+  },
+  "cea-pr": {
+    "Data": {
+      "id": "b3oae99gmacyy",
+      "eventId": "202607021038.0001",
+      "shockTime": "2026-07-02 10:38:07",
+      "longitude": 101.96,
+      "latitude": 29.914,
+      "placeName": "四川甘孜州康定市",
+      "magnitude": 4,
+      "epiIntensity": 5.6,
+      "depth": 11,
+      "updates": 2,
+      "province": "四川"
+    },
+    "md5": "18737442a310b807adc96fa389f10ae2"
+  },
+  "ningxia": {
+    "Data": {
+      "id": "2050691459024261121",
+      "title": "2026年05月03日05时27分宁夏石嘴山市惠农区发生2.5级地震",
+      "latitude": 39.2659,
+      "longitude": 106.563,
+      "depth": 19,
+      "placeName": "宁夏石嘴山市惠农区",
+      "shockTime": "2026-05-03 05:27:52",
+      "magnitude": 2.5
+    },
+    "md5": "f3360c1258965dea739a2b571376f313"
+  },
+  "guangxi": {
+    "Data": {
+      "shockTime": "2026-06-27 12:09:18",
+      "longitude": 109.25,
+      "latitude": 24.41,
+      "placeName": "广西柳州市柳南区",
+      "magnitude": 3.6,
+      "depth": 5
+    },
+    "md5": "c08b4fcbf889a96a8d5bbad471f23942"
+  },
+  "shanxi": {
+    "Data": {
+      "shockTime": "2026-02-02 12:05:41",
+      "latitude": 39.017,
+      "longitude": 112.517,
+      "magnitude": 0.3,
+      "depth": 25,
+      "placeName": "山西原平"
+    },
+    "md5": "9d31caaf8cf215fe81e1483f5f630176"
+  },
+  "beijing": {
+    "Data": {
+      "eventId": "CD20260621123135",
+      "shockTime": "2026-06-21 12:26:08.0",
+      "longitude": 117.35,
+      "latitude": 42.4,
+      "placeName": "河北承德市围场县",
+      "magnitude": 2.3,
+      "depth": 18
+    },
+    "md5": "881ad5097904fbfa5f828d20e27b02f3"
+  },
+  "yunnan": {
+    "Data": {
+      "id": "YN.2026070215454247.9834.2493.10",
+      "shockTime": "2026-07-02 15:45:42",
+      "latitude": 24.933,
+      "longitude": 98.342,
+      "depth": 10,
+      "magnitude": 0,
+      "magnitudel": 1,
+      "placeName": "云南腾冲"
+    },
+    "md5": "2dbd40fbaadc472bcee4fe07eded0cef"
+  },
+  "cwa": {
+    "Data": {
+      "id": "115000",
+      "shockTime": "2026-07-02 11:45:25",
+      "latitude": 23.88,
+      "longitude": 121.48,
+      "depth": 14.1,
+      "magnitude": 3.5,
+      "placeName": "花蓮縣政府西南方  19.3  公里 (位於花蓮縣秀林鄉)",
+      "maxIntensity": "2級",
+      "imageURI": "https://scweb.cwa.gov.tw/webdata/OLDEQ/202607/2026070211452535_H.png",
+      "shakemapURI": null
+    },
+    "md5": "5a29c1d9cdc99a87814fe6319ddf13c1"
+  },
+  "cwa-eew": {
+    "Data": {
+      "id": "1150051",
+      "updates": 2,
+      "shockTime": "2026-06-30 05:15:11",
+      "latitude": 24.83,
+      "longitude": 121.75,
+      "depth": 50,
+      "magnitude": 4.7,
+      "placeName": "宜蘭縣礁溪鄉",
+      "locationDesc": ["宜蘭縣"]
+    },
+    "md5": "aa59a9cd071a55c256f8c42748157008"
+  },
+  "jma": {
+    "Data": {
+      "id": "20260702161746",
+      "updates": 4,
+      "shockTime": "2026-07-02 16:17:39",
+      "createTime": "2026-07-02 16:18:25",
+      "latitude": 35.7,
+      "longitude": 140.7,
+      "depth": 50,
+      "magnitude": 4,
+      "placeName": "千葉県北東部",
+      "epiIntensity": "2",
+      "infoTypeName": "予報",
+      "final": true,
+      "cancel": false
+    },
+    "md5": "665d89a1d59675d38d9c30af701fad22"
+  },
+  "hko": {
+    "Data": {
+      "id": "20260702052327_S1251230607",
+      "eventId": "20260702052327_S1251230607",
+      "shockTime": "2026-07-02 13:23:00",
+      "longitude": -23.28,
+      "latitude": -61.08,
+      "depth": 10,
+      "magnitude": 5.6,
+      "placeName": "里奧加耶戈斯, 阿根廷",
+      "citystring": "里奧加耶戈斯東南約2950公里, 震源深度 10 公里",
+      "region": "南桑威奇群島區",
+      "verify": "Y"
+    },
+    "md5": "5ecacf24969587d39638d3766d0a1ac0"
+  },
+  "usgs": {
+    "Data": {
+      "id": "6000t9lc",
+      "title": "M 4.8 - 65 km WNW of Catuday, Philippines",
+      "infoTypeName": "reviewed",
+      "magnitude": 4.8,
+      "placeName": "65 km WNW of Catuday, Philippines",
+      "shockTime": "2026-07-02 17:11:23",
+      "updateTime": "2026-07-02 17:40:52",
+      "longitude": 119.2488,
+      "latitude": 16.5375,
+      "depth": 12.487,
+      "url": "https://earthquake.usgs.gov/earthquakes/eventpage/us6000t9lc"
+    },
+    "md5": "6b0ce1af7ba7eaac0ace1549870a055e"
+  },
+  "sa": {
+    "Data": {
+      "id": "nc75382936",
+      "shockTime": "2026-06-24 23:10:40",
+      "latitude": 39.3623333333333,
+      "longitude": -123.228833333333,
+      "depth": 9,
+      "magnitude": 5.59,
+      "placeName": "11 km N of Redwood Valley, CA"
+    },
+    "md5": "6adfe747f916ae171418ee73e3d7db32"
+  },
+  "emsc": {
+    "Data": {
+      "id": "20260702_0000150",
+      "shockTime": "2026-07-02 18:01:49",
+      "latitude": 43.4432,
+      "longitude": 2.145,
+      "depth": 5,
+      "magnitude": 2.2,
+      "placeName": "FRANCE"
+    },
+    "md5": "33d70b1e353715f48ba4f476d0d05c05"
+  },
+  "bcsf": {
+    "Data": {
+      "id": "fr2026ubskkz",
+      "shockTime": "2026-07-02 18:06:29",
+      "latitude": 47.18445206,
+      "longitude": -1.79731214,
+      "depth": 17,
+      "magnitude": 2.011747624,
+      "placeName": "Event of magnitude 2.0, near Saint-Herblain (France hexagonale)"
+    },
+    "md5": "41d7f9ac8916a7913945398f0dd13ff6"
+  },
+  "gfz": {
+    "Data": {
+      "id": "gfz2026mvft",
+      "shockTime": "2026-07-02 17:11:23",
+      "latitude": 16.508,
+      "longitude": 119.271,
+      "depth": 10,
+      "magnitude": 4.94,
+      "placeName": "Luzon, Philippines"
+    },
+    "md5": "a6ed1cb4ed770754629a8d59bad0d742"
+  },
+  "usp": {
+    "Data": {
+      "id": "usp2026mubp",
+      "shockTime": "2026-07-02 01:57:01",
+      "latitude": 36.44220733642578,
+      "longitude": 70.59758758544922,
+      "depth": 199,
+      "magnitude": 5.082815764524373,
+      "placeName": "Hindu Kush Region, Afghanistan"
+    },
+    "md5": "0abddfab63a7b68a18a93d1a653c0cef"
+  },
+  "kma": {
+    "Data": {
+      "id": "KMA.20260616160653",
+      "shockTime": "2026-06-16 16:06:53",
+      "createTime": "2026-06-16 16:12:00",
+      "latitude": 39.09,
+      "longitude": 126.73,
+      "depth": 11,
+      "magnitude": 2.4,
+      "epiIntensity": 1,
+      "placeName": "북한 평안남도 양덕 남남동쪽 16km 지역"
+    },
+    "md5": "6b48137c1c0aaf1bdda6d372ce84c447"
+  },
+  "kma-eew": {
+    "Data": {
+      "id": "2021007178",
+      "updates": 1,
+      "shockTime": "2021-12-14 17:19:16",
+      "createTime": "2021-12-14 17:20:27",
+      "latitude": 33.15,
+      "longitude": 126.24,
+      "magnitude": 5.3,
+      "depth": 0,
+      "epiIntensity": 6,
+      "placeName": "제주 서귀포시 서남서쪽 32km 해역",
+      "affectedAreas": ["제주"]
+    },
+    "md5": "872f5600ed4170cfca104837178ee626"
+  },
+  "fssn": {
+    "Data": {
+      "id": "FSSN2026muyf",
+      "shockTime": "2026-07-02 13:23:17",
+      "createTime": "2026-07-02 15:25:53",
+      "latitude": -61.0428,
+      "longitude": -23.429,
+      "depth": 10,
+      "magnitude": 5.4,
+      "placeName": "South Sandwich Islands Region",
+      "placeName_zh": "南桑威奇群岛地区",
+      "infoTypeName": "正式(已核实)"
+    },
+    "md5": "915faae8ecb151cff985a4333a716311"
+  },
+  "fssn-cmt": {
+    "Data": {
+      "id": "6a450638b6f0e",
+      "eventId": null,
+      "shockTime": "2026-07-01 20:08:29",
+      "latitude": 40.0881,
+      "longitude": 142.3284,
+      "depth": "70(+/- 4)",
+      "allMagnitudes": {
+        "M": 6,
+        "Mj": 6,
+        "mB": 6.3,
+        "mb": 5.8,
+        "MLv": 6.1,
+        "Mwp": 6.1,
+        "Mww": 5.9,
+        "Mw(mB)": 6,
+        "Mw(Mwp)": 6
+      },
+      "placeName": "日本本州岛东海岸附近",
+      "centroidDepth": "26.8",
+      "nodalPlane1": "14/59/88",
+      "nodalPlane2": "199/31/94",
+      "mnn": "3.2975e+16",
+      "mee": "-2.2986e+17",
+      "mdd": "1.9689e+17",
+      "mne": "8.2689e+16",
+      "mnd": "2.6134e+16",
+      "med": "-1.1555e+17"
+    },
+    "md5": "9acce1bfc160466c21aed3f56927da95"
+  }
+}
