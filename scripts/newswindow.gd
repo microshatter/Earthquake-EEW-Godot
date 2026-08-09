@@ -25,7 +25,7 @@ func clear_text():
 	
 func strip_message():
 	for i in range(len(text_lines)):
-		text_lines[i] = text_lines[i].strip_edges()
+		text_lines[i] = wrap_string(text_lines[i].strip_edges(), max_char)
 	
 func return_text_lines(line: int, reset: bool = true):
 	if line < 0 or line >= len(text_lines):
@@ -39,8 +39,7 @@ func return_text_lines(line: int, reset: bool = true):
 func return_fixed_message_content():
 	var fixed_texts: Array[String] = []
 	for i in range(len(text_lines)):
-		#var text = text_lines[i]
-		var text = wrap_string(text_lines[i], max_char)
+		var text = text_lines[i]
 		var lines = return_text_lines(i, false)
 		var visible_lines = $Label.max_lines_visible
 		if lines > visible_lines:
@@ -103,14 +102,15 @@ func _ready() -> void:
 	$HiddenTimer.start()
 	$CycleTimer.start()
 	$AudioStreamPlayer.play()
-	strip_message()
 	test_simulated_eng_chars_in_line()
+	strip_message()
 	text_lines = return_fixed_message_content()
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
 	$Label.custom_minimum_size.x = size.x
 	$Label.text = text_lines[current_line]
+	$Label.position = Vector2((size.x / 2) - ($Label.size.x / 2), (size.y / 2) - ($Label.size.y / 2))
 	$ColorRect.size = size
 
 func _on_cycle_timer_timeout() -> void:
