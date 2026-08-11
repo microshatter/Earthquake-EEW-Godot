@@ -163,6 +163,7 @@ text = "P2P(Disabled)"
 [connection signal="visibility_changed" from="EEW-Popup-Window" to="EEW-Popup-Window" method="_on_visibility_changed"]
 [connection signal="shakealert" from="EEW-Popup-Window/EEW-Popup" to="EEW-Popup-Window/shakealert" method="_on_eew_popup_shakealert"]
 [connection signal="text_changed" from="EEW-Popup-Window/EEW-Popup" to="EEW-Popup-Window" method="_on_eew_popup_text_changed"]
+[connection signal="finished" from="EEW-Popup-Window/shakealert" to="EEW-Popup-Window/shakealert" method="_on_finished"]
 [connection signal="timeout" from="EEW-Popup-Window/hidetimer" to="EEW-Popup-Window" method="_on_hidetimer_timeout"]
 [connection signal="close_requested" from="Flipping-Text-Window" to="Flipping-Text-Window" method="_on_close_requested"]
 [connection signal="close_requested" from="Options" to="Options/Options" method="_on_options_close_requested"]

@@ -53,6 +53,71 @@ func get_distance_from_source(latitude, longtitude):
 	var long = opt.longitude
 	return calculate_distance(lat, long, latitude, longtitude)
 
+# ⚠️ WARNING: This is a SIMPLIFIED empirical model for educational use.
+# Uncertainty: ±1.0 intensity units.
+# Do NOT use for life-safety decisions or official reporting.
+# For production: Use official JMA/CENC real-time systems.
+func calculate_local_intensity(distance: float, maxIntensity: float, depth: float, soilType: String = "rock") -> float:
+	var hypocentral_distance := sqrt(pow(distance, 2) + pow(depth, 2))
+	var site_boost := 0.0
+	match soilType.to_lower():
+		"soil":
+			site_boost = 0.5
+		"soft_soil":
+			site_boost = 1.0
+		_:
+			site_boost = 0.0
+
+	var beta := 1.5
+	
+	var intensity := maxIntensity
+	if hypocentral_distance > 1.0:
+		intensity = maxIntensity - beta * log(hypocentral_distance) / log(10.0) + site_boost
+	return clamp(intensity, 0.0, 7.0)
+
+func chinese_to_jma(chinese_intensity: float) -> float:
+	# Approximate conversion from the Chinese 烈度 scale (0–12) to the JMA
+	# scale (0–7). Rough calibration: 烈度 VI≈5, VII≈5強, VIII≈6弱, IX≈6強, X≈7.
+
+	var jma := 0.0
+	if chinese_intensity <= 0.0:
+		return 0.0
+	elif chinese_intensity <= 3.0:
+		jma = chinese_intensity * 0.8
+	elif chinese_intensity <= 5.0:
+		jma = 1.5 + (chinese_intensity - 3.0) * 0.9
+	elif chinese_intensity <= 8.0:
+		jma = 3.5 + (chinese_intensity - 5.0) * 0.7
+	elif chinese_intensity <= 10.0:
+		jma = 5.5 + (chinese_intensity - 8.0) * 0.6
+	else:
+		jma = 7.0
+	var value := float(chinese_intensity)
+	return clamp(jma, 0.0, 7.0)
+
+func parse_jma_string(intensity_str) -> float:
+	# Converts a JMA intensity string (e.g. "5弱", "5強", "6弱", "6強", "7", "4")
+	# to a continuous value on the JMA 0–7 scale (弱 → X.0, 強 → X.5).
+	
+	var value := 0.0
+	
+	# Extract numeric part using regex
+	var regex := RegEx.new()
+	regex.compile("\\d+")
+	var result := regex.search(intensity_str)
+	
+	if result:
+		value = float(result.get_string())
+	else:
+		return 0.0
+	
+	# Add 0.5 for 強 (strong)
+	if "強" in intensity_str:
+		value += 0.5
+	# "弱" (weak) stays as-is
+	
+	return clamp(value, 0.0, 7.0)
+
 func add_notification(message, sec=5):
 	var msg = news_message_scene.instantiate()
 	msg.clear_text()
@@ -92,8 +157,8 @@ func connect_fan():
 	$"FanStudio-Ping".start()
 
 func connect_p2pq():
-	#p2pq.connect_to_url(api_sources.eqUrls.p2pquake_ws[0])
-	p2pq.connect_to_url("ws://localhost:3000/_ws")
+	p2pq.connect_to_url(api_sources.eqUrls.p2pquake_ws[0])
+	#p2pq.connect_to_url("ws://localhost:3000/_ws")
 	$"../StatContainer/P2P".text = "P2P(Connecting)"
 	$"../StatContainer/P2P".add_theme_color_override("font_color", Color("ffff00"))
 
@@ -102,6 +167,7 @@ func _ready() -> void:
 	connect_wolfx()
 	#connect_fan()
 	#connect_p2pq()
+	send_eew("EEW Test", "Just a test btw", "test ".repeat(60), 3000, calculate_local_intensity(730, chinese_to_jma(9), 10))
 
 func poll_wolfx():
 	if $"../Reconnect Timer/Wolfx".time_left > 0: # Don't pull if connection lost
@@ -141,7 +207,9 @@ func poll_wolfx():
 					w = "  ".join(wa_str)
 				else:
 					w = "警報区域はありません"
-				send_eew(title, "%sで地震 強い揺れに警戒" % location, w, distance)
+				var maxint = parse_jma_string(json_message.MaxIntensity)
+				var local_intensity = calculate_local_intensity(distance, maxint, depth)
+				send_eew(title, "%sで地震 強い揺れに警戒" % location, w, distance, local_intensity)
 				print_eew(title, "%sで地震 強い揺れに警戒" % location, w, json_message.Serial)
 			elif message_type == "jma_eqlist":
 				var data = json_message["No1"]
@@ -172,10 +240,11 @@ func poll_wolfx():
 				if depth == null:
 					depth = 0
 				var estint = json_message.MaxIntensity
+				var local_intensity = calculate_local_intensity(distance, chinese_to_jma(estint), depth)
 				var eew_header = "Wolfx紧急地震速报（中国地震预警网）"
 				var eew_title = "%s发生了地震  请注意强烈摇晃" % location
 				var eew_desc = "M%s | 预估最大烈度：%s | 深度：%s | 纬度: %s | 经度: %s\n发生时间： %s" % [magnitude, estint, depth, latitude, longitude, shocktime]
-				send_eew(eew_header, eew_title, eew_desc, distance)
+				send_eew(eew_header, eew_title, eew_desc, distance, local_intensity)
 				print_eew(eew_header, eew_title, eew_desc, json_message.ReportNum)
 			elif message_type == "cenc_eqlist":
 				var data = json_message["No1"]
@@ -244,7 +313,6 @@ func poll_fan():
 			elif message_type == "auth_required":
 				if len($"../Options/Options/VBoxContainer/Settings/FanApi/LineEdit".text) > 0:
 					fan.send_text($"../Options/Options/VBoxContainer/Settings/FanApi/LineEdit".text) # No authencation key obtained
-				pass
 			elif message_type == "update":
 				# Fetch from data
 				var data = json_message.Data
@@ -279,11 +347,15 @@ func poll_fan():
 					var longitude = data.longitude
 					var magnitude = data.magnitude
 					var depth = data.depth
+					if depth == null:
+						depth = 0
 					var estint = data.epiIntensity
+					var distance = get_distance_from_source(latitude, longitude)
+					var local_intensity = calculate_local_intensity(distance, chinese_to_jma(estint), depth)
 					var eew_header = "紧急地震速报（中国地震预警网）"
 					var eew_title = "%s发生了地震  请注意强烈摇晃" % location
 					var eew_desc = "M%s | 预估最大烈度：%s | 深度：%s | 纬度: %s | 经度: %s\n发生时间： %s" % [magnitude, estint, depth, latitude, longitude, shocktime]
-					send_eew(eew_header, eew_title, eew_desc)
+					send_eew(eew_header, eew_title, eew_desc, distance, local_intensity)
 				elif data_source == "cwa-eew":
 					var location = data.placeName
 					var affected = PackedStringArray(data.locationDesc)

@@ -13,3 +13,8 @@ func _process(delta: float) -> void:
 
 func _on_eew_popup_shakealert() -> void:
 	play()
+
+
+func _on_finished() -> void:
+	if $"..".visible:
+		play()
