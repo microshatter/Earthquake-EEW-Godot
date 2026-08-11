@@ -208,7 +208,7 @@ func connect_p2pq():
 func _ready() -> void:
 	connect_wolfx()
 	#connect_fan()
-	#connect_p2pq()
+	connect_p2pq()
 	#send_eew("EEW Test", "Just a test btw", "test ".repeat(60), 3000, calculate_local_intensity(730, chinese_to_jma(9), 10))
 
 func poll_wolfx():
@@ -412,9 +412,10 @@ func poll_fan():
 					send_eew(eew_header, eew_title, eew_desc)
 				else:
 					var msg = news_message_scene.instantiate()
-					msg.clear_text()
-					msg.add_text("Received from FAN Studio\nSource: %s" % data_source)
-					msg.add_text(JSON.stringify(data))
+					msg.set_text([
+						"Received from FAN Studio\nSource: %s" % data_source,
+						JSON.stringify(data)
+					])
 					$"../Flipping-Text-Window/VBoxContainer".add_child(msg)
 					print("Received from %s(FAN Studio): %s" % [data_source, JSON.stringify(data)]) 
 					
@@ -451,11 +452,12 @@ func poll_p2pq():
 		while p2pq.get_available_packet_count():
 			var packet = p2pq.get_packet()
 			var message = packet.get_string_from_utf8()
-			#var msg = news_message_scene.instantiate()
-			#msg.clear_text()
-			#msg.add_text("Received from P2PQuake")
-			#msg.add_text(message)
-			#$"../Flipping-Text-Window/VBoxContainer".add_child(msg)
+			var msg = news_message_scene.instantiate()
+			msg.set_text([
+				"Received from P2PQuake",
+				message
+			])
+			$"../Flipping-Text-Window/VBoxContainer".add_child(msg)
 			print("Received from p2pquake: %s" % message) # placeholder for future p2pquake websocket message handling
 	elif state == WebSocketPeer.STATE_CLOSING:
 		add_notification("P2PQuake connection is closing!", 10)
@@ -472,7 +474,7 @@ func poll_p2pq():
 func _process(delta: float) -> void:
 	poll_wolfx()
 	#poll_fan()
-	#poll_p2pq()
+	poll_p2pq()
 	$"../StatContainer/wolfx-timer".text = "(%d)" % $"Wolfx-Ping".time_left
 	$"../StatContainer/fanstudio-timer".text = "(%d)" % $"FanStudio-Ping".time_left
 
