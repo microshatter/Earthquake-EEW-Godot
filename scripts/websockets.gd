@@ -264,10 +264,10 @@ func poll_wolfx():
 				var magnitude = data.magnitude
 				var tsunami_info = data.info
 				var msg = news_message_scene.instantiate()
-				msg.set_text([
+				msg.set_text(PackedStringArray([
 					"日本地震%s" % title,
 					"%s\n%sに地震が発生しました。" % [eqtime, location]
-				])
+				]))
 				if len(tsunami_info) > 0:
 					msg.add_text(tsunami_info)
 				msg.add_text("地震発生場所：%s | 緯度：%s | 経度：%s\nマグニチュード%s | 震源の深さ：%s" % [location, latitude, longitude, magnitude, depth])
@@ -298,18 +298,18 @@ func poll_wolfx():
 				var magnitude = data.magnitude
 				var depth = data.depth
 				var msg = news_message_scene.instantiate()
-				msg.set_text([
+				msg.set_text(PackedStringArray([
 					"中国地震局地震情报(Wolfx)\nChina Earthquake Networks Center Earthquake Report\n以下内容将使用中文 The follow content will using Chinese",
 					"%s\n在%s发生了地震" % [shocktime, location],
 					"震源: %s | 纬度: %s | 经度: %s\nM%s | 深度: %s" % [location, latitude, longitude, magnitude, depth]
-				])
+				]))
 				$"../Flipping-Text-Window/VBoxContainer".add_child(msg)
 			else:
 				var msg = news_message_scene.instantiate()
-				msg.set_text([
+				msg.set_text(PackedStringArray([
 					"Received from Wolfx\ntype: %s" % message_type,
 					message
-				])
+				]))
 				$"../Flipping-Text-Window/VBoxContainer".add_child(msg)
 				print("Received from wolfx: %s" % message) # placeholder for future wolfx websocket message handling
 	elif state == WebSocketPeer.STATE_CLOSING:
@@ -367,11 +367,11 @@ func poll_fan():
 					var title = data.headline
 					var desc = data.description
 					var msg = news_message_scene.instantiate()
-					msg.set_text([
+					msg.set_text(PackedStringArray([
 						"中国气象局气象预警(FAN Studio)\nChina Meteorological Administration Weather Warning",
 						"在%s\n%s" % [time, title],
 						desc
-					])
+					]))
 					$"../Flipping-Text-Window/VBoxContainer".add_child(msg)
 				elif data_source == "cenc": # 中国地震局地震速报 China Earthquake Networks Center Earthquake Report
 					var shocktime = data.shockTime
@@ -381,11 +381,11 @@ func poll_fan():
 					var magnitude = data.magnitude
 					var depth = data.depth
 					var msg = news_message_scene.instantiate()
-					msg.set_text([
+					msg.set_text(PackedStringArray([
 						"中国地震局地震情报(FAN Studio)\nChina Earthquake Networks Center Earthquake Report\n以下内容将使用中文 The follow content will using Chinese",
 						"%s\n在%s发生了地震" % [shocktime, location],
 						"震源: %s | 纬度: %s | 经度: %s\nM%s | 深度: %s" % [location, latitude, longitude, magnitude, depth]
-					])
+					]))
 					$"../Flipping-Text-Window/VBoxContainer".add_child(msg)
 				elif data_source == "cea":
 					var shocktime = data.shockTime
@@ -412,10 +412,10 @@ func poll_fan():
 					send_eew(eew_header, eew_title, eew_desc)
 				else:
 					var msg = news_message_scene.instantiate()
-					msg.set_text([
+					msg.set_text(PackedStringArray([
 						"Received from FAN Studio\nSource: %s" % data_source,
 						JSON.stringify(data)
-					])
+					]))
 					$"../Flipping-Text-Window/VBoxContainer".add_child(msg)
 					print("Received from %s(FAN Studio): %s" % [data_source, JSON.stringify(data)]) 
 					
@@ -453,10 +453,10 @@ func poll_p2pq():
 			var packet = p2pq.get_packet()
 			var message = packet.get_string_from_utf8()
 			var msg = news_message_scene.instantiate()
-			msg.set_text([
+			msg.set_text(PackedStringArray([
 				"Received from P2PQuake",
 				message
-			])
+			]))
 			$"../Flipping-Text-Window/VBoxContainer".add_child(msg)
 			print("Received from p2pquake: %s" % message) # placeholder for future p2pquake websocket message handling
 	elif state == WebSocketPeer.STATE_CLOSING:
