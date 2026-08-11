@@ -47,11 +47,35 @@ func calculate_distance(lat1: float, long1: float, lat2: float, long2: float) ->
 
 	return R * c
 
+# Distance Calculation
 func get_distance_from_source(latitude, longtitude):
 	var opt = $"..".load_option()
 	var lat = opt.latitude
 	var long = opt.longitude
 	return calculate_distance(lat, long, latitude, longtitude)
+
+# Helper functions for calculate earthquake informations
+func magnitude_to_intensity(magnitude: float, depth: float) -> Dictionary:
+	# Estimates the maximum (epicentral) intensity from magnitude and depth,
+	# returning BOTH scales in one dictionary:
+	#   "shindo"  → JMA 震度 0–7 (e.g. 5.5 = 5強)
+	#   "chinese" → Chinese 烈度 0–12
+	# ⚠️ Simplified empirical model for educational use — same caveats as
+	# calculate_local_intensity(): ±1 unit uncertainty, not for life safety.
+
+	# Epicentral JMA intensity for a shallow event, calibrated to:
+	#   M4 → 2.5, M5 → 4, M6 → 5.5, M7 → 7
+	var shindo := 1.5 * magnitude - 3.5
+
+	# Depth attenuation: no penalty for focuses above 10 km; below that, each
+	# factor-of-10 increase in depth costs roughly 1 intensity unit.
+	if depth > 10.0:
+		shindo -= log(depth / 10.0) / log(10.0)
+
+	shindo = clamp(shindo, 0.0, 7.0)
+	var chinese := jma_to_chinese(shindo)
+
+	return {"shindo": shindo, "chinese": chinese}
 
 # ⚠️ WARNING: This is a SIMPLIFIED empirical model for educational use.
 # Uncertainty: ±1.0 intensity units.
@@ -94,6 +118,24 @@ func chinese_to_jma(chinese_intensity: float) -> float:
 		jma = 7.0
 	var value := float(chinese_intensity)
 	return clamp(jma, 0.0, 7.0)
+
+func jma_to_chinese(jma_intensity: float) -> float:
+	# Inverse of chinese_to_jma(): converts a JMA 0–7 intensity value back to
+	# the Chinese 烈度 scale (0–12).
+	var value: float = clamp(jma_intensity, 0.0, 7.0)
+	var chinese := 0.0
+	if value <= 2.4:
+		chinese = value / 0.8
+	elif value <= 3.3:
+		chinese = 3.0 + (value - 1.5) / 0.9
+	elif value <= 5.6:
+		chinese = 5.0 + (value - 3.5) / 0.7
+	elif value <= 6.7:
+		chinese = 8.0 + (value - 5.5) / 0.6
+	else:
+		# Forward mapping saturates at 烈度 X → JMA 7, so stretch X–XII over 6.7–7.
+		chinese = 10.0 + (value - 6.7) / 0.3 * 2.0
+	return chinese
 
 func parse_jma_string(intensity_str) -> float:
 	# Converts a JMA intensity string (e.g. "5弱", "5強", "6弱", "6強", "7", "4")
