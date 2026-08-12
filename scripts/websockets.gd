@@ -452,13 +452,20 @@ func poll_p2pq():
 		while p2pq.get_available_packet_count():
 			var packet = p2pq.get_packet()
 			var message = packet.get_string_from_utf8()
-			var msg = news_message_scene.instantiate()
-			msg.set_text(PackedStringArray([
-				"Received from P2PQuake",
-				message
-			]))
-			$"../Flipping-Text-Window/VBoxContainer".add_child(msg)
-			print("Received from p2pquake: %s" % message) # placeholder for future p2pquake websocket message handling
+			var json_message = JSON.parse_string(message)
+			var message_type = json_message.code
+			if message_type == 555:
+				pass
+			#elif message_type == 556:
+				#var title = "緊急地震速報"
+			else:
+				var msg = news_message_scene.instantiate()
+				msg.set_text(PackedStringArray([
+					"Received from P2PQuake",
+					message
+				]))
+				$"../Flipping-Text-Window/VBoxContainer".add_child(msg)
+				print("Received from p2pquake: %s" % message) # placeholder for future p2pquake websocket message handling
 	elif state == WebSocketPeer.STATE_CLOSING:
 		add_notification("P2PQuake connection is closing!", 10)
 	elif state == WebSocketPeer.STATE_CLOSED:
