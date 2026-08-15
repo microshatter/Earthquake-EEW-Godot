@@ -526,13 +526,27 @@ func poll_p2pq():
 			var packet = p2pq.get_packet()
 			var message = packet.get_string_from_utf8()
 			var json_message = JSON.parse_string(message)
-			var message_type = json_message.code
+			var message_type = int(json_message.code)
+			print(message_type)
 			match message_type:
 				551:
+					var eq = json_message.earthquake
+					var hypocenter = eq.hypocenter
+					var depth = hypocenter.depth
+					var latitude = hypocenter.latitude
+					var longitude = hypocenter.longitude
+					var magnitude = hypocenter.magnitude
+					var title = "日本地震情報"
+					var eqtime = json_message.issue.time
+					var location = hypocenter.name
+					var tsunami_info = eq.domesticTsunami
+					var foreign_info = eq.foreignTsunami
 					var msg = news_message_scene.instantiate()
 					msg.set_text(PackedStringArray([
-						"Received from P2PQuake",
-						message
+						title,
+						"%s\n%sに地震が発生しました。" % [eqtime, location],
+						"津波：%s\n海外津波：%s" % [tsunami_info, foreign_info],
+						"地震発生場所：%s | 緯度：%s | 経度：%s\nマグニチュード%s | 震源の深さ：%s" % [location, latitude, longitude, magnitude, depth]
 					]))
 					$"../Flipping-Text-Window/VBoxContainer".add_child(msg)
 					print("Received from p2pquake: %s" % message)
@@ -544,17 +558,24 @@ func poll_p2pq():
 					]))
 					$"../Flipping-Text-Window/VBoxContainer".add_child(msg)
 					print("Received from p2pquake: %s" % message)
-				556:
-					var title = "緊急地震速報"
-					var msg = news_message_scene.instantiate()
-					msg.set_text(PackedStringArray([
-						"Received from P2PQuake",
-						message
-					]))
-					$"../Flipping-Text-Window/VBoxContainer".add_child(msg)
-					print("Received from p2pquake: %s" % message)
 				555:
 					pass
+				556:
+					var eq = json_message.earthquake
+					var hypocenter = eq.hypocenter
+					var depth = hypocenter.depth
+					var latitude = hypocenter.latitude
+					var longitude = hypocenter.longitude
+					var distance = get_distance_from_source(latitude, longitude)
+					var magnitude = hypocenter.magnitude
+					var location = hypocenter.name
+					var title = "緊急地震速報"
+
+					var w = "警報区域はありません"
+					var maxint = parse_jma_string(json_message.MaxIntensity)
+					var local_intensity = calculate_local_intensity(distance, maxint, depth)
+					send_eew(title, "%sで地震 強い揺れに警戒" % location, w, distance, local_intensity)
+					print_eew(title, "%sで地震 強い揺れに警戒" % location, w, json_message.Serial)
 				_:
 					var msg = news_message_scene.instantiate()
 					msg.set_text(PackedStringArray([
