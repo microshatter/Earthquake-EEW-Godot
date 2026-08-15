@@ -612,6 +612,11 @@ func _on_fan_studio_ping_timeout() -> void:
 		fan = WebSocketPeer.new()
 
 
+func _on_wolfx_pong() -> void:
+	recieved_pinged.set("wolfx", true)
+	recieved_time.set("wolfx", Time.get_ticks_msec())
+
+
 func _on_fanstudio_pong() -> void:
 	recieved_pinged.set("fan", true)
 	recieved_time.set("fan", Time.get_ticks_msec())
@@ -620,8 +625,3 @@ func _on_fanstudio_pong() -> void:
 func _on_p_2_pquake_pong() -> void:
 	recieved_pinged.set("p2p", true)
 	recieved_time.set("p2p", Time.get_ticks_msec())
-
-
-func _on_wolfx_pong() -> void:
-	recieved_pinged.set("wolfx", true)
-	recieved_time.set("wolfx", Time.get_ticks_msec())
