@@ -20,6 +20,7 @@ This project is currently made with Godot 4.7, may update engine later
 * Earthquake Early Warning (CEA/SC/FJ/CWA/JMA), Earthquake Information (CENC/CWA/USGS/FSSN), Earthquake List (CENC/FSSN), CENC Intensity Report, Typhoon Information, NTP Time: [FAN Studio API](https://api.fanstudio.tech)
 * SREV Sound Effects: [scratch-realtime-earthquake-viewer-page](https://github.com/kotoho7/scratch-realtime-earthquake-viewer-page)
 * Chinese Countdown Broadcast Material: [地牛Wake Up！](https://eew.earthquake.tw/)
+* EEW Sound Effects: NHK
 
 # Credits
 * [Maple Font by subframe7536](https://github.com/subframe7536/Maple-font)
