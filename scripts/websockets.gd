@@ -37,7 +37,7 @@ var recieved_time = {
 func return_ping_time_recieved(service="wolfx"):
 	var diff = recieved_time.get(service, 0.0) - pings.get(service, 0.0)
 	if diff > 0:
-		return "%.0f ms" % diff
+		return "%d ms" % diff
 	else:
 		return "--- ms"
 
@@ -264,7 +264,7 @@ func _ready() -> void:
 	connect_wolfx()
 	connect_fan()
 	connect_p2pq()
-	send_eew("EEW Test", "Just a test btw", "test ".repeat(60), 3000, calculate_local_intensity(730, chinese_to_jma(9), 10))
+	# send_eew("EEW Test", "Just a test btw", "test ".repeat(60), 3000, calculate_local_intensity(730, chinese_to_jma(9), 10))
 
 func poll_wolfx():
 	if $"../Reconnect Timer/Wolfx".time_left > 0: # Don't pull if connection lost
