@@ -21,11 +21,15 @@ script = ExtResource("1_o5qli")
 script = ExtResource("3_tbgi4")
 
 [node name="Wolfx-Ping" type="Timer" parent="Websockets" unique_id=687242202]
-wait_time = 90.0
+wait_time = 60.0
 one_shot = true
 
 [node name="FanStudio-Ping" type="Timer" parent="Websockets" unique_id=272677208]
-wait_time = 90.0
+wait_time = 60.0
+one_shot = true
+
+[node name="P2P-Ping" type="Timer" parent="Websockets" unique_id=1693358433]
+wait_time = 60.0
 one_shot = true
 
 [node name="Reconnect Timer" type="Node" parent="." unique_id=2111712214]
@@ -127,7 +131,7 @@ offset_top = -40.0
 offset_right = 20.0
 grow_horizontal = 2
 grow_vertical = 0
-theme_override_constants/separation = 16
+theme_override_constants/separation = 12
 
 [node name="Label" type="Label" parent="StatContainer" unique_id=1408072562]
 layout_mode = 2
@@ -136,7 +140,7 @@ text = "STATUS >>"
 
 [node name="Wolfx" type="Label" parent="StatContainer" unique_id=252531457]
 layout_mode = 2
-theme_override_font_sizes/font_size = 32
+theme_override_font_sizes/font_size = 24
 text = "Wolfx(disabled)"
 
 [node name="wolfx-timer" type="Label" parent="StatContainer" unique_id=1404489529]
@@ -144,7 +148,7 @@ layout_mode = 2
 
 [node name="FanStudio" type="Label" parent="StatContainer" unique_id=1343439604]
 layout_mode = 2
-theme_override_font_sizes/font_size = 32
+theme_override_font_sizes/font_size = 24
 text = "FAN(Disabled)"
 
 [node name="fanstudio-timer" type="Label" parent="StatContainer" unique_id=562688662]
@@ -152,9 +156,15 @@ layout_mode = 2
 
 [node name="P2P" type="Label" parent="StatContainer" unique_id=182336624]
 layout_mode = 2
-theme_override_font_sizes/font_size = 32
+theme_override_font_sizes/font_size = 24
 text = "P2P(Disabled)"
 
+[node name="Label2" type="Label" parent="StatContainer" unique_id=290333774]
+layout_mode = 2
+
+[connection signal="fanstudio_pong" from="Websockets" to="Websockets" method="_on_fanstudio_pong"]
+[connection signal="p2pquake_pong" from="Websockets" to="Websockets" method="_on_p_2_pquake_pong"]
+[connection signal="wolfx_pong" from="Websockets" to="Websockets" method="_on_wolfx_pong"]
 [connection signal="timeout" from="Websockets/Wolfx-Ping" to="Websockets" method="_on_wolfx_ping_timeout"]
 [connection signal="timeout" from="Websockets/FanStudio-Ping" to="Websockets" method="_on_fan_studio_ping_timeout"]
 [connection signal="timeout" from="Reconnect Timer/Wolfx" to="Websockets" method="_on_wolfx_timeout"]
