@@ -553,6 +553,8 @@ func poll_p2pq():
 					]))
 					$"../Flipping-Text-Window/VBoxContainer".add_child(msg)
 					print("Received from p2pquake: %s" % message)
+				555:
+					pass
 				_:
 					var msg = news_message_scene.instantiate()
 					msg.set_text(PackedStringArray([
