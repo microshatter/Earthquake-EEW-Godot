@@ -6,15 +6,21 @@ var config_file = "user://config.json"
 func load_settings():
 	if FileAccess.file_exists(config_file):
 		var f = FileAccess.open(config_file, FileAccess.READ)
-		var options = f.get_var()
-		$VBoxContainer/Settings/GeoLocation/LatitudeSpinBox.value = options.latitude
-		$VBoxContainer/Settings/GeoLocation/LongitudeSpinBox.value = options.longitude
-		$VBoxContainer/Settings/MagnitudeIntensity/MagSpinBox.value = options.minmagnitude
-		$VBoxContainer/Settings/MagnitudeIntensity/IntenSpinBox.value = options.minintensity
-		$VBoxContainer/Settings/FanApi/LineEdit.text = options.fanapi
+		var json = JSON.new()
+		var err = json.parse(f.get_as_text())
+		var options = {}
+		if err == OK:
+			options = json.data
+		else:
+			$"../../Websockets".add_notification("JSON load failed! Using default value. \nCheck config and reload again!")
+			$"..".show()
+			OS.shell_open(ProjectSettings.globalize_path(config_file))
+		$VBoxContainer/Settings/GeoLocation/LatitudeSpinBox.value = options.get("latitude", 0.0)
+		$VBoxContainer/Settings/GeoLocation/LongitudeSpinBox.value = options.get("longitude", 0.0)
+		$VBoxContainer/Settings/MagnitudeIntensity/MagSpinBox.value = options.get("minmagnitude", 0)
+		$VBoxContainer/Settings/MagnitudeIntensity/IntenSpinBox.value = options.get("minintensity", 5)
+		$VBoxContainer/Settings/FanApi/LineEdit.text = options.get("fanapi", "")
 		print("Config loaded!")
-	else:
-		save_settings()
 
 func save_settings():
 	var options = {
@@ -25,7 +31,7 @@ func save_settings():
 		"fanapi": $VBoxContainer/Settings/FanApi/LineEdit.text
 	}
 	var f = FileAccess.open(config_file, FileAccess.WRITE)
-	f.store_var(options)
+	f.store_string(JSON.stringify(options, "  "))
 	f.close()
 	print("Config saved")
 
