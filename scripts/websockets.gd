@@ -56,7 +56,7 @@ func fan_con_type(full = false):
 		return t
 	else:
 		return ""
-		
+
 func calculate_distance(lat1: float, long1: float, lat2: float, long2: float) -> float:
 	# Earth's radius in kilometers
 	var R: float = 6371.0
@@ -123,7 +123,7 @@ func calculate_local_intensity(distance: float, maxIntensity: float, depth: floa
 			site_boost = 0.0
 
 	var beta := 1.5
-	
+
 	var intensity := maxIntensity
 	if hypocentral_distance > 1.0:
 		intensity = maxIntensity - beta * log(hypocentral_distance) / log(10.0) + site_boost
@@ -170,24 +170,24 @@ func jma_to_chinese(jma_intensity: float) -> float:
 func parse_jma_string(intensity_str) -> float:
 	# Converts a JMA intensity string (e.g. "5弱", "5強", "6弱", "6強", "7", "4")
 	# to a continuous value on the JMA 0–7 scale (弱 → X.0, 強 → X.5).
-	
+
 	var value := 0.0
-	
+
 	# Extract numeric part using regex
 	var regex := RegEx.new()
 	regex.compile("\\d+")
 	var result := regex.search(intensity_str)
-	
+
 	if result:
 		value = float(result.get_string())
 	else:
 		return 0.0
-	
+
 	# Add 0.5 for 強 (strong)
 	if "強" in intensity_str:
 		value += 0.5
 	# "弱" (weak) stays as-is
-	
+
 	return clamp(value, 0.0, 7.0)
 
 func add_notification(message, sec=5):
@@ -196,7 +196,7 @@ func add_notification(message, sec=5):
 	msg.add_text(message)
 	$"../Flipping-Text-Window/VBoxContainer".add_child(msg)
 	msg.start_different_hidden_timer(sec)
-	
+
 func send_eew(header, title, desc, distance = 0, intensity = 0):
 	$"../EEW-Popup-Window/EEW-Popup".set_header(header)
 	$"../EEW-Popup-Window/EEW-Popup".set_text(title)
@@ -253,7 +253,7 @@ func send_fan_ping():
 	pings.set("fan", Time.get_ticks_msec())
 	recieved_pinged.set("fan", false)
 	$"FanStudio-Ping".start()
-	
+
 func send_p2p_ping():
 	p2pq.send_text("ping")
 	pings.set("p2p", Time.get_ticks_msec())
@@ -399,8 +399,8 @@ func poll_fan():
 			if len(key) > 0 and not fan_key_sent and not fan_key_invalid and FAN_STUDIO_APP_ID != null:
 				var auth_payload = {
 					"type": 'auth',
-                    "appId": FAN_STUDIO_APP_ID,
-                    "key": key
+					"appId": FAN_STUDIO_APP_ID,
+					"key": key
 				}
 				fan.send_text(JSON.stringify(auth_payload))
 				fan_key_sent = true
@@ -504,7 +504,7 @@ func poll_fan():
 								JSON.stringify(data)
 							]))
 							$"../Flipping-Text-Window/VBoxContainer".add_child(msg)
-							print("Received from %s(FAN Studio): %s" % [data_source, JSON.stringify(data)]) 
+							print("Received from %s(FAN Studio): %s" % [data_source, JSON.stringify(data)])
 				_:
 					add_notification("Received from FAN Studio\n%s" % message, 30)
 					print("Received from fan: %s" % message)
