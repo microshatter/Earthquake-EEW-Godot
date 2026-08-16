@@ -1,8 +1,5 @@
 extends Node
 
-# -- folders --
-var config_path = "user://config.json"
-#--------------
 
 @export var indicator_id = -1
 var indicator_menu: PopupMenu
@@ -11,23 +8,6 @@ var indicator_menu: PopupMenu
 @onready var main_window = get_window()
 
 
-func load_option() -> Dictionary:
-	var options = {}
-	if FileAccess.file_exists(config_path):
-		var f = FileAccess.open(config_path, FileAccess.READ)
-		var json = JSON.new()
-		var err = json.parse(f.get_as_text())
-		if err == OK:
-			options = json.data
-
-	var fixed_options = {
-		"latitude": options.get("latitude", 0.0),
-		"longitude": options.get("longitude", 0.0),
-		"minmagnitude": options.get("minmagnitude", 0),
-		"minintensity": options.get("minintensity", 5),
-		"fanapi": options.get("fanapi", "")
-	}
-	return fixed_options
 
 func initialize_window():
 	$"EEW-Popup-Window".move_to_center()

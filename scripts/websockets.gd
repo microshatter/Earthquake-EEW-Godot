@@ -59,7 +59,7 @@ func fan_con_type(full = false):
 
 # Distance Calculation
 func get_distance_from_source(latitude, longtitude):
-	var opt = $"..".load_option()
+	var opt = Utils.load_option()
 	var lat = opt.latitude
 	var long = opt.longitude
 	return Utils.calculate_distance(lat, long, latitude, longtitude)
@@ -102,7 +102,7 @@ func connect_fan():
 	fan_is_authorized = false
 	fan_key_sent = false
 	fan_key_invalid = false
-	if len($"..".load_option().get("fanapi", "")) <= 0:
+	if len(Utils.load_option().get("fanapi", "")) <= 0:
 		add_notification("You don't have FAN Studio API key entered! Most of the data source are restricted!", 30)
 	fan.connect_to_url(api_sources.eqUrls.fan_ws[fan_url])
 	$"../StatContainer/FanStudio".text = "FAN%s(Connecting)" % fan_con_type()
@@ -268,7 +268,7 @@ func poll_fan():
 	var state = fan.get_ready_state()
 	if state == WebSocketPeer.STATE_OPEN:
 		fan_attempts = 0
-		var key = $"..".load_option().get("fanapi", "")
+		var key = Utils.load_option().get("fanapi", "")
 		if not fan_is_authorized:
 			if len(key) > 0 and not fan_key_sent and not fan_key_invalid and FAN_STUDIO_APP_ID != null:
 				var auth_payload = {

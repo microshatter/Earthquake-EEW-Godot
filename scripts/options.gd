@@ -1,11 +1,11 @@
 extends Control
 
-var config_file = "user://config.json"
+
 @onready var http_request = $HTTPRequest
 
 func load_settings():
-	if FileAccess.file_exists(config_file):
-		var f = FileAccess.open(config_file, FileAccess.READ)
+	if FileAccess.file_exists(Utils.config_path):
+		var f = FileAccess.open(Utils.config_path, FileAccess.READ)
 		var json = JSON.new()
 		var err = json.parse(f.get_as_text())
 		var options = {}
@@ -14,7 +14,7 @@ func load_settings():
 		else:
 			$"../../Websockets".add_notification("JSON load failed! Using default value. \nCheck config and reload again!")
 			$"..".show()
-			OS.shell_open(ProjectSettings.globalize_path(config_file))
+			OS.shell_open(ProjectSettings.globalize_path(Utils.config_path))
 		$VBoxContainer/Settings/GeoLocation/LatitudeSpinBox.value = options.get("latitude", 0.0)
 		$VBoxContainer/Settings/GeoLocation/LongitudeSpinBox.value = options.get("longitude", 0.0)
 		$VBoxContainer/Settings/MagnitudeIntensity/MagSpinBox.value = options.get("minmagnitude", 0)
@@ -30,7 +30,7 @@ func save_settings():
 		"minintensity": $VBoxContainer/Settings/MagnitudeIntensity/IntenSpinBox.value,
 		"fanapi": $VBoxContainer/Settings/FanApi/LineEdit.text
 	}
-	var f = FileAccess.open(config_file, FileAccess.WRITE)
+	var f = FileAccess.open(Utils.config_path, FileAccess.WRITE)
 	f.store_string(JSON.stringify(options, "  "))
 	f.close()
 	print("Config saved")

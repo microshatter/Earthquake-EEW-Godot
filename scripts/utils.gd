@@ -1,5 +1,45 @@
 class_name Utils
 extends RefCounted
+# Options
+static var config_path = "user://config.json"
+
+# Functions
+static func load_option() -> Dictionary:
+	var options = {}
+	if FileAccess.file_exists(config_path):
+		var f = FileAccess.open(config_path, FileAccess.READ)
+		var json = JSON.new()
+		var err = json.parse(f.get_as_text())
+		if err == OK:
+			options = json.data
+
+	var fixed_options = {
+		"latitude": options.get("latitude", 0.0),
+		"longitude": options.get("longitude", 0.0),
+		"minmagnitude": options.get("minmagnitude", 0),
+		"minintensity": options.get("minintensity", 5),
+		"fanapi": options.get("fanapi", "")
+	}
+	return fixed_options
+
+
+static func wrap_string(text: String, max_length: int):
+	var a = text
+	var final = ""
+	while len(a) > 0:
+		if len(a) <= max_length:
+			final += a
+			return final
+		var s = a.left(max_length).strip_edges()
+		var last_space = max(s.rfind(" "), s.rfind("\t"), s.rfind("\n"), s.rfind("\r"))
+		if last_space > 0:
+			final += a.left(last_space) + "\n"
+			a = a.substr(last_space + 1)
+		else:
+			final += s + "\n"
+			a = a.substr(max_length)
+
+	return final
 
 static func calculate_distance(lat1: float, long1: float, lat2: float, long2: float) -> float:
 	# Earth's radius in kilometers
