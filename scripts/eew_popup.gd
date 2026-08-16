@@ -10,7 +10,7 @@ func set_header(text):
 func set_text(text):
 	$VBoxContainer/BodyContent/VBoxContainer/Label.text = text
 	text_changed.emit()
-	
+
 func set_affected_cities(text):
 	$VBoxContainer/BodyContent/VBoxContainer/RichTextLabel.text = text
 	text_changed.emit()

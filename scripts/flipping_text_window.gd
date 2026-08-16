@@ -18,7 +18,7 @@ func _ready() -> void:
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
 	var display_size = DisplayServer.screen_get_size()
-	
+
 	var news_count = $VBoxContainer.get_child_count()
 	if news_count > 0:
 		show()

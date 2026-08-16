@@ -1,6 +1,6 @@
 extends Node
 
-# -- folders -- 
+# -- folders --
 var config_path = "user://config.json"
 #--------------
 
@@ -36,7 +36,7 @@ func initialize_window():
 func create_indicator():
 	var icon_texture = preload("res://icon.svg")
 	indicator_id = DisplayServer.create_status_indicator(
-		icon_texture, 
+		icon_texture,
 		"Earthquake and EEW Warning",
 		self._on_indicator_clicked
 	)
@@ -57,7 +57,7 @@ func _process(delta: float) -> void:
 		$"StatContainer/wolfx-timer".show()
 	else:
 		$"StatContainer/wolfx-timer".hide()
-		
+
 	if $"Websockets/FanStudio-Ping".time_left > 0:
 		$"StatContainer/fanstudio-timer".show()
 	else:

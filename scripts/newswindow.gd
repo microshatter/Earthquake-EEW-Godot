@@ -16,17 +16,17 @@ func set_text(text_line: Array[String]):
 	text_lines = text_line.duplicate()
 	for i in range(len(text_lines)):
 		text_lines[i].strip_edges()
-	
+
 func add_text(text: String):
 	text_lines.append(text.strip_edges())
-	
+
 func clear_text():
 	text_lines.clear()
-	
+
 func strip_message():
 	for i in range(len(text_lines)):
 		text_lines[i] = wrap_string(text_lines[i].strip_edges(), max_char)
-	
+
 func return_text_lines(line: int, reset: bool = true):
 	if line < 0 or line >= len(text_lines):
 		return 0
@@ -35,7 +35,7 @@ func return_text_lines(line: int, reset: bool = true):
 	if reset:
 		$Label.text = text_lines[current_line]
 	return lines
-	
+
 func return_fixed_message_content():
 	var fixed_texts: Array[String] = []
 	for i in range(len(text_lines)):
@@ -58,7 +58,7 @@ func return_fixed_message_content():
 		#print("Text %d: Lines = %d, Visible Lines = %d, Overload = %s" % [i + 1, lines, visible_lines, lines > visible_lines])
 	$Label.text = text_lines[current_line]
 	return fixed_texts
-	
+
 func start_different_hidden_timer(sec):
 	$HiddenTimer.start(sec)
 
@@ -75,7 +75,7 @@ func test_simulated_eng_chars_in_line():
 	print("This monitor max chars is %d in a line! It may have chinese and japanese chars, so it will set to %d" % [len(t), max_char])
 	$Label.text = ""
 	$Label.size.x = og_width
-	
+
 func wrap_string(text: String, max_length: int):
 	var a = text
 	var final = ""
@@ -91,7 +91,7 @@ func wrap_string(text: String, max_length: int):
 		else:
 			final += s + "\n"
 			a = a.substr(max_length)
-			
+
 	return final
 
 # Called when the node enters the scene tree for the first time.
