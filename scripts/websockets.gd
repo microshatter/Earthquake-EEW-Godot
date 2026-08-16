@@ -402,7 +402,7 @@ func poll_fan():
                     "appId": FAN_STUDIO_APP_ID,
                     "key": key
 				}
-				fan.send(auth_payload)
+				fan.send_text(JSON.stringify(auth_payload))
 				fan_key_sent = true
 			elif fan_key_sent:
 				$"../StatContainer/FanStudio".text = "FAN%s(Authorizing)(%s)" % [fan_con_type(), return_ping_time_recieved("fan")]
