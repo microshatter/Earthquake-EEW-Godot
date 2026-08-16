@@ -564,7 +564,6 @@ func poll_p2pq():
 						"地震発生場所：%s | 緯度：%s | 経度：%s\nマグニチュード%s | 震源の深さ：%s" % [location, latitude, longitude, magnitude, depth]
 					]))
 					$"../Flipping-Text-Window/VBoxContainer".add_child(msg)
-					print("Received from p2pquake: %s" % message)
 				552:
 					var msg = news_message_scene.instantiate()
 					msg.set_text(PackedStringArray([
@@ -572,7 +571,6 @@ func poll_p2pq():
 						message
 					]))
 					$"../Flipping-Text-Window/VBoxContainer".add_child(msg)
-					print("Received from p2pquake: %s" % message)
 				555, 561, 9611:
 					pass
 				556:
