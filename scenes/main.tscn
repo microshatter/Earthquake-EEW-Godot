@@ -1,7 +1,6 @@
 [gd_scene format=3 uid="uid://mhteu7l8jc"]
 
 [ext_resource type="Script" uid="uid://xw65t8841emu" path="res://scripts/main.gd" id="1_0wfyh"]
-[ext_resource type="Script" uid="uid://dqd6cq5eek0i4" path="res://scripts/api_sources.gd" id="1_o5qli"]
 [ext_resource type="PackedScene" uid="uid://bhl7wlfwwwfbm" path="res://scenes/eew_popup.tscn" id="2_sugp2"]
 [ext_resource type="PackedScene" uid="uid://cweo8dp4fg2xk" path="res://scenes/options.tscn" id="3_jyhfs"]
 [ext_resource type="Script" uid="uid://bhf6jwajolacb" path="res://scripts/websockets.gd" id="3_tbgi4"]
@@ -13,9 +12,6 @@
 
 [node name="Main" type="Node" unique_id=1409934259]
 script = ExtResource("1_0wfyh")
-
-[node name="API-sources" type="Node" parent="." unique_id=1979285615]
-script = ExtResource("1_o5qli")
 
 [node name="Websockets" type="Node" parent="." unique_id=1498491870]
 script = ExtResource("3_tbgi4")

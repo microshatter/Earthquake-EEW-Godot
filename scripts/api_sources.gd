@@ -1,6 +1,7 @@
-extends Node
+class_name API_URLs
+extends RefCounted
 
-@export var eqUrls: Dictionary = {
+static var eqUrls: Dictionary = {
 	"niedLatest": "http://www.kmoni.bosai.go.jp/webservice/server/pros/latest.json",
 	"jmaEew2_http": "http://www.kmoni.bosai.go.jp/webservice/hypo/eew",
 	"jmaEqlist_http": "https://api.p2pquake.net/v2/history?codes=551&limit=1",
@@ -10,10 +11,10 @@ extends Node
 	"fan_ws": ["wss://ws.fanstudio.tech/all", "wss://ws.fanstudio.hk/all"],
 	"p2pquake_ws": ["wss://api.p2pquake.net/v2/ws"],
 };
-@export var tsunamiUrls: Dictionary = {
+static var tsunamiUrls: Dictionary = {
 	"jmaTsunami_http": "https://api.p2pquake.net/v2/history?codes=552&limit=1",
 };
-@export var seisNetUrls: Dictionary = {
+static var seisNetUrls: Dictionary = {
 	"nied": {
 		"stationList":
 			"https://weather-kyoshin.east.edge.storage-yahoo.jp/SiteList/sitelist.json",
@@ -25,10 +26,10 @@ extends Node
 		"wss://ws.fanstudio.hk/kma-station",
 	],
 };
-@export var utilUrls: Dictionary = {
+static var utilUrls: Dictionary = {
 	"geoIp": "https://api.wolfx.jp/geoip.php",
 	"ntpTime": "https://api.fanstudio.tech/tool/ntp.php",
 };
-@export var typhoonUrls: Dictionary = {
+static var typhoonUrls: Dictionary = {
 	"typhoon_http": "https://api.fanstudio.tech/we/typhoon.php",
 };

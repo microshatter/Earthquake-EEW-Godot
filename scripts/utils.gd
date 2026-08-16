@@ -1,7 +1,8 @@
 class_name Utils
 extends RefCounted
-# Options
+
 static var config_path = "user://config.json"
+static var FAN_STUDIO_APP_ID = null
 
 # Functions
 static func load_option() -> Dictionary:

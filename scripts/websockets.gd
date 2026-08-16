@@ -1,7 +1,5 @@
 extends Node
 
-@onready var api_sources = $"../API-sources"
-var FAN_STUDIO_APP_ID = null
 
 var wolfx = WebSocketPeer.new()
 var fan = WebSocketPeer.new()
@@ -85,7 +83,7 @@ func print_eew(header, title, desc, reportnum):
 	print("========================")
 
 func connect_wolfx():
-	wolfx.connect_to_url(api_sources.eqUrls.wolfx_ws[0])
+	wolfx.connect_to_url(API_URLs.eqUrls.wolfx_ws[0])
 	wolfx_pinged = false
 	$"../StatContainer/Wolfx".text = "Wolfx(Connecting)"
 	$"../StatContainer/Wolfx".add_theme_color_override("font_color", Color("ffff00"))
@@ -95,22 +93,22 @@ func connect_fan():
 	fan_attempts += 1
 	if fan_attempts > 5:
 		fan_url += 1
-		if fan_url >= len(api_sources.eqUrls.fan_ws):
+		if fan_url >= len(API_URLs.eqUrls.fan_ws):
 			fan_url = 0
-		print("Switching to " + api_sources.eqUrls.fan_ws[fan_url])
+		print("Switching to " + API_URLs.eqUrls.fan_ws[fan_url])
 	fan_pinged = false
 	fan_is_authorized = false
 	fan_key_sent = false
 	fan_key_invalid = false
 	if len(Utils.load_option().get("fanapi", "")) <= 0:
 		add_notification("You don't have FAN Studio API key entered! Most of the data source are restricted!", 30)
-	fan.connect_to_url(api_sources.eqUrls.fan_ws[fan_url])
+	fan.connect_to_url(API_URLs.eqUrls.fan_ws[fan_url])
 	$"../StatContainer/FanStudio".text = "FAN%s(Connecting)" % fan_con_type()
 	$"../StatContainer/FanStudio".add_theme_color_override("font_color", Color("ffff00"))
 	$"FanStudio-Ping".start()
 
 func connect_p2pq():
-	p2pq.connect_to_url(api_sources.eqUrls.p2pquake_ws[0])
+	p2pq.connect_to_url(API_URLs.eqUrls.p2pquake_ws[0])
 	p2p_pinged = false
 	#p2pq.connect_to_url("ws://localhost:3000/_ws")
 	$"../StatContainer/P2P".text = "P2P(Connecting)"
@@ -270,10 +268,10 @@ func poll_fan():
 		fan_attempts = 0
 		var key = Utils.load_option().get("fanapi", "")
 		if not fan_is_authorized:
-			if len(key) > 0 and not fan_key_sent and not fan_key_invalid and FAN_STUDIO_APP_ID != null:
+			if len(key) > 0 and not fan_key_sent and not fan_key_invalid and Utils.FAN_STUDIO_APP_ID != null:
 				var auth_payload = {
 					"type": 'auth',
-					"appId": FAN_STUDIO_APP_ID,
+					"appId": Utils.FAN_STUDIO_APP_ID,
 					"key": key
 				}
 				fan.send_text(JSON.stringify(auth_payload))
