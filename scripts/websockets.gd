@@ -1,6 +1,7 @@
 extends Node
 
 @onready var api_sources = $"../API-sources"
+var FAN_STUDIO_APP_ID = null
 
 var wolfx = WebSocketPeer.new()
 var fan = WebSocketPeer.new()
@@ -395,8 +396,13 @@ func poll_fan():
 		fan_attempts = 0
 		var key = $"..".load_option().get("fanapi", "")
 		if not fan_is_authorized:
-			if len(key) > 0 and not fan_key_sent and not fan_key_invalid:
-				fan.send(key)
+			if len(key) > 0 and not fan_key_sent and not fan_key_invalid and FAN_STUDIO_APP_ID != null:
+				var auth_payload = {
+					"type": 'auth',
+                    "appId": FAN_STUDIO_APP_ID,
+                    "key": key
+				}
+				fan.send(auth_payload)
 				fan_key_sent = true
 			elif fan_key_sent:
 				$"../StatContainer/FanStudio".text = "FAN%s(Authorizing)(%s)" % [fan_con_type(), return_ping_time_recieved("fan")]
@@ -428,6 +434,16 @@ func poll_fan():
 				"auth_required":
 					if len(key) > 0 and not fan_key_sent and not fan_key_invalid:
 						fan.send_text(key)
+				"auth_success":
+					fan_is_authorized = true
+					add_notification("FAN Studio API authorize success!")
+				"auth_fail":
+					fan_key_invalid = true
+					var err_message = json_message.get("message")
+					if err_message:
+						add_notification("FAN Studio API authorize failed：%s" % err_message)
+					else:
+						add_notification("FAN Studio API authorize failed. Please check your API key")
 				"update":
 					# Fetch from data
 					var data = json_message.Data
