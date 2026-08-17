@@ -42,3 +42,10 @@ jobs:
         generateReleaseNotes: true
         tag: ${{ github.ref_name }}
         artifacts: ${{ steps.export.outputs.archive_directory }}/*
+        draft: true
+        
+    - name: upload artifacts
+      uses: actions/upload-artifact@v7
+      with:
+        name: godot-builds
+        path: ${{ steps.export.outputs.archive_directory }}/*
