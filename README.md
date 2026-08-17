@@ -9,8 +9,8 @@ This project is currently made with Godot 4.7, may update engine later
 > * Local intensity estimation (`calculate_local_intensity` in `scripts/utils.gd`)
 > * Epicentral intensity estimation from magnitude/depth (`magnitude_to_intensity`) and the JMA ⇄ Chinese intensity scale conversions (`chinese_to_jma` / `jma_to_chinese`)
 
->[!INFO]
-> ⚠️ The intensity calculations are **simplified empirical models for educational use only**, with roughly ±1 unit of uncertainty. They must **not** be used for life-safety decisions or official reporting. For production use, rely on official JMA/CENC real-time systems.
+> [!NOTE]
+> The intensity calculations are **simplified empirical models for educational use only**, with roughly ±1 unit of uncertainty. They must **not** be used for life-safety decisions or official reporting. For production use, rely on official JMA/CENC real-time systems.
 
 # Data Source
 > Copied from [https://github.com/Lipomoea/kanameishi/blob/dev/README.md#数据来源]
