@@ -55,6 +55,7 @@ text = "Min Magnitude"
 
 [node name="MagSpinBox" type="SpinBox" parent="VBoxContainer/Settings/MagnitudeIntensity" unique_id=1068096392]
 layout_mode = 2
+step = 0.1
 value = 1.0
 
 [node name="IntenLabel" type="Label" parent="VBoxContainer/Settings/MagnitudeIntensity" unique_id=1627747439]
@@ -63,6 +64,8 @@ text = "Min Intensity"
 
 [node name="IntenSpinBox" type="SpinBox" parent="VBoxContainer/Settings/MagnitudeIntensity" unique_id=1910350469]
 layout_mode = 2
+max_value = 10.0
+step = 0.1
 value = 5.0
 
 [node name="FanApi" type="HBoxContainer" parent="VBoxContainer/Settings" unique_id=35183253]
