@@ -2,7 +2,7 @@
 This is EEW and news that inspired from NHK, except the EEW don't have a map, and news are aligned at top
 This project is currently made with Godot 4.7, may update engine later
 
-> # AI Generated Notice
+> [!WARNING]
 > This project is AI Generated: parts of the project, including parts of the scripts, were written with the assistance of an AI.
 >
 > AI-assisted areas include (but are not limited to):
