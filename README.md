@@ -1,15 +1,13 @@
 # Project Info
 This is EEW and news that inspired from NHK, except the EEW don't have a map, and news are aligned at top
 This project is currently made with Godot 4.7, may update engine later
-> P2PQuake is not used in this project
 
 > # AI Generated Notice
 > This project is AI Generated: parts of the project, including parts of the scripts, were written with the assistance of an AI.
 >
 > AI-assisted areas include (but are not limited to):
-> * Local intensity estimation (`calculate_local_intensity` in `scripts/websockets.gd`)
+> * Local intensity estimation (`calculate_local_intensity` in `scripts/utils.gd`)
 > * Epicentral intensity estimation from magnitude/depth (`magnitude_to_intensity`) and the JMA ⇄ Chinese intensity scale conversions (`chinese_to_jma` / `jma_to_chinese`)
-> * The built-in AI assistant prompt and request handling (`scripts/ai_http.gd`)
 >
 > ⚠️ The intensity calculations are **simplified empirical models for educational use only**, with roughly ±1 unit of uncertainty. They must **not** be used for life-safety decisions or official reporting. For production use, rely on official JMA/CENC real-time systems.
 
