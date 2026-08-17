@@ -1,5 +1,5 @@
 # Project Info
-This is EEW and news that inspired from NHK, except the EEW don't have a map, and news are aligned at top
+This is a software that notify users EEW and earthquake information.  EEW don't have a map, and earthquake information are aligned at center
 This project is currently made with Godot 4.7, may update engine later
 
 > [!WARNING]
@@ -8,7 +8,8 @@ This project is currently made with Godot 4.7, may update engine later
 > AI-assisted areas include (but are not limited to):
 > * Local intensity estimation (`calculate_local_intensity` in `scripts/utils.gd`)
 > * Epicentral intensity estimation from magnitude/depth (`magnitude_to_intensity`) and the JMA ⇄ Chinese intensity scale conversions (`chinese_to_jma` / `jma_to_chinese`)
->
+
+>[!INFO]
 > ⚠️ The intensity calculations are **simplified empirical models for educational use only**, with roughly ±1 unit of uncertainty. They must **not** be used for life-safety decisions or official reporting. For production use, rely on official JMA/CENC real-time systems.
 
 # Data Source
