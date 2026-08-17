@@ -137,7 +137,7 @@ func _ready() -> void:
 	connect_wolfx()
 	connect_fan()
 	connect_p2pq()
-	send_eew("EEW Test", "Just a test btw", "test ".repeat(60), 730, Utils.calculate_local_intensity_magnitude(730, 4, 10))
+	# send_eew("EEW Test", "Just a test btw", "test ".repeat(60), 730, Utils.calculate_local_intensity_magnitude(730, 5.9, 10))
 
 func poll_wolfx():
 	if $"../Reconnect Timer/Wolfx".time_left > 0: # Don't pull if connection lost
