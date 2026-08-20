@@ -50,6 +50,7 @@ visible = false
 borderless = true
 always_on_top = true
 transparent = true
+popup_window = true
 script = ExtResource("4_85g3d")
 
 [node name="EEW-Popup" parent="EEW-Popup-Window" unique_id=1677442648 instance=ExtResource("2_sugp2")]
@@ -72,6 +73,7 @@ visible = false
 borderless = true
 always_on_top = true
 transparent = true
+popup_window = true
 script = ExtResource("5_tefeu")
 
 [node name="VBoxContainer" type="VBoxContainer" parent="Flipping-Text-Window" unique_id=602997996]

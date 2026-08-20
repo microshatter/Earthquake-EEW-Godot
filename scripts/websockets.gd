@@ -120,6 +120,7 @@ func send_wolfx_ping():
 	pings.set("wolfx", Time.get_ticks_msec())
 	recieved_pinged.set("wolfx", false)
 	$"Wolfx-Ping".start()
+
 func send_fan_ping():
 	fan.send_text("ping")
 	pings.set("fan", Time.get_ticks_msec())
@@ -520,6 +521,14 @@ func _on_fan_studio_ping_timeout() -> void:
 	else:
 		fan.close(1000, "Connection Time Out")
 		fan = WebSocketPeer.new()
+
+
+func _on_p_2p_ping_timeout() -> void:
+	if recieved_pinged.get("p2p", false):
+		send_p2p_ping()
+	else:
+		p2pq.close(1000, "Connection Time Out")
+		p2pq = WebSocketPeer.new()
 
 
 func _on_wolfx_pong() -> void:
