@@ -94,6 +94,7 @@ func _process(delta: float) -> void:
 	$Label.text = text_lines[current_line]
 	$Label.position = Vector2((size.x / 2) - ($Label.size.x / 2), (size.y / 2) - ($Label.size.y / 2))
 	$ColorRect.size = size
+	$CloseButton/Label.text = "(%.1fs)" % $HiddenTimer.time_left
 
 func _on_cycle_timer_timeout() -> void:
 	current_line += 1
@@ -101,4 +102,8 @@ func _on_cycle_timer_timeout() -> void:
 		current_line = 0
 
 func _on_hidden_timer_timeout() -> void:
+	hide()
+
+
+func _on_button_pressed() -> void:
 	hide()

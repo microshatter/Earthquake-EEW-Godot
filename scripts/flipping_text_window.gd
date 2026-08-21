@@ -32,6 +32,6 @@ func _process(delta: float) -> void:
 		hide()
 
 
-func _on_close_requested() -> void:
+func _on_close_all_button_pressed() -> void:
 	for i in $VBoxContainer.get_children():
 		$VBoxContainer.remove_child(i)

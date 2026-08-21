@@ -9,6 +9,7 @@ static var eqUrls: Dictionary = {
 		"https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/2.5_week.geojson",
 	"wolfx_ws": ["wss://ws-api.wolfx.jp/all_eew"],
 	"fan_ws": ["wss://ws.fanstudio.tech/all", "wss://ws.fanstudio.hk/all"],
+	"whews_ws": ["wss://api.2v8.cn/ws/all", "wss://api.beecld.com/ws/all"],
 	"p2pquake_ws": ["wss://api.p2pquake.net/v2/ws"],
 };
 static var tsunamiUrls: Dictionary = {

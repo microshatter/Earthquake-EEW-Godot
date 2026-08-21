@@ -4,33 +4,46 @@ extends Node
 var wolfx = WebSocketPeer.new()
 var fan = WebSocketPeer.new()
 var p2pq = WebSocketPeer.new()
+var whews = WebSocketPeer.new()
 
 var news_message_scene = preload("res://scenes/newswindow.tscn")
 
-var fan_attempts = 0
-var fan_url = 0
 var wolfx_pinged = false
 var fan_pinged = false
 var p2p_pinged = false
+var whews_pinged = false
+
+var fan_attempts = 0
+var fan_url = 0
 var fan_is_authorized = false
 var fan_key_sent = false
 var fan_key_invalid = false
+
+var whews_is_authorized = false
+var whews_key_sent = false
+var whews_key_invalid = false
+var whews_last_invalid_key = ""
+var whews_current_key = ""
+
 var pings = {
 	"wolfx": 0,
 	"fan": 0,
-	"p2p": 0
+	"p2p": 0,
+	"whews": 0
 }
 
 var recieved_pinged = {
 	"wolfx": false,
 	"fan": false,
-	"p2p": false
+	"p2p": false,
+	"whews": false
 }
 
 var recieved_time = {
 	"wolfx": 0,
 	"fan": 0,
-	"p2p": 0
+	"p2p": 0,
+	"whews": 0
 }
 
 func return_ping_time_recieved(service="wolfx"):
@@ -43,6 +56,7 @@ func return_ping_time_recieved(service="wolfx"):
 signal wolfx_pong()
 signal fanstudio_pong()
 signal p2pquake_pong()
+signal whews_pong()
 
 func fan_con_type(full = false):
 	var t
@@ -107,6 +121,26 @@ func connect_fan():
 	$"../StatContainer/FanStudio".add_theme_color_override("font_color", Color("ffff00"))
 	$"FanStudio-Ping".start()
 
+func connect_whews():
+	var key = Utils.load_option().get("whewsapi", "")
+	if len(key) <= 0:
+		$"../StatContainer/WHEWS".text = "WHEWS(Unauthorized)"
+		$"../StatContainer/WHEWS".add_theme_color_override("font_color", Color("ff0000"))
+		return
+	elif key == whews_last_invalid_key:
+		$"../StatContainer/WHEWS".text = "WHEWS(Invalid)"
+		$"../StatContainer/WHEWS".add_theme_color_override("font_color", Color("ff0000"))
+		return
+	whews_pinged = false
+	whews_is_authorized = false
+	whews_key_sent = false
+	whews_key_invalid = false
+	whews_current_key = key
+	whews.connect_to_url(API_URLs.eqUrls.whews_ws[0] + "?token=%s" % key)
+	$"../StatContainer/WHEWS".text = "WHEWS(Connecting)"
+	$"../StatContainer/WHEWS".add_theme_color_override("font_color", Color("ffff00"))
+	$"WHEWS-Ping".start()
+
 func connect_p2pq():
 	p2pq.connect_to_url(API_URLs.eqUrls.p2pquake_ws[0])
 	p2p_pinged = false
@@ -120,11 +154,18 @@ func send_wolfx_ping():
 	pings.set("wolfx", Time.get_ticks_msec())
 	recieved_pinged.set("wolfx", false)
 	$"Wolfx-Ping".start()
+
 func send_fan_ping():
 	fan.send_text("ping")
 	pings.set("fan", Time.get_ticks_msec())
 	recieved_pinged.set("fan", false)
 	$"FanStudio-Ping".start()
+
+func send_whews_ping():
+	whews.send_text("ping")
+	pings.set("whews", Time.get_ticks_msec())
+	recieved_pinged.set("whews", false)
+	$"WHEWS-Ping".start()
 
 func send_p2p_ping():
 	p2pq.send_text("ping")
@@ -137,6 +178,7 @@ func _ready() -> void:
 	connect_wolfx()
 	connect_fan()
 	connect_p2pq()
+	connect_whews()
 	# send_eew("EEW Test", "Just a test btw", "test ".repeat(60), 730, Utils.calculate_local_intensity_magnitude(730, 5.9, 10))
 
 func poll_wolfx():
@@ -405,6 +447,89 @@ func poll_fan():
 			add_notification(("Connect to FAN Studio%s Lost\n" % fan_con_type(true)) + ("FAN Studio WebSocket closed with code: %d, reason: %s. Clean: %s" % [code, reason, code != -1]) + "\nReconnect in 5s", 5)
 			$"../Reconnect Timer/FanStudio".start()
 
+func poll_whews():
+	if $"../Reconnect Timer/WHEWS".time_left > 0: # Don't pull if connection lost
+		return
+	elif whews_key_invalid:
+		return
+	whews.poll()
+	var state = whews.get_ready_state()
+	if state == WebSocketPeer.STATE_OPEN:
+		$"../StatContainer/WHEWS".text = "WHEWS(%s)" % return_ping_time_recieved("whews")
+		$"../StatContainer/WHEWS".add_theme_color_override("font_color", Color("00ff00"))
+		if not whews_pinged:
+			send_whews_ping()
+			whews_pinged = true
+		while whews.get_available_packet_count():
+			var packet = whews.get_packet()
+			var message = packet.get_string_from_utf8()
+			var json_message = JSON.parse_string(message)
+			var json_type = typeof(json_message)
+			if json_type == TYPE_ARRAY:
+				print(message)
+			elif json_type == TYPE_DICTIONARY:
+				var message_type = json_message.get("type")
+				var data = json_message.get("Data", {})
+				var data_source = json_message.get("source", data.get("source"))
+				if data_source != null:
+					match data_source:
+						"weatheralarm":
+							var time = data.effective
+							var title = data.headline
+							var desc = data.description
+							var msg = news_message_scene.instantiate()
+							msg.set_text(PackedStringArray([
+								"中国气象局气象预警(WHEWS)\nChina Meteorological Administration Weather Warning",
+								"在%s\n%s" % [time, title],
+								desc
+							]))
+							$"../Flipping-Text-Window/VBoxContainer".add_child(msg)
+						"cenc":
+							var shocktime = data.shockTime
+							var location = data.placeName
+							var latitude = data.latitude
+							var longitude = data.longitude
+							var magnitude = data.magnitude
+							var depth = data.depth
+							var msg = news_message_scene.instantiate()
+							msg.set_text(PackedStringArray([
+								"中国地震局地震情报(FAN Studio)\nChina Earthquake Networks Center Earthquake Report\n以下内容将使用中文 The follow content will using Chinese",
+								"%s\n在%s发生了地震" % [shocktime, location],
+								"震源: %s | 纬度: %s | 经度: %s\nM%s | 深度: %s" % [location, latitude, longitude, magnitude, depth]
+							]))
+							$"../Flipping-Text-Window/VBoxContainer".add_child(msg)
+						_:
+							var msg = news_message_scene.instantiate()
+							msg.set_text(PackedStringArray([
+								"Received from WHEWS\nSource: %s" % data_source,
+								JSON.stringify(data)
+							]))
+							$"../Flipping-Text-Window/VBoxContainer".add_child(msg)
+							print("Received from %s(WHEWS): %s" % [data_source, JSON.stringify(data)])
+				else:
+					match message_type:
+						"pong":
+							print("WHEWS Server received ping")
+							whews_pong.emit()
+						"heartbeat":
+							print("Heartbeat recieved from WHEWS.")
+						_:
+							add_notification("Received from WHEWS\n%s" % message, 300)
+							print("Received from WHEWS: %s" % message)
+	elif state == WebSocketPeer.STATE_CLOSING:
+		pass
+	elif state == WebSocketPeer.STATE_CLOSED:
+		if $"WHEWS-Ping".time_left > 0:
+			$"WHEWS-Ping".stop()
+		$"../StatContainer/WHEWS".text = "WHEWS(Disconnected)"
+		$"../StatContainer/WHEWS".add_theme_color_override("font_color", Color("ff0000"))
+		var code = whews.get_close_code()
+		var reason = whews.get_close_reason()
+		print("WHEWS WebSocket closed with code: %d, reason %s. Clean: %s" % [code, reason, code != -1])
+		if code == 4401:
+			whews_last_invalid_key = whews_current_key
+			whews_key_invalid = true
+
 func poll_p2pq():
 	if $"../Reconnect Timer/P2P".time_left > 0: # Don't pull if connection lost
 		return
@@ -489,6 +614,7 @@ func _process(delta: float) -> void:
 	poll_wolfx()
 	poll_fan()
 	poll_p2pq()
+	poll_whews()
 	$"../StatContainer/wolfx-timer".text = "(%d)" % $"Wolfx-Ping".time_left
 	$"../StatContainer/fanstudio-timer".text = "(%d)" % $"FanStudio-Ping".time_left
 	$"../StatContainer/Label2".text = "(%d)" % $"P2P-Ping".time_left
@@ -522,6 +648,14 @@ func _on_fan_studio_ping_timeout() -> void:
 		fan = WebSocketPeer.new()
 
 
+func _on_whews_ping_timeout() -> void:
+	if recieved_pinged.get("whews", false):
+		send_whews_ping()
+	else:
+		whews.close(1000, "Connection Time Out")
+		whews = WebSocketPeer.new()
+
+
 func _on_wolfx_pong() -> void:
 	recieved_pinged.set("wolfx", true)
 	recieved_time.set("wolfx", Time.get_ticks_msec())
@@ -535,3 +669,8 @@ func _on_fanstudio_pong() -> void:
 func _on_p_2_pquake_pong() -> void:
 	recieved_pinged.set("p2p", true)
 	recieved_time.set("p2p", Time.get_ticks_msec())
+
+
+func _on_whews_pong() -> void:
+	recieved_pinged.set("whews", true)
+	recieved_time.set("whews", Time.get_ticks_msec())

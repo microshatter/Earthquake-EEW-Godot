@@ -49,7 +49,6 @@ func _on_indicator_clicked(mouse_button: int, _mouse_position: Vector2i):
 			$"Flipping-Text-Window/VBoxContainer".remove_child(i)
 	else:
 		$Options.visible = not $Options.visible
-		$Options.move_to_center()
 
 func _exit_tree() -> void:
 	if indicator_id != -1:
@@ -58,4 +57,8 @@ func _exit_tree() -> void:
 
 func _on_button_pressed() -> void:
 	$Options.visible = not $Options.visible
+	$Options.move_to_center()
+
+
+func _on_options_visibility_changed() -> void:
 	$Options.move_to_center()
