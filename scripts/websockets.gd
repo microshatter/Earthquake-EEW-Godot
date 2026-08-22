@@ -124,10 +124,12 @@ func connect_fan():
 func connect_whews():
 	var key = Utils.load_option().get("whewsapi", "")
 	if len(key) <= 0:
+		whews_key_invalid = true
 		$"../StatContainer/sources/WHEWS".text = "WHEWS(Unauthorized)"
 		$"../StatContainer/sources/WHEWS".add_theme_color_override("font_color", Color("ff0000"))
 		return
 	elif key == whews_last_invalid_key:
+		whews_key_invalid = true
 		$"../StatContainer/sources/WHEWS".text = "WHEWS(Invalid)"
 		$"../StatContainer/sources/WHEWS".add_theme_color_override("font_color", Color("ff0000"))
 		return
