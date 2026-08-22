@@ -615,6 +615,10 @@ func poll_whews():
 		if code == 4401:
 			whews_last_invalid_key = whews_current_key
 			whews_key_invalid = true
+			add_notification("WHEWS Authentication failed! Please check your API key, and restart the program!", INT32_MAX)
+		else:
+			add_notification("Connection to WHEWS lost\n" + ("WHEWS WebSocket closed with code: %d, reason: %s. Clean: %s" % [code, reason, code != -1]) + "\nReconnect in 5s", 5)
+		$"../Reconnect Timer/WHEWS".start()
 
 func poll_p2pq():
 	if $"../Reconnect Timer/P2P".time_left > 0: # Don't pull if connection lost

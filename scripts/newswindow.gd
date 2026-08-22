@@ -25,7 +25,7 @@ func clear_text():
 
 func strip_message():
 	var re = RegEx.new()
-	re.compile("[^\\p{Script=Latin}\\p{P}\\P{N}\\s]")
+	re.compile("[^\\x00-\\x7F\\p{P}\\p{N}\\s]")
 	for i in range(len(text_lines)):
 		var text = text_lines[i].strip_edges()
 		var result = re.search(text)
