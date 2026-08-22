@@ -24,8 +24,15 @@ func clear_text():
 	text_lines.clear()
 
 func strip_message():
+	var re = RegEx.new()
+	re.compile("[^\\p{Script=Latin}\\p{P}\\P{N}\\s]")
 	for i in range(len(text_lines)):
-		text_lines[i] = Utils.wrap_string(text_lines[i].strip_edges(), max_char)
+		var text = text_lines[i].strip_edges()
+		var result = re.search(text)
+		if result:
+			text_lines[i] = Utils.wrap_string(text, int(max_char / 2))
+		else:
+			text_lines[i] = Utils.wrap_string(text, max_char)
 
 func return_text_lines(line: int, reset: bool = true):
 	if line < 0 or line >= len(text_lines):
@@ -71,7 +78,7 @@ func test_simulated_eng_chars_in_line():
 	while $Label.get_line_count() == 1:
 		t += "a"
 		$Label.text = t
-	max_char = int((len(t) - 1) / 2)
+	max_char = len(t) - 1
 	print("This monitor max chars is %d in a line! It may have chinese and japanese chars, so it will set to %d" % [len(t), max_char])
 	$Label.text = ""
 	$Label.size.x = og_width
