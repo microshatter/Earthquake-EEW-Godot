@@ -5,6 +5,7 @@
 [node name="Options" type="TabContainer" unique_id=555193361]
 offset_right = 640.0
 offset_bottom = 480.0
+tab_alignment = 1
 current_tab = 0
 script = ExtResource("1_c2u1v")
 
@@ -53,7 +54,7 @@ alignment = 1
 
 [node name="MagLabel" type="Label" parent="VBoxContainer/Settings/MagnitudeIntensity" unique_id=980061800]
 layout_mode = 2
-text = "Min Magnitude"
+text = "Unknown Source Min Magnitude"
 
 [node name="MagSpinBox" type="SpinBox" parent="VBoxContainer/Settings/MagnitudeIntensity" unique_id=1068096392]
 layout_mode = 2
@@ -62,7 +63,7 @@ value = 1.0
 
 [node name="IntenLabel" type="Label" parent="VBoxContainer/Settings/MagnitudeIntensity" unique_id=1627747439]
 layout_mode = 2
-text = "Min Intensity"
+text = "EEW Min Intensity"
 
 [node name="IntenSpinBox" type="SpinBox" parent="VBoxContainer/Settings/MagnitudeIntensity" unique_id=1910350469]
 layout_mode = 2
