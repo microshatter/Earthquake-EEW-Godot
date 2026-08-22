@@ -716,6 +716,10 @@ func _on_p2p_timeout() -> void:
 	connect_p2pq()
 
 
+func _on_whews_timeout() -> void:
+	connect_whews()
+
+
 func _on_wolfx_ping_timeout() -> void:
 	if recieved_pinged.get("wolfx", false):
 		send_wolfx_ping()
