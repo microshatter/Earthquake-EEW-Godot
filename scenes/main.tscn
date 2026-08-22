@@ -133,7 +133,7 @@ text = "You can hide this window now!
 このウィンドウを非表示にできます！"
 horizontal_alignment = 1
 
-[node name="StatContainer" type="HBoxContainer" parent="." unique_id=421206161]
+[node name="StatContainer" type="VBoxContainer" parent="." unique_id=2130361054]
 anchors_preset = 7
 anchor_left = 0.5
 anchor_top = 1.0
@@ -141,41 +141,39 @@ anchor_right = 0.5
 anchor_bottom = 1.0
 offset_left = -20.0
 offset_top = -40.0
-offset_right = 20.0
+offset_right = 1032.0
+offset_bottom = 229.0
 grow_horizontal = 2
 grow_vertical = 0
 theme_override_constants/separation = 12
+
+[node name="sources" type="HBoxContainer" parent="StatContainer" unique_id=632691299]
+layout_mode = 2
+
+[node name="Wolfx" type="Label" parent="StatContainer/sources" unique_id=252531457]
+layout_mode = 2
+theme_override_font_sizes/font_size = 24
+text = "Wolfx(disabled)"
+
+[node name="FanStudio" type="Label" parent="StatContainer/sources" unique_id=1343439604]
+layout_mode = 2
+theme_override_font_sizes/font_size = 24
+text = "FAN(Disabled)"
+
+[node name="WHEWS" type="Label" parent="StatContainer/sources" unique_id=997699266]
+layout_mode = 2
+theme_override_font_sizes/font_size = 24
+text = "WHEWS(Disabled)"
+
+[node name="P2P" type="Label" parent="StatContainer/sources" unique_id=182336624]
+layout_mode = 2
+theme_override_font_sizes/font_size = 24
+text = "P2P(Disabled)"
 
 [node name="Label" type="Label" parent="StatContainer" unique_id=1408072562]
 layout_mode = 2
 theme_override_font_sizes/font_size = 32
 text = "STATUS >>"
-
-[node name="Wolfx" type="Label" parent="StatContainer" unique_id=252531457]
-layout_mode = 2
-theme_override_font_sizes/font_size = 24
-text = "Wolfx(disabled)"
-
-[node name="wolfx-timer" type="Label" parent="StatContainer" unique_id=1404489529]
-layout_mode = 2
-
-[node name="FanStudio" type="Label" parent="StatContainer" unique_id=1343439604]
-layout_mode = 2
-theme_override_font_sizes/font_size = 24
-text = "FAN(Disabled)"
-
-[node name="fanstudio-timer" type="Label" parent="StatContainer" unique_id=562688662]
-layout_mode = 2
-
-[node name="WHEWS" type="Label" parent="StatContainer" unique_id=997699266]
-layout_mode = 2
-theme_override_font_sizes/font_size = 24
-text = "WHEWS(Disabled)"
-
-[node name="P2P" type="Label" parent="StatContainer" unique_id=182336624]
-layout_mode = 2
-theme_override_font_sizes/font_size = 24
-text = "P2P(Disabled)"
 
 [node name="Label2" type="Label" parent="StatContainer" unique_id=290333774]
 layout_mode = 2

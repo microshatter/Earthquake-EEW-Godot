@@ -33,15 +33,7 @@ func _ready() -> void:
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
-	if $"Websockets/Wolfx-Ping".time_left > 0:
-		$"StatContainer/wolfx-timer".show()
-	else:
-		$"StatContainer/wolfx-timer".hide()
-
-	if $"Websockets/FanStudio-Ping".time_left > 0:
-		$"StatContainer/fanstudio-timer".show()
-	else:
-		$"StatContainer/fanstudio-timer".hide()
+	pass
 
 func _on_indicator_clicked(mouse_button: int, _mouse_position: Vector2i):
 	if mouse_button == MOUSE_BUTTON_RIGHT:
