@@ -133,6 +133,8 @@ func connect_whews():
 		$"../StatContainer/sources/WHEWS".text = "WHEWS(Invalid)"
 		$"../StatContainer/sources/WHEWS".add_theme_color_override("font_color", Color("ff0000"))
 		return
+	whews.inbound_buffer_size = 8388608
+	whews.outbound_buffer_size = 8388608
 	whews_pinged = false
 	whews_is_authorized = false
 	whews_key_sent = false
