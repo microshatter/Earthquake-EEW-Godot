@@ -33,15 +33,7 @@ func _ready() -> void:
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
-	if $"Websockets/Wolfx-Ping".time_left > 0:
-		$"StatContainer/wolfx-timer".show()
-	else:
-		$"StatContainer/wolfx-timer".hide()
-
-	if $"Websockets/FanStudio-Ping".time_left > 0:
-		$"StatContainer/fanstudio-timer".show()
-	else:
-		$"StatContainer/fanstudio-timer".hide()
+	pass
 
 func _on_indicator_clicked(mouse_button: int, _mouse_position: Vector2i):
 	if mouse_button == MOUSE_BUTTON_RIGHT:
@@ -49,7 +41,6 @@ func _on_indicator_clicked(mouse_button: int, _mouse_position: Vector2i):
 			$"Flipping-Text-Window/VBoxContainer".remove_child(i)
 	else:
 		$Options.visible = not $Options.visible
-		$Options.move_to_center()
 
 func _exit_tree() -> void:
 	if indicator_id != -1:
@@ -58,4 +49,8 @@ func _exit_tree() -> void:
 
 func _on_button_pressed() -> void:
 	$Options.visible = not $Options.visible
+	$Options.move_to_center()
+
+
+func _on_options_visibility_changed() -> void:
 	$Options.move_to_center()

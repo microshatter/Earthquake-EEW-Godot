@@ -20,6 +20,7 @@ func load_settings():
 		$VBoxContainer/Settings/MagnitudeIntensity/MagSpinBox.value = options.get("minmagnitude", 0)
 		$VBoxContainer/Settings/MagnitudeIntensity/IntenSpinBox.value = options.get("minintensity", 5)
 		$VBoxContainer/Settings/FanApi/LineEdit.text = options.get("fanapi", "")
+		$VBoxContainer/Settings/WHEWSApi/LineEdit.text = options.get("whewsapi", "")
 		print("Config loaded!")
 
 func save_settings():
@@ -28,7 +29,8 @@ func save_settings():
 		"longitude": $VBoxContainer/Settings/GeoLocation/LongitudeSpinBox.value,
 		"minmagnitude": $VBoxContainer/Settings/MagnitudeIntensity/MagSpinBox.value,
 		"minintensity": $VBoxContainer/Settings/MagnitudeIntensity/IntenSpinBox.value,
-		"fanapi": $VBoxContainer/Settings/FanApi/LineEdit.text
+		"fanapi": $VBoxContainer/Settings/FanApi/LineEdit.text,
+		"whewsapi": $VBoxContainer/Settings/WHEWSApi/LineEdit.text
 	}
 	var f = FileAccess.open(Utils.config_path, FileAccess.WRITE)
 	f.store_string(JSON.stringify(options, "  "))
@@ -56,7 +58,7 @@ func _on_save_only_button_pressed() -> void:
 
 
 func _on_locate_button_pressed() -> void:
-	var request_api = $"../../API-sources".utilUrls.geoIp
+	var request_api = API_URLs.utilUrls.geoIp
 	http_request.request_completed.connect(_locate_complete)
 	http_request.request(request_api)
 

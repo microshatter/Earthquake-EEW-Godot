@@ -24,6 +24,10 @@ one_shot = true
 wait_time = 60.0
 one_shot = true
 
+[node name="WHEWS-Ping" type="Timer" parent="Websockets" unique_id=610771098]
+wait_time = 60.0
+one_shot = true
+
 [node name="P2P-Ping" type="Timer" parent="Websockets" unique_id=1693358433]
 wait_time = 60.0
 one_shot = true
@@ -35,6 +39,10 @@ wait_time = 5.0
 one_shot = true
 
 [node name="FanStudio" type="Timer" parent="Reconnect Timer" unique_id=162330161]
+wait_time = 5.0
+one_shot = true
+
+[node name="WHEWS" type="Timer" parent="Reconnect Timer" unique_id=1510524988]
 wait_time = 5.0
 one_shot = true
 
@@ -81,6 +89,15 @@ offset_right = 40.0
 offset_bottom = 40.0
 theme_override_constants/separation = 0
 
+[node name="CloseAllButton" type="Button" parent="Flipping-Text-Window" unique_id=1831415868]
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -95.0
+offset_bottom = 30.0
+grow_horizontal = 0
+text = "Close All"
+
 [node name="Options" type="Window" parent="." unique_id=1621207996]
 oversampling_override = 1.0
 title = "Config Menu"
@@ -118,61 +135,69 @@ text = "You can hide this window now!
 このウィンドウを非表示にできます！"
 horizontal_alignment = 1
 
-[node name="StatContainer" type="HBoxContainer" parent="." unique_id=421206161]
+[node name="StatContainer" type="VBoxContainer" parent="." unique_id=2130361054]
 anchors_preset = 7
 anchor_left = 0.5
 anchor_top = 1.0
 anchor_right = 0.5
 anchor_bottom = 1.0
-offset_left = -20.0
-offset_top = -40.0
-offset_right = 20.0
+offset_left = -427.5
+offset_top = -80.0
+offset_right = 427.5
 grow_horizontal = 2
 grow_vertical = 0
-theme_override_constants/separation = 12
 
 [node name="Label" type="Label" parent="StatContainer" unique_id=1408072562]
 layout_mode = 2
 theme_override_font_sizes/font_size = 32
-text = "STATUS >>"
+text = "STATUS"
+horizontal_alignment = 1
 
-[node name="Wolfx" type="Label" parent="StatContainer" unique_id=252531457]
+[node name="sources" type="HBoxContainer" parent="StatContainer" unique_id=632691299]
+layout_mode = 2
+theme_override_constants/separation = 12
+alignment = 1
+
+[node name="Wolfx" type="Label" parent="StatContainer/sources" unique_id=252531457]
 layout_mode = 2
 theme_override_font_sizes/font_size = 24
 text = "Wolfx(disabled)"
 
-[node name="wolfx-timer" type="Label" parent="StatContainer" unique_id=1404489529]
-layout_mode = 2
-
-[node name="FanStudio" type="Label" parent="StatContainer" unique_id=1343439604]
+[node name="FanStudio" type="Label" parent="StatContainer/sources" unique_id=1343439604]
 layout_mode = 2
 theme_override_font_sizes/font_size = 24
 text = "FAN(Disabled)"
 
-[node name="fanstudio-timer" type="Label" parent="StatContainer" unique_id=562688662]
+[node name="WHEWS" type="Label" parent="StatContainer/sources" unique_id=997699266]
 layout_mode = 2
+theme_override_font_sizes/font_size = 24
+text = "WHEWS(Disabled)"
 
-[node name="P2P" type="Label" parent="StatContainer" unique_id=182336624]
+[node name="P2P" type="Label" parent="StatContainer/sources" unique_id=182336624]
 layout_mode = 2
 theme_override_font_sizes/font_size = 24
 text = "P2P(Disabled)"
 
-[node name="Label2" type="Label" parent="StatContainer" unique_id=290333774]
+[node name="Label2" type="Label" parent="StatContainer/sources" unique_id=290333774]
 layout_mode = 2
 
 [connection signal="fanstudio_pong" from="Websockets" to="Websockets" method="_on_fanstudio_pong"]
 [connection signal="p2pquake_pong" from="Websockets" to="Websockets" method="_on_p_2_pquake_pong"]
+[connection signal="whews_pong" from="Websockets" to="Websockets" method="_on_whews_pong"]
 [connection signal="wolfx_pong" from="Websockets" to="Websockets" method="_on_wolfx_pong"]
 [connection signal="timeout" from="Websockets/Wolfx-Ping" to="Websockets" method="_on_wolfx_ping_timeout"]
 [connection signal="timeout" from="Websockets/FanStudio-Ping" to="Websockets" method="_on_fan_studio_ping_timeout"]
+[connection signal="timeout" from="Websockets/WHEWS-Ping" to="Websockets" method="_on_whews_ping_timeout"]
 [connection signal="timeout" from="Reconnect Timer/Wolfx" to="Websockets" method="_on_wolfx_timeout"]
 [connection signal="timeout" from="Reconnect Timer/FanStudio" to="Websockets" method="_on_fan_studio_timeout"]
+[connection signal="timeout" from="Reconnect Timer/WHEWS" to="Websockets" method="_on_whews_timeout"]
 [connection signal="timeout" from="Reconnect Timer/P2P" to="Websockets" method="_on_p2p_timeout"]
 [connection signal="visibility_changed" from="EEW-Popup-Window" to="EEW-Popup-Window" method="_on_visibility_changed"]
 [connection signal="shakealert" from="EEW-Popup-Window/EEW-Popup" to="EEW-Popup-Window/shakealert" method="_on_eew_popup_shakealert"]
 [connection signal="text_changed" from="EEW-Popup-Window/EEW-Popup" to="EEW-Popup-Window" method="_on_eew_popup_text_changed"]
 [connection signal="finished" from="EEW-Popup-Window/shakealert" to="EEW-Popup-Window/shakealert" method="_on_finished"]
 [connection signal="timeout" from="EEW-Popup-Window/hidetimer" to="EEW-Popup-Window" method="_on_hidetimer_timeout"]
-[connection signal="close_requested" from="Flipping-Text-Window" to="Flipping-Text-Window" method="_on_close_requested"]
+[connection signal="pressed" from="Flipping-Text-Window/CloseAllButton" to="Flipping-Text-Window" method="_on_close_all_button_pressed"]
 [connection signal="close_requested" from="Options" to="Options/Options" method="_on_options_close_requested"]
+[connection signal="visibility_changed" from="Options" to="." method="_on_options_visibility_changed"]
 [connection signal="pressed" from="Button" to="." method="_on_button_pressed"]

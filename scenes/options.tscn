@@ -86,6 +86,24 @@ secret = true
 layout_mode = 2
 text = "Get a Key"
 
+[node name="WHEWSApi" type="HBoxContainer" parent="VBoxContainer/Settings" unique_id=1830950988]
+layout_mode = 2
+alignment = 1
+
+[node name="Label" type="Label" parent="VBoxContainer/Settings/WHEWSApi" unique_id=617498522]
+layout_mode = 2
+text = "WHEWS API Key"
+
+[node name="LineEdit" type="LineEdit" parent="VBoxContainer/Settings/WHEWSApi" unique_id=844811130]
+custom_minimum_size = Vector2(300, 0)
+layout_mode = 2
+placeholder_text = "Enter API key here..."
+secret = true
+
+[node name="Button" type="Button" parent="VBoxContainer/Settings/WHEWSApi" unique_id=567249916]
+layout_mode = 2
+text = "Get a Key"
+
 [node name="Actions" type="HBoxContainer" parent="VBoxContainer" unique_id=1295576382]
 layout_mode = 2
 theme_override_constants/separation = 30

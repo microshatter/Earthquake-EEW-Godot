@@ -54,5 +54,29 @@ one_shot = true
 [node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="." unique_id=1905250452]
 stream = ExtResource("2_dgl3u")
 
+[node name="CloseButton" type="HBoxContainer" parent="." unique_id=1048575846]
+layout_mode = 1
+anchors_preset = 6
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = -61.0
+offset_top = -20.0
+offset_bottom = 20.0
+grow_horizontal = 0
+grow_vertical = 2
+
+[node name="Label" type="Label" parent="CloseButton" unique_id=1070280890]
+layout_mode = 2
+text = "(0s)"
+horizontal_alignment = 2
+vertical_alignment = 1
+
+[node name="Button" type="Button" parent="CloseButton" unique_id=1709485535]
+layout_mode = 2
+text = " X "
+
 [connection signal="timeout" from="CycleTimer" to="." method="_on_cycle_timer_timeout"]
 [connection signal="timeout" from="HiddenTimer" to="." method="_on_hidden_timer_timeout"]
+[connection signal="pressed" from="CloseButton/Button" to="." method="_on_button_pressed"]
