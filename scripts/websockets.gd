@@ -505,7 +505,40 @@ func poll_whews():
 								w = "警報区域はありません"
 							var local_intensity = Utils.calculate_local_intensity_magnitude(distance, magnitude, depth)
 							send_eew(title, "%sで地震 M%.1f 強い揺れに警戒" % [location, magnitude], w, distance, local_intensity)
-							print_eew(title, "%sで地震 強い揺れに警戒" % location, w, json_message.Serial)
+							print_eew(title, "%sで地震 強い揺れに警戒" % location, w, data.updates)
+						"cea":
+							var shocktime = data.shockTime
+							var location = data.placeName
+							var latitude = data.latitude
+							var longitude = data.longitude
+							var magnitude = data.magnitude
+							var depth = data.depth
+							if depth == null:
+								depth = 0
+							var estint = data.epiIntensity
+							var distance = get_distance_from_source(latitude, longitude)
+							var local_intensity = Utils.calculate_local_intensity_magnitude(distance, magnitude, depth)
+							var eew_header = "紧急地震速报（中国地震预警网）"
+							var eew_title = "%s发生了地震 M%.1f 请注意强烈摇晃" % [location, magnitude]
+							var eew_desc = "M%s | 预估最大烈度：%s | 深度：%s | 纬度: %s | 经度: %s\n发生时间： %s" % [magnitude, estint, depth, latitude, longitude, shocktime]
+							send_eew(eew_header, eew_title, eew_desc, distance, local_intensity)
+						"cea-pr":
+							var shocktime = data.shockTime
+							var location = data.placeName
+							var latitude = data.latitude
+							var longitude = data.longitude
+							var magnitude = data.magnitude
+							var depth = data.depth
+							if depth == null:
+								depth = 0
+							var estint = data.epiIntensity
+							var province = data.province
+							var distance = get_distance_from_source(latitude, longitude)
+							var local_intensity = Utils.calculate_local_intensity_magnitude(distance, magnitude, depth)
+							var eew_header = "紧急地震速报（中国%s地震预警网）" % province
+							var eew_title = "%s发生了地震 M%.1f 请注意强烈摇晃" % [location, magnitude]
+							var eew_desc = "M%s | 预估最大烈度：%s | 深度：%s | 纬度: %s | 经度: %s\n发生时间： %s" % [magnitude, estint, depth, latitude, longitude, shocktime]
+							send_eew(eew_header, eew_title, eew_desc, distance, local_intensity)
 						"cenc":
 							var shocktime = data.shockTime
 							var location = data.placeName
