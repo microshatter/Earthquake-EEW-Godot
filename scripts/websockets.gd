@@ -498,6 +498,35 @@ func poll_whews():
 								"震源: %s | 纬度: %s | 经度: %s\nM%s | 深度: %s" % [location, latitude, longitude, magnitude, depth]
 							]))
 							$"../Flipping-Text-Window/VBoxContainer".add_child(msg)
+						"jma":
+							var title = data.title
+							var eqtime = data.shockTime
+							var location = data.placeName
+							var latitude = data.latitude
+							var longitude = data.longitude
+							var depth = data.depth
+							var magnitude = data.magnitude
+							var msg = news_message_scene.instantiate()
+							msg.set_text(PackedStringArray([
+								"日本地震%s" % title,
+								"%s\n%sに地震が発生しました。" % [eqtime, location]
+							]))
+							msg.add_text("地震発生場所：%s | 緯度：%s | 経度：%s\nマグニチュード%s | 震源の深さ：%s" % [location, latitude, longitude, magnitude, depth])
+							$"../Flipping-Text-Window/VBoxContainer".add_child(msg)
+						"usgs", "bmkg", "geonet", "tmd", "usp", "gfz", "ingv", "emsc", "hko", "bcsf", "nrcan", "mmd", "phivolcs", "sgc", "ga", "cenais", "gsras", "bgs":
+							var shocktime = data.shockTime
+							var location = data.placeName
+							var latitude = data.latitude
+							var longitude = data.longitude
+							var magnitude = data.magnitude
+							var depth = data.depth
+							var msg = news_message_scene.instantiate()
+							msg.set_text(PackedStringArray([
+								"Earthquake Information From %s" % data_source.to_upper(),
+								"In %s\nAn earthquake happans in %s" % [shocktime, location],
+								"Hypocenter: %s | Latitude: %s | Longitude: %s\nM%s | Depth: %s km" % [location, latitude, longitude, magnitude, depth]
+							]))
+							$"../Flipping-Text-Window/VBoxContainer".add_child(msg)
 						_:
 							var msg = news_message_scene.instantiate()
 							msg.set_text(PackedStringArray([
