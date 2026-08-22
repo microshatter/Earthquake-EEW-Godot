@@ -36,6 +36,7 @@ jobs:
       # This release action has worked well for me. However, you can most likely use any release action of your choosing.
       # https://github.com/ncipollo/release-action
     - name: create release
+      if: ${{ startsWith(github.ref, 'refs/tags') }}
       uses: ncipollo/release-action@v1.18.0
       with:
         token: ${{ secrets.GITHUB_TOKEN }}
@@ -43,7 +44,6 @@ jobs:
         tag: ${{ github.ref_name }}
         allowUpdates: true
         artifacts: ${{ steps.export.outputs.archive_directory }}/*
-        draft: true
         
     - name: upload artifacts
       if: ${{ !startsWith(github.ref, 'refs/tags') }}
