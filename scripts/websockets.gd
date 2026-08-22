@@ -541,6 +541,58 @@ func poll_whews():
 							var eew_title = "%s发生了地震 M%.1f 请注意强烈摇晃" % [location, magnitude]
 							var eew_desc = "M%s | 预估最大烈度：%s | 深度：%s | 纬度: %s | 经度: %s\n发生时间： %s" % [magnitude, estint, depth, latitude, longitude, shocktime]
 							send_eew(eew_header, eew_title, eew_desc, distance, local_intensity)
+						"sa_eew":
+							var shocktime = data.shockTime
+							var location = data.placeName
+							var latitude = data.latitude
+							var longitude = data.longitude
+							var magnitude = data.magnitude
+							var depth = data.depth
+							if depth == null:
+								depth = 0
+							var estint = data.epiIntensity
+							var distance = get_distance_from_source(latitude, longitude)
+							var local_intensity = Utils.calculate_local_intensity_magnitude(distance, magnitude, depth)
+							var eew_header = "EARTHQUAKE EARLY WARNING(ShakeAlert)"
+							var eew_title = "Earthquake happening in %s  M%.1f  Please be aware of strong shaking" % [location, magnitude]
+							var eew_desc = "M%s | Max Intensity：%s | Depth：%s | Latitude: %s | Longitude: %s\nShock Time： %s" % [magnitude, estint, depth, latitude, longitude, shocktime]
+							send_eew(eew_header, eew_title, eew_desc, distance, local_intensity)
+						"cwa_eew":
+							var shocktime = data.shockTime
+							var location = data.placeName
+							var latitude = data.latitude
+							var longitude = data.longitude
+							var magnitude = data.magnitude
+							var depth = data.depth
+							if depth == null:
+								depth = 0
+							var estint = data.epiIntensity
+							var distance = get_distance_from_source(latitude, longitude)
+							var local_intensity = Utils.calculate_local_intensity_magnitude(distance, magnitude, depth)
+							var eew_header = "緊急地震速報（台灣氣象署）"
+							var eew_title = "%s發生了地震 M%.1f 請注意強烈搖晃" % [location, magnitude]
+							var eew_desc = "M%s | 預估最大震度：%s | 深度：%s | 緯度: %s | 經度: %s\n發生時間： %s" % [magnitude, estint, depth, latitude, longitude, shocktime]
+							send_eew(eew_header, eew_title, eew_desc, distance, local_intensity)
+						"kma_eew":
+							var location = data.placeNameKo
+							var latitude = data.latitude
+							var longitude = data.longitude
+							var magnitude = data.magnitude
+							var depth = data.depth
+							if depth == null:
+								depth = 0
+							var warnarea = data.maxAreasZh
+							var w: String
+							if len(warnarea) > 0:
+								w = "  ".join(warnarea)
+							else:
+								w = "警報区域はありません"
+							var distance = get_distance_from_source(latitude, longitude)
+							var local_intensity = Utils.calculate_local_intensity_magnitude(distance, magnitude, depth)
+							var eew_header = "緊急地震速報（KMA）"
+							var eew_title = "%sで地震 M%.1f 強い揺れに警戒" % [location, magnitude]
+							var eew_desc = w
+							send_eew(eew_header, eew_title, eew_desc, distance, local_intensity)
 						"cenc":
 							var shocktime = data.shockTime
 							var location = data.placeName
@@ -550,7 +602,7 @@ func poll_whews():
 							var depth = data.depth
 							var msg = news_message_scene.instantiate()
 							msg.set_text(PackedStringArray([
-								"中国地震局地震情报(FAN Studio)\nChina Earthquake Networks Center Earthquake Report\n以下内容将使用中文 The follow content will using Chinese",
+								"中国地震局地震情报\nChina Earthquake Networks Center Earthquake Report\n以下内容将使用中文 The follow content will using Chinese",
 								"%s\n在%s发生了地震" % [shocktime, location],
 								"震源: %s | 纬度: %s | 经度: %s\nM%s | 深度: %s" % [location, latitude, longitude, magnitude, depth]
 							]))
@@ -570,20 +622,25 @@ func poll_whews():
 							]))
 							msg.add_text("地震発生場所：%s | 緯度：%s | 経度：%s\nマグニチュード%s | 震源の深さ：%s" % [location, latitude, longitude, magnitude, depth])
 							$"../Flipping-Text-Window/VBoxContainer".add_child(msg)
-						"usgs", "bmkg", "geonet", "tmd", "usp", "gfz", "ingv", "emsc", "hko", "bcsf", "nrcan", "mmd", "phivolcs", "sgc", "ga", "cenais", "gsras", "bgs":
+						"usgs", "bmkg", "geonet", "tmd", "usp", "gfz", "ingv", "emsc", "hko", "bcsf", "nrcan", "mmd", "phivolcs", "sgc", "ga", "cenais", "gsras", "bgs", "scan", "noa", "afad":
 							var shocktime = data.shockTime
 							var location = data.placeName
 							var latitude = data.latitude
 							var longitude = data.longitude
 							var magnitude = data.magnitude
 							var depth = data.depth
-							var msg = news_message_scene.instantiate()
-							msg.set_text(PackedStringArray([
-								"Earthquake Information From %s" % data_source.to_upper(),
-								"In %s\nAn earthquake happans in %s" % [shocktime, location],
-								"Hypocenter: %s | Latitude: %s | Longitude: %s\nM%s | Depth: %s km" % [location, latitude, longitude, magnitude, depth]
-							]))
-							$"../Flipping-Text-Window/VBoxContainer".add_child(msg)
+							if magnitude >= Utils.load_option().get("minmagnitude", 0.0):
+								var msg = news_message_scene.instantiate()
+								msg.set_text(PackedStringArray([
+									"Earthquake Information From %s" % data_source.to_upper(),
+									"In %s\nAn earthquake happans in %s" % [shocktime, location],
+									"Hypocenter: %s | Latitude: %s | Longitude: %s\nM%s | Depth: %s km" % [location, latitude, longitude, magnitude, depth]
+								]))
+								$"../Flipping-Text-Window/VBoxContainer".add_child(msg)
+							else:
+								print("Earthquake happaned in %s with magnitude %s. (%s)" % [location, magnitude, data_source.to_upper()])
+						"va":
+							print("%s don't recieve message but via print: %s" % [data_source.to_upper(), JSON.stringify(data)])
 						_:
 							var msg = news_message_scene.instantiate()
 							msg.set_text(PackedStringArray([
