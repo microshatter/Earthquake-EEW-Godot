@@ -13,38 +13,17 @@ func initialize_window():
 	$"EEW-Popup-Window".move_to_center()
 	$"Flipping-Text-Window".visible = false
 
-func create_indicator():
-	var icon_texture = preload("res://icon.svg")
-	indicator_id = DisplayServer.create_status_indicator(
-		icon_texture,
-		"Earthquake and EEW Warning",
-		self._on_indicator_clicked
-	)
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	#DisplayServer.tts_speak("Welcome to early warning app, using Godot 4.7!", DisplayServer.tts_get_voices()[0].id)
 	indicator_supported = DisplayServer.has_feature(DisplayServer.FEATURE_STATUS_INDICATOR)
-	if indicator_supported:
-		create_indicator()
-		print("Indicator create successfully!")
-	else:
+	if not indicator_supported:
 		print("It seems your OS/Desktop Environment doesn't support indicator yet...")
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
 	pass
-
-func _on_indicator_clicked(mouse_button: int, _mouse_position: Vector2i):
-	if mouse_button == MOUSE_BUTTON_RIGHT:
-		for i in $"Flipping-Text-Window/VBoxContainer".get_children():
-			$"Flipping-Text-Window/VBoxContainer".remove_child(i)
-	else:
-		$Options.visible = not $Options.visible
-
-func _exit_tree() -> void:
-	if indicator_id != -1:
-		DisplayServer.delete_status_indicator(indicator_id)
 
 
 func _on_button_pressed() -> void:
@@ -54,3 +33,14 @@ func _on_button_pressed() -> void:
 
 func _on_options_visibility_changed() -> void:
 	$Options.move_to_center()
+
+
+func _on_popup_menu_id_pressed(id: int) -> void:
+	match id:
+		0:
+			for i in $"Flipping-Text-Window/VBoxContainer".get_children():
+				$"Flipping-Text-Window/VBoxContainer".remove_child(i)
+		1:
+			$Options.visible = not $Options.visible
+		2:
+			get_tree().quit()

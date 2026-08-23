@@ -1,6 +1,7 @@
 [gd_scene format=3 uid="uid://mhteu7l8jc"]
 
 [ext_resource type="Script" uid="uid://xw65t8841emu" path="res://scripts/main.gd" id="1_0wfyh"]
+[ext_resource type="Texture2D" uid="uid://dpl1174xmn3l" path="res://icon.svg" id="2_choun"]
 [ext_resource type="PackedScene" uid="uid://bhl7wlfwwwfbm" path="res://scenes/eew_popup.tscn" id="2_sugp2"]
 [ext_resource type="PackedScene" uid="uid://cweo8dp4fg2xk" path="res://scenes/options.tscn" id="3_jyhfs"]
 [ext_resource type="Script" uid="uid://bhf6jwajolacb" path="res://scripts/websockets.gd" id="3_tbgi4"]
@@ -12,6 +13,20 @@
 
 [node name="Main" type="Node" unique_id=1409934259]
 script = ExtResource("1_0wfyh")
+
+[node name="StatusIndicator" type="StatusIndicator" parent="." unique_id=933155180]
+tooltip = "Earthquake and EEW"
+icon = ExtResource("2_choun")
+menu = NodePath("PopupMenu")
+
+[node name="PopupMenu" type="PopupMenu" parent="StatusIndicator" unique_id=1395953157]
+item_count = 3
+item_0/text = "Clear Notifications"
+item_0/id = 0
+item_1/text = "Settings"
+item_1/id = 1
+item_2/text = "Quit"
+item_2/id = 2
 
 [node name="Websockets" type="Node" parent="." unique_id=1498491870]
 script = ExtResource("3_tbgi4")
@@ -55,6 +70,7 @@ transparent_bg = true
 oversampling_override = 1.0
 size = Vector2i(800, 350)
 visible = false
+unresizable = true
 borderless = true
 always_on_top = true
 transparent = true
@@ -78,6 +94,7 @@ one_shot = true
 transparent_bg = true
 oversampling_override = 1.0
 visible = false
+unresizable = true
 borderless = true
 always_on_top = true
 transparent = true
@@ -181,6 +198,7 @@ text = "P2P(Disabled)"
 [node name="Label2" type="Label" parent="StatContainer/sources" unique_id=290333774]
 layout_mode = 2
 
+[connection signal="id_pressed" from="StatusIndicator/PopupMenu" to="." method="_on_popup_menu_id_pressed"]
 [connection signal="fanstudio_pong" from="Websockets" to="Websockets" method="_on_fanstudio_pong"]
 [connection signal="p2pquake_pong" from="Websockets" to="Websockets" method="_on_p_2_pquake_pong"]
 [connection signal="whews_pong" from="Websockets" to="Websockets" method="_on_whews_pong"]
