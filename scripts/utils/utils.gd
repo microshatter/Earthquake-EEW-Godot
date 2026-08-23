@@ -24,6 +24,10 @@ static func load_option() -> Dictionary:
 	}
 	return fixed_options
 
+static func send_system_notification(title: String, body: String):
+	match OS.get_name():
+		"Linux":
+			OS.execute("notify-send", [title, body])
 
 static func wrap_string(text: String, max_length: int):
 	var a = text

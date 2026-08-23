@@ -371,13 +371,14 @@ func poll_fan():
 							var time = data.effective
 							var title = data.headline
 							var desc = data.description
-							var msg = news_message_scene.instantiate()
-							msg.set_text(PackedStringArray([
-								"中国气象局气象预警(FAN Studio)\nChina Meteorological Administration Weather Warning",
-								"在%s\n%s" % [time, title],
-								desc
-							]))
-							$"../Flipping-Text-Window/VBoxContainer".add_child(msg)
+							Utils.send_system_notification("%s(%s)" % [title, time], desc)
+							# var msg = news_message_scene.instantiate()
+							# msg.set_text(PackedStringArray([
+							# 	"中国气象局气象预警(FAN Studio)\nChina Meteorological Administration Weather Warning",
+							# 	"在%s\n%s" % [time, title],
+							# 	desc
+							# ]))
+							# $"../Flipping-Text-Window/VBoxContainer".add_child(msg)
 						"cenc":
 							var shocktime = data.shockTime
 							var location = data.placeName
@@ -481,13 +482,14 @@ func poll_whews():
 							var time = data.effective
 							var title = data.headline
 							var desc = data.description
-							var msg = news_message_scene.instantiate()
-							msg.set_text(PackedStringArray([
-								"中国气象局气象预警(WHEWS)\nChina Meteorological Administration Weather Warning",
-								"在%s\n%s" % [time, title],
-								desc
-							]))
-							$"../Flipping-Text-Window/VBoxContainer".add_child(msg)
+							Utils.send_system_notification("%s(%s)" % [title, time], desc)
+							# var msg = news_message_scene.instantiate()
+							# msg.set_text(PackedStringArray([
+							# 	"中国气象局气象预警(WHEWS)\nChina Meteorological Administration Weather Warning",
+							# 	"在%s\n%s" % [time, title],
+							# 	desc
+							# ]))
+							# $"../Flipping-Text-Window/VBoxContainer".add_child(msg)
 						"jma_eew":
 							var title = "緊急地震速報(%s)" % data.infoTypeName
 							var location = data.placeName
@@ -624,7 +626,7 @@ func poll_whews():
 							]))
 							msg.add_text("地震発生場所：%s | 緯度：%s | 経度：%s\nマグニチュード%s | 震源の深さ：%s" % [location, latitude, longitude, magnitude, depth])
 							$"../Flipping-Text-Window/VBoxContainer".add_child(msg)
-						"usgs", "bmkg", "geonet", "tmd", "usp", "gfz", "ingv", "emsc", "hko", "bcsf", "nrcan", "mmd", "phivolcs", "sgc", "ga", "cenais", "gsras", "bgs", "scan", "noa", "afad":
+						"usgs", "bmkg", "geonet", "tmd", "usp", "gfz", "ingv", "emsc", "hko", "bcsf", "nrcan", "mmd", "phivolcs", "sgc", "ga", "cenais", "gsras", "bgs", "scan", "noa", "afad", "scsn":
 							var shocktime = data.shockTime
 							var location = data.placeName
 							var latitude = data.latitude

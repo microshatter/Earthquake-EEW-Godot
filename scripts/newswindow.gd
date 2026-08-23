@@ -91,6 +91,7 @@ func _ready() -> void:
 	$HiddenTimer.start()
 	$CycleTimer.start()
 	$AudioStreamPlayer.play()
+	Utils.send_system_notification("Earthquake Information", "\n".join(text_lines))
 	test_simulated_eng_chars_in_line()
 	strip_message()
 	text_lines = return_fixed_message_content()
