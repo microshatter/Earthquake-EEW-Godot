@@ -471,11 +471,27 @@ func poll_whews():
 			var json_message = JSON.parse_string(message)
 			var json_type = typeof(json_message)
 			if json_type == TYPE_ARRAY:
-				print(message)
+				for d in json_message:
+					var message_type = d.get("type")
+					var data = d.get("Data", {})
+					var data_source = d.get("source", data.get("source"))
+					var hash_value = d.get("md5", "")
+					if len(hash_value) > 0:
+						if Deduplicate.is_in_hash(hash_value):
+							print("Duplicate entry ignored for %s with hash %s" % [data_source, hash_value])
+							continue
+						Deduplicate.add_hash(hash_value)
+					print(d)
 			elif json_type == TYPE_DICTIONARY:
 				var message_type = json_message.get("type")
 				var data = json_message.get("Data", {})
 				var data_source = json_message.get("source", data.get("source"))
+				var hash_value = json_message.get("md5", "")
+				if len(hash_value) > 0:
+					if Deduplicate.is_in_hash(hash_value):
+						print("Duplicate entry ignored")
+						continue
+					Deduplicate.add_hash(hash_value)
 				if data_source != null:
 					match data_source:
 						"weatheralarm":
@@ -626,7 +642,7 @@ func poll_whews():
 							]))
 							msg.add_text("地震発生場所：%s | 緯度：%s | 経度：%s\nマグニチュード%s | 震源の深さ：%s" % [location, latitude, longitude, magnitude, depth])
 							$"../Flipping-Text-Window/VBoxContainer".add_child(msg)
-						"usgs", "bmkg", "geonet", "tmd", "usp", "gfz", "ingv", "emsc", "hko", "bcsf", "nrcan", "mmd", "phivolcs", "sgc", "ga", "cenais", "gsras", "bgs", "scan", "noa", "afad", "scsn":
+						"usgs", "bmkg", "geonet", "tmd", "usp", "gfz", "ingv", "emsc", "hko", "bcsf", "nrcan", "mmd", "phivolcs", "sgc", "ga", "cenais", "gsras", "bgs", "scsn", "noa", "afad", "sed":
 							var shocktime = data.shockTime
 							var location = data.placeName
 							var latitude = data.latitude
@@ -752,6 +768,8 @@ func poll_p2pq():
 	elif state == WebSocketPeer.STATE_CLOSING:
 		add_notification("P2PQuake connection is closing!", 10)
 	elif state == WebSocketPeer.STATE_CLOSED:
+		if $"P2P-Ping".time_left > 0:
+			$"P2P-Ping".stop()
 		$"../StatContainer/sources/P2P".text = "P2P(Disconnected)"
 		$"../StatContainer/sources/P2P".add_theme_color_override("font_color", Color("ff0000"))
 		var code = p2pq.get_close_code()

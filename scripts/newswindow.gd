@@ -79,7 +79,7 @@ func test_simulated_eng_chars_in_line():
 		t += "a"
 		$Label.text = t
 	max_char = len(t) - 1
-	print("This monitor max chars is %d in a line! It may have chinese and japanese chars, so it will set to %d" % [len(t), max_char])
+	#print("This monitor max chars is %d in a line! It may have chinese and japanese chars, so it will set to %d" % [len(t), max_char])
 	$Label.text = ""
 	$Label.size.x = og_width
 
