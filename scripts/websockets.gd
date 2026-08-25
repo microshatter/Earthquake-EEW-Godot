@@ -83,13 +83,6 @@ func add_notification(message, sec=5):
 	$"../Flipping-Text-Window/VBoxContainer".add_child(msg)
 	msg.start_different_hidden_timer(sec)
 
-func send_eew(header, title, desc, distance = 0, intensity = 0):
-	$"../EEW-Popup-Window/EEW-Popup".set_header(header)
-	$"../EEW-Popup-Window/EEW-Popup".set_text(title)
-	$"../EEW-Popup-Window/EEW-Popup".set_affected_cities(desc)
-	$"../EEW-Popup-Window/EEW-Popup".set_local_eq_info(distance, intensity)
-	$"../EEW-Popup-Window".show()
-
 func print_eew(header, title, desc, reportnum):
 	print("=====%s(Report #%s)=====" % [header, reportnum])
 	print(title)
@@ -183,7 +176,7 @@ func _ready() -> void:
 	connect_fan()
 	connect_p2pq()
 	connect_whews()
-	# send_eew("EEW Test", "Just a test btw", "test ".repeat(60), 730, Utils.calculate_local_intensity_magnitude(730, 5.9, 10))
+	#$"../EEW-Popup-Window".send_eew("EEW Test", "Just a test btw", "test ".repeat(60), 730, Utils.calculate_local_intensity_magnitude(730, 5.9, 10), 114514, true)
 
 func poll_wolfx():
 	if $"../Reconnect Timer/Wolfx".time_left > 0: # Don't pull if connection lost
@@ -226,8 +219,10 @@ func poll_wolfx():
 						w = "  ".join(wa_str)
 					else:
 						w = "警報区域はありません"
+					var reports = json_message.get("Serial", 0)
+					var isFinal = json_message.get("isFinal", false)
 					var local_intensity = Utils.calculate_local_intensity_magnitude(distance, magnitude, depth)
-					send_eew(title, "%sで地震 M%.1f 強い揺れに警戒" % [location, magnitude], w, distance, local_intensity)
+					$"../EEW-Popup-Window".send_eew(title, "%sで地震 M%.1f 強い揺れに警戒" % [location, magnitude], w, distance, local_intensity, reports, isFinal)
 					print_eew(title, "%sで地震 強い揺れに警戒" % location, w, json_message.Serial)
 				"jma_eqlist":
 					var data = json_message["No1"]
@@ -263,7 +258,7 @@ func poll_wolfx():
 					var eew_header = "Wolfx紧急地震速报（中国地震预警网）"
 					var eew_title = "%s发生了地震 M%.1f 请注意强烈摇晃" % [location, magnitude]
 					var eew_desc = "M%s | 预估最大烈度：%s | 深度：%s | 纬度: %s | 经度: %s\n发生时间： %s" % [magnitude, estint, depth, latitude, longitude, shocktime]
-					send_eew(eew_header, eew_title, eew_desc, distance, local_intensity)
+					$"../EEW-Popup-Window".send_eew(eew_header, eew_title, eew_desc, distance, local_intensity)
 					print_eew(eew_header, eew_title, eew_desc, json_message.ReportNum)
 				"cenc_eqlist":
 					var data = json_message["No1"]
@@ -400,6 +395,7 @@ func poll_fan():
 							var longitude = data.longitude
 							var magnitude = data.magnitude
 							var depth = data.depth
+							var reports = data.get("updates")
 							if depth == null:
 								depth = 0
 							var estint = data.epiIntensity
@@ -408,7 +404,7 @@ func poll_fan():
 							var eew_header = "紧急地震速报（中国地震预警网）"
 							var eew_title = "%s发生了地震 M%.1f 请注意强烈摇晃" % [location, magnitude]
 							var eew_desc = "M%s | 预估最大烈度：%s | 深度：%s | 纬度: %s | 经度: %s\n发生时间： %s" % [magnitude, estint, depth, latitude, longitude, shocktime]
-							send_eew(eew_header, eew_title, eew_desc, distance, local_intensity)
+							$"../EEW-Popup-Window".send_eew(eew_header, eew_title, eew_desc, distance, local_intensity, reports)
 						"cwa-eew":
 							var location = data.placeName
 							var latitude = data.latitude
@@ -421,7 +417,7 @@ func poll_fan():
 							var eew_header = "紧急地震速报（台湾省气象署）"
 							var eew_title = "%s发生了地震 M%.1f 请注意强烈摇晃" % [location, magnitude]
 							var eew_desc = affected.join("  ")
-							send_eew(eew_header, eew_title, eew_desc, distance, local_intensity)
+							$"../EEW-Popup-Window".send_eew(eew_header, eew_title, eew_desc, distance, local_intensity)
 						_:
 							var msg = news_message_scene.instantiate()
 							msg.set_text(PackedStringArray([
@@ -526,7 +522,7 @@ func poll_whews():
 							else:
 								w = "警報区域はありません"
 							var local_intensity = Utils.calculate_local_intensity_magnitude(distance, magnitude, depth)
-							send_eew(title, "%sで地震 M%.1f 強い揺れに警戒" % [location, magnitude], w, distance, local_intensity)
+							$"../EEW-Popup-Window".send_eew(title, "%sで地震 M%.1f 強い揺れに警戒" % [location, magnitude], w, distance, local_intensity)
 							print_eew(title, "%sで地震 強い揺れに警戒" % location, w, data.updates)
 						"cea":
 							var shocktime = data.shockTime
@@ -543,7 +539,7 @@ func poll_whews():
 							var eew_header = "紧急地震速报（中国地震预警网）"
 							var eew_title = "%s发生了地震 M%.1f 请注意强烈摇晃" % [location, magnitude]
 							var eew_desc = "M%s | 预估最大烈度：%s | 深度：%s | 纬度: %s | 经度: %s\n发生时间： %s" % [magnitude, estint, depth, latitude, longitude, shocktime]
-							send_eew(eew_header, eew_title, eew_desc, distance, local_intensity)
+							$"../EEW-Popup-Window".send_eew(eew_header, eew_title, eew_desc, distance, local_intensity)
 						"cea-pr":
 							var shocktime = data.shockTime
 							var location = data.placeName
@@ -560,7 +556,7 @@ func poll_whews():
 							var eew_header = "紧急地震速报（中国%s地震预警网）" % province
 							var eew_title = "%s发生了地震 M%.1f 请注意强烈摇晃" % [location, magnitude]
 							var eew_desc = "M%s | 预估最大烈度：%s | 深度：%s | 纬度: %s | 经度: %s\n发生时间： %s" % [magnitude, estint, depth, latitude, longitude, shocktime]
-							send_eew(eew_header, eew_title, eew_desc, distance, local_intensity)
+							$"../EEW-Popup-Window".send_eew(eew_header, eew_title, eew_desc, distance, local_intensity)
 						"sa_eew":
 							var shocktime = data.shockTime
 							var location = data.placeName
@@ -576,7 +572,7 @@ func poll_whews():
 							var eew_header = "EARTHQUAKE EARLY WARNING(ShakeAlert)"
 							var eew_title = "Earthquake happening in %s  M%.1f  Please be aware of strong shaking" % [location, magnitude]
 							var eew_desc = "M%s | Max Intensity：%s | Depth：%s | Latitude: %s | Longitude: %s\nShock Time： %s" % [magnitude, estint, depth, latitude, longitude, shocktime]
-							send_eew(eew_header, eew_title, eew_desc, distance, local_intensity)
+							$"../EEW-Popup-Window".send_eew(eew_header, eew_title, eew_desc, distance, local_intensity)
 						"cwa_eew":
 							var shocktime = data.shockTime
 							var location = data.placeName
@@ -592,7 +588,7 @@ func poll_whews():
 							var eew_header = "緊急地震速報（台灣氣象署）"
 							var eew_title = "%s發生了地震 M%.1f 請注意強烈搖晃" % [location, magnitude]
 							var eew_desc = "M%s | 預估最大震度：%s | 深度：%s | 緯度: %s | 經度: %s\n發生時間： %s" % [magnitude, estint, depth, latitude, longitude, shocktime]
-							send_eew(eew_header, eew_title, eew_desc, distance, local_intensity)
+							$"../EEW-Popup-Window".send_eew(eew_header, eew_title, eew_desc, distance, local_intensity)
 						"kma_eew":
 							var location = data.placeNameKo
 							var latitude = data.latitude
@@ -612,7 +608,7 @@ func poll_whews():
 							var eew_header = "緊急地震速報（KMA）"
 							var eew_title = "%sで地震 M%.1f 強い揺れに警戒" % [location, magnitude]
 							var eew_desc = w
-							send_eew(eew_header, eew_title, eew_desc, distance, local_intensity)
+							$"../EEW-Popup-Window".send_eew(eew_header, eew_title, eew_desc, distance, local_intensity)
 						"cenc":
 							var shocktime = data.shockTime
 							var location = data.placeName
@@ -755,7 +751,7 @@ func poll_p2pq():
 					var title = "緊急地震速報"
 					var w = "警報区域はありません"
 					var local_intensity = Utils.calculate_local_intensity_magnitude(distance, magnitude, depth)
-					send_eew(title, "%sで地震 M%.1f 強い揺れに警戒" % [location, magnitude], w, distance, local_intensity)
+					$"../EEW-Popup-Window".send_eew(title, "%sで地震 M%.1f 強い揺れに警戒" % [location, magnitude], w, distance, local_intensity)
 					print_eew(title, "%sで地震 強い揺れに警戒" % location, w, json_message.Serial)
 				_:
 					var msg = news_message_scene.instantiate()

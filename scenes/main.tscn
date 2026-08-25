@@ -9,7 +9,9 @@
 [ext_resource type="Script" uid="uid://cjo67pptx1wdv" path="res://scripts/flipping_text_window.gd" id="5_tefeu"]
 [ext_resource type="AudioStream" uid="uid://baau6vabl42nr" path="res://assets/audio/misc/Untitled.mp3" id="6_85g3d"]
 [ext_resource type="AudioStream" uid="uid://hrhehhs4q4vu" path="res://assets/audio/misc/nhk eew.mp3" id="6_choun"]
+[ext_resource type="AudioStream" uid="uid://dlmn2o4bpn61a" path="res://assets/audio/srev/update.mp3" id="7_eb6dy"]
 [ext_resource type="Script" uid="uid://c040ea5amhptl" path="res://scripts/shakealert.gd" id="8_choun"]
+[ext_resource type="AudioStream" uid="uid://cxwqjt2qe7b45" path="res://assets/audio/srev/final.mp3" id="8_trceg"]
 
 [node name="Main" type="Node" unique_id=1409934259]
 script = ExtResource("1_0wfyh")
@@ -68,6 +70,7 @@ one_shot = true
 [node name="EEW-Popup-Window" type="Window" parent="." unique_id=2040913522]
 transparent_bg = true
 oversampling_override = 1.0
+title = "WARNING"
 size = Vector2i(800, 350)
 visible = false
 unresizable = true
@@ -82,6 +85,12 @@ script = ExtResource("4_85g3d")
 [node name="eew" type="AudioStreamPlayer" parent="EEW-Popup-Window" unique_id=12138998]
 stream = ExtResource("6_choun")
 
+[node name="update" type="AudioStreamPlayer" parent="EEW-Popup-Window" unique_id=1642935675]
+stream = ExtResource("7_eb6dy")
+
+[node name="final" type="AudioStreamPlayer" parent="EEW-Popup-Window" unique_id=1361849081]
+stream = ExtResource("8_trceg")
+
 [node name="shakealert" type="AudioStreamPlayer" parent="EEW-Popup-Window" unique_id=2061236957]
 stream = ExtResource("6_85g3d")
 script = ExtResource("8_choun")
@@ -93,6 +102,7 @@ one_shot = true
 [node name="Flipping-Text-Window" type="Window" parent="." unique_id=402798098]
 transparent_bg = true
 oversampling_override = 1.0
+title = "Information"
 visible = false
 unresizable = true
 borderless = true
