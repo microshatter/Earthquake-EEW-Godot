@@ -414,9 +414,9 @@ func poll_fan():
 							var distance = get_distance_from_source(latitude, longitude)
 							var local_intensity = Utils.calculate_local_intensity_magnitude(distance, magnitude, depth)
 							var affected = PackedStringArray(data.locationDesc)
-							var eew_header = "紧急地震速报（台湾省气象署）"
-							var eew_title = "%s发生了地震 M%.1f 请注意强烈摇晃" % [location, magnitude]
-							var eew_desc = affected.join("  ")
+							var eew_header = "緊急地震速報（台灣氣象署）"
+							var eew_title = "%s發生了地震 M%.1f 請注意強烈搖晃" % [location, magnitude]
+							var eew_desc = "  ".join(affected)
 							$"../EEW-Popup-Window".send_eew(eew_header, eew_title, eew_desc, distance, local_intensity)
 						_:
 							var msg = news_message_scene.instantiate()
@@ -521,8 +521,10 @@ func poll_whews():
 								w = "  ".join(wa_str)
 							else:
 								w = "警報区域はありません"
+							var reports = data.get("updates", 0)
+							var final_report = data.get("final", false)
 							var local_intensity = Utils.calculate_local_intensity_magnitude(distance, magnitude, depth)
-							$"../EEW-Popup-Window".send_eew(title, "%sで地震 M%.1f 強い揺れに警戒" % [location, magnitude], w, distance, local_intensity)
+							$"../EEW-Popup-Window".send_eew(title, "%sで地震 M%.1f 強い揺れに警戒" % [location, magnitude], w, distance, local_intensity, reports, final_report)
 							print_eew(title, "%sで地震 強い揺れに警戒" % location, w, data.updates)
 						"cea":
 							var shocktime = data.shockTime
@@ -534,12 +536,13 @@ func poll_whews():
 							if depth == null:
 								depth = 0
 							var estint = data.epiIntensity
+							var reports = data.get("updates", 0)
 							var distance = get_distance_from_source(latitude, longitude)
 							var local_intensity = Utils.calculate_local_intensity_magnitude(distance, magnitude, depth)
 							var eew_header = "紧急地震速报（中国地震预警网）"
 							var eew_title = "%s发生了地震 M%.1f 请注意强烈摇晃" % [location, magnitude]
 							var eew_desc = "M%s | 预估最大烈度：%s | 深度：%s | 纬度: %s | 经度: %s\n发生时间： %s" % [magnitude, estint, depth, latitude, longitude, shocktime]
-							$"../EEW-Popup-Window".send_eew(eew_header, eew_title, eew_desc, distance, local_intensity)
+							$"../EEW-Popup-Window".send_eew(eew_header, eew_title, eew_desc, distance, local_intensity, reports)
 						"cea-pr":
 							var shocktime = data.shockTime
 							var location = data.placeName
@@ -551,12 +554,13 @@ func poll_whews():
 								depth = 0
 							var estint = data.epiIntensity
 							var province = data.province
+							var reports = data.get("updates", 0)
 							var distance = get_distance_from_source(latitude, longitude)
 							var local_intensity = Utils.calculate_local_intensity_magnitude(distance, magnitude, depth)
 							var eew_header = "紧急地震速报（中国%s地震预警网）" % province
 							var eew_title = "%s发生了地震 M%.1f 请注意强烈摇晃" % [location, magnitude]
 							var eew_desc = "M%s | 预估最大烈度：%s | 深度：%s | 纬度: %s | 经度: %s\n发生时间： %s" % [magnitude, estint, depth, latitude, longitude, shocktime]
-							$"../EEW-Popup-Window".send_eew(eew_header, eew_title, eew_desc, distance, local_intensity)
+							$"../EEW-Popup-Window".send_eew(eew_header, eew_title, eew_desc, distance, local_intensity, reports)
 						"sa_eew":
 							var shocktime = data.shockTime
 							var location = data.placeName
@@ -583,12 +587,14 @@ func poll_whews():
 							if depth == null:
 								depth = 0
 							var estint = data.epiIntensity
+							var reports = data.get("updates", 0)
+							var final_report = data.get("final", false)
 							var distance = get_distance_from_source(latitude, longitude)
 							var local_intensity = Utils.calculate_local_intensity_magnitude(distance, magnitude, depth)
 							var eew_header = "緊急地震速報（台灣氣象署）"
 							var eew_title = "%s發生了地震 M%.1f 請注意強烈搖晃" % [location, magnitude]
 							var eew_desc = "M%s | 預估最大震度：%s | 深度：%s | 緯度: %s | 經度: %s\n發生時間： %s" % [magnitude, estint, depth, latitude, longitude, shocktime]
-							$"../EEW-Popup-Window".send_eew(eew_header, eew_title, eew_desc, distance, local_intensity)
+							$"../EEW-Popup-Window".send_eew(eew_header, eew_title, eew_desc, distance, local_intensity, reports, final_report)
 						"kma_eew":
 							var location = data.placeNameKo
 							var latitude = data.latitude
