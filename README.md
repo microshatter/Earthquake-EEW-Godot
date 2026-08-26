@@ -3,6 +3,9 @@ This is a software that notify users EEW and earthquake information.  EEW don't 
 This project is currently made with Godot 4.7, may update engine later
 
 > [!WARNING]
+> This project name is not final and it will subject to change later
+
+> [!WARNING]
 > This project is AI Generated: parts of the project, including parts of the scripts, were written with the assistance of an AI.
 >
 > AI-assisted areas include (but are not limited to):
