@@ -259,6 +259,23 @@ func poll_wolfx():
 					var eew_desc = "M%s | 预估最大烈度：%s | 深度：%s | 纬度: %s | 经度: %s\n发生时间： %s" % [magnitude, estint, depth, latitude, longitude, shocktime]
 					$"../EEW-Popup-Window".send_eew(eew_header, eew_title, eew_desc, distance, local_intensity)
 					print_eew(eew_header, eew_title, eew_desc, json_message.ReportNum)
+				"cwa_eew":
+					var shocktime = json_message.OriginTime
+					var location = json_message.HypoCenter
+					var latitude = json_message.Latitude
+					var longitude = json_message.Longitude
+					var distance = get_distance_from_source(latitude, longitude)
+					var magnitude = json_message.get("Magunitude", json_message.get("Magnitude", 0.0))
+					var depth = json_message.get("Depth")
+					if depth == null:
+						depth = 0
+					var estint = json_message.MaxIntensity
+					var local_intensity = IntensityServices.calculate_estimated_intensity(magnitude, distance, depth, longitude)
+					var eew_header = "緊急地震速報（台灣氣象署）"
+					var eew_title = "%s發生了地震 M%.1f 請注意強烈搖晃" % [location, magnitude]
+					var eew_desc = "M%s | 預估最大震度：%s | 深度：%s | 緯度: %s | 經度: %s\n發生時間： %s" % [magnitude, estint, depth, latitude, longitude, shocktime]
+					$"../EEW-Popup-Window".send_eew(eew_header, eew_title, eew_desc, distance, local_intensity)
+					print_eew(eew_header, eew_title, eew_desc, json_message.ReportNum)
 				"cenc_eqlist":
 					var data = json_message["No1"]
 					var shocktime = data.time
@@ -643,6 +660,21 @@ func poll_whews():
 							]))
 							msg.add_text("地震発生場所：%s | 緯度：%s | 経度：%s\nマグニチュード%s | 震源の深さ：%s" % [location, latitude, longitude, magnitude, depth])
 							$"../Flipping-Text-Window/VBoxContainer".add_child(msg)
+						"cwa":
+							var shocktime = data.shockTime
+							var location = data.placeName
+							var latitude = data.latitude
+							var longitude = data.longitude
+							var magnitude = data.magnitude
+							var depth = data.depth
+							if magnitude >= Utils.load_option().get("minmagnitude", 0.0):
+								var msg = news_message_scene.instantiate()
+								msg.set_text(PackedStringArray([
+									"台灣氣象署地震情报",
+									"In %s\nAn earthquake happans in %s" % [shocktime, location],
+									"Hypocenter: %s | Latitude: %s | Longitude: %s\nM%s | Depth: %s km" % [location, latitude, longitude, magnitude, depth]
+								]))
+								$"../Flipping-Text-Window/VBoxContainer".add_child(msg)
 						"usgs", "bmkg", "geonet", "tmd", "usp", "gfz", "ingv", "emsc", "hko", "bcsf", "nrcan", "mmd", "phivolcs", "sgc", "ga", "cenais", "gsras", "bgs", "scsn", "noa", "afad", "sed", "ssw", "ssn":
 							var shocktime = data.shockTime
 							var location = data.placeName
