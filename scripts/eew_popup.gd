@@ -16,7 +16,7 @@ func set_affected_cities(text):
 	text_changed.emit()
 
 func set_local_eq_info(distance: float, local_intensity: float):
-	$VBoxContainer/BodyContent/VBoxContainer/Local.text = "震源からの距離: %.2f km | 推定現地震度: %.1f" % [distance, local_intensity]
+	$VBoxContainer/BodyContent/VBoxContainer/Local.text = "震源からの距離: %.2f km | 推定現地強度: %.1f" % [distance, local_intensity]
 	if local_intensity >= Utils.load_option().get("minintensity", 0):
 		shakealert.emit()
 	text_changed.emit()

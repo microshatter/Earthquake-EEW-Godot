@@ -58,6 +58,7 @@ text = "Unknown Source Min Magnitude"
 
 [node name="MagSpinBox" type="SpinBox" parent="VBoxContainer/Settings/MagnitudeIntensity" unique_id=1068096392]
 layout_mode = 2
+tooltip_text = "Fliter all earthquake information sources but CENC, JMA, CWA, "
 step = 0.1
 value = 1.0
 
@@ -67,7 +68,7 @@ text = "EEW Min Intensity"
 
 [node name="IntenSpinBox" type="SpinBox" parent="VBoxContainer/Settings/MagnitudeIntensity" unique_id=1910350469]
 layout_mode = 2
-max_value = 10.0
+max_value = 12.0
 step = 0.1
 value = 5.0
 
