@@ -26,4 +26,5 @@ This project is currently made with Godot 4.7, may update engine later
 * EEW Sound Effects: NHK
 
 # Credits
-* [Maple Font by subframe7536](https://github.com/subframe7536/Maple-font)
+* [Maple Mono Font by subframe7536](https://github.com/subframe7536/Maple-font)
+* [DSEG Font by subframe7536](https://github.com/keshikan/DSEG)
