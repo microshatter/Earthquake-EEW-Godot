@@ -1,6 +1,5 @@
 extends Node
 
-
 var wolfx = WebSocketPeer.new()
 var fan = WebSocketPeer.new()
 var p2pq = WebSocketPeer.new()
@@ -675,7 +674,7 @@ func poll_whews():
 									"Hypocenter: %s | Latitude: %s | Longitude: %s\nM%s | Depth: %s km" % [location, latitude, longitude, magnitude, depth]
 								]))
 								$"../Flipping-Text-Window/VBoxContainer".add_child(msg)
-						"usgs", "bmkg", "geonet", "tmd", "usp", "gfz", "ingv", "emsc", "hko", "bcsf", "nrcan", "mmd", "phivolcs", "sgc", "ga", "cenais", "gsras", "bgs", "scsn", "noa", "afad", "sed", "ssw", "ssn":
+						"usgs", "bmkg", "geonet", "tmd", "usp", "gfz", "ingv", "emsc", "hko", "bcsf", "nrcan", "mmd", "phivolcs", "sgc", "ga", "cenais", "gsras", "bgs", "scsn", "noa", "afad", "sed", "ssw", "ssn", "ipma":
 							var shocktime = data.shockTime
 							var location = data.placeName
 							var latitude = data.latitude
