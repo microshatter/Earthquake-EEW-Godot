@@ -23,6 +23,7 @@ var whews_key_sent = false
 var whews_key_invalid = false
 var whews_last_invalid_key = ""
 var whews_current_key = ""
+var whews_cea_token = ""
 
 var pings = {
 	"wolfx": 0,
@@ -495,7 +496,7 @@ func poll_whews():
 					print(d)
 			elif json_type == TYPE_DICTIONARY:
 				var message_type = json_message.get("type")
-				var data = json_message.get("Data", {})
+				var data = json_message.get("Data", json_message.get("data", {}))
 				var data_source = json_message.get("source", data.get("source"))
 				var hash_value = json_message.get("md5", "")
 				if len(hash_value) > 0:
@@ -703,6 +704,26 @@ func poll_whews():
 							print("Received from %s(WHEWS): %s" % [data_source, JSON.stringify(data)])
 				else:
 					match message_type:
+						"hello":
+							var auth_payload = {
+								"type": "auth",
+								"data": {
+									"appId": "app_63d2a04f72f1327c",
+									"appSecret": OS.get_environment("WHEWS_APP_SECRET")
+								}
+							}
+							whews.send_text(JSON.stringify(auth_payload))
+						"auth_ok":
+							whews_cea_token = data.get("accessToken")
+							$"WHEWS-CEA-Auth".start(data.get("expiresIn", 600) - 10)
+							print("Auth success. New token: %s" % whews_cea_token)
+						"auth_fail":
+							var code = data.get("code")
+							var reason = data.get("message")
+							add_notification("Auth failed with code %s: %s" % [code, reason])
+						"error":
+							add_notification("WHEWS ERROR: %s" % message, 120)
+							print("WHEWS ERROR:  %s" % message)
 						"pong":
 							print("WHEWS Server received ping")
 							whews_pong.emit()
@@ -884,3 +905,11 @@ func _on_p_2_pquake_pong() -> void:
 func _on_whews_pong() -> void:
 	recieved_pinged.set("whews", true)
 	recieved_time.set("whews", Time.get_ticks_msec())
+
+
+func _on_whewscea_auth_timeout() -> void:
+	var refresh_payload = {
+		"type": "refresh",
+		"data": {"accessToken": whews_cea_token}
+	}
+	whews.send_text(JSON.stringify(refresh_payload))

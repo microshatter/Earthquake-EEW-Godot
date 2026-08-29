@@ -17,15 +17,22 @@ jobs:
     # Job name, can be anything
     name: Export Game
     steps:
-      # Always include the checkout step so that 
+      # Always include the checkout step so that
       # your project is available for Godot to export
     - name: checkout
       uses: actions/checkout@v5
-  
+
+    - name: setup env
+      uses: SpicyPizza/create-envfile@v2.0
+      with:
+        envkey_WHEWS_APP_SECRET: ${{secrets.WHEWS_APP_SECRET}}
+
     - name: export game
       id: export
       # Use latest version (see releases for all versions)
       uses: firebelley/godot-export@v8.0.0
+      env:
+        WHEWS_APP_SECRET: ${{secrets.WHEWS_APP_SECRET}}
       with:
         # Defining all the required inputs
         godot_executable_download_url: https://downloads.godotengine.org/?version=4.7.2&flavor=stable&slug=linux.x86_64.zip&platform=linux.64
@@ -44,7 +51,7 @@ jobs:
         tag: ${{ github.ref_name }}
         allowUpdates: true
         artifacts: ${{ steps.export.outputs.archive_directory }}/*
-        
+
     - name: upload artifacts
       if: ${{ !startsWith(github.ref, 'refs/tags') }}
       uses: actions/upload-artifact@v7

@@ -45,6 +45,9 @@ one_shot = true
 wait_time = 60.0
 one_shot = true
 
+[node name="WHEWS-CEA-Auth" type="Timer" parent="Websockets" unique_id=1009099974]
+wait_time = 590.0
+
 [node name="P2P-Ping" type="Timer" parent="Websockets" unique_id=1693358433]
 wait_time = 60.0
 one_shot = true
@@ -216,6 +219,7 @@ layout_mode = 2
 [connection signal="timeout" from="Websockets/Wolfx-Ping" to="Websockets" method="_on_wolfx_ping_timeout"]
 [connection signal="timeout" from="Websockets/FanStudio-Ping" to="Websockets" method="_on_fan_studio_ping_timeout"]
 [connection signal="timeout" from="Websockets/WHEWS-Ping" to="Websockets" method="_on_whews_ping_timeout"]
+[connection signal="timeout" from="Websockets/WHEWS-CEA-Auth" to="Websockets" method="_on_whewscea_auth_timeout"]
 [connection signal="timeout" from="Reconnect Timer/Wolfx" to="Websockets" method="_on_wolfx_timeout"]
 [connection signal="timeout" from="Reconnect Timer/FanStudio" to="Websockets" method="_on_fan_studio_timeout"]
 [connection signal="timeout" from="Reconnect Timer/WHEWS" to="Websockets" method="_on_whews_timeout"]
