@@ -716,7 +716,7 @@ func poll_whews():
 						"auth_ok":
 							whews_cea_token = data.get("accessToken")
 							$"WHEWS-CEA-Auth".start(data.get("expiresIn", 600) - 10)
-							print("Auth success. New token: %s" % whews_cea_token)
+							print("WHEWS CEA Auth success")
 						"auth_fail":
 							var code = data.get("code")
 							var reason = data.get("message")
