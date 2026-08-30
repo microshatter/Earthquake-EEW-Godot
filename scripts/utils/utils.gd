@@ -20,7 +20,9 @@ static func load_option() -> Dictionary:
 		"minmagnitude": options.get("minmagnitude", 0),
 		"minintensity": options.get("minintensity", 5),
 		"fanapi": options.get("fanapi", ""),
-		"whewsapi": options.get("whewsapi", "")
+		"whewsapi": options.get("whewsapi", ""),
+		"whewsceaid": options.get("whewsceaid", ""),
+		"whewsceasecret": options.get("whewsceasecret", "")
 	}
 	return fixed_options
 

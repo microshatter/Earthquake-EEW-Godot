@@ -15,22 +15,26 @@ func load_settings():
 			$"../../Websockets".add_notification("JSON load failed! Using default value. \nCheck config and reload again!")
 			$"..".show()
 			OS.shell_open(ProjectSettings.globalize_path(Utils.config_path))
-		$VBoxContainer/Settings/GeoLocation/LatitudeSpinBox.value = options.get("latitude", 0.0)
-		$VBoxContainer/Settings/GeoLocation/LongitudeSpinBox.value = options.get("longitude", 0.0)
-		$VBoxContainer/Settings/MagnitudeIntensity/MagSpinBox.value = options.get("minmagnitude", 0)
-		$VBoxContainer/Settings/MagnitudeIntensity/IntenSpinBox.value = options.get("minintensity", 5)
-		$VBoxContainer/Settings/FanApi/LineEdit.text = options.get("fanapi", "")
-		$VBoxContainer/Settings/WHEWSApi/LineEdit.text = options.get("whewsapi", "")
+		$VBoxContainer/TabContainer/General/GeoLocation/LatitudeSpinBox.value = options.get("latitude", 0.0)
+		$VBoxContainer/TabContainer/General/GeoLocation/LongitudeSpinBox.value = options.get("longitude", 0.0)
+		$VBoxContainer/TabContainer/General/MagnitudeIntensity/MagSpinBox.value = options.get("minmagnitude", 0)
+		$VBoxContainer/TabContainer/General/MagnitudeIntensity/IntenSpinBox.value = options.get("minintensity", 5)
+		$"VBoxContainer/TabContainer/API Keys/FanApi/LineEdit".text = options.get("fanapi", "")
+		$"VBoxContainer/TabContainer/API Keys/WHEWSApi/LineEdit".text = options.get("whewsapi", "")
+		$"VBoxContainer/TabContainer/API Keys/WHEWSCEAID/LineEdit".text = options.get("whewsceaid", "")
+		$"VBoxContainer/TabContainer/API Keys/WHEWSCEASecret/LineEdit".text = options.get("whewsceasecret", "")
 		print("Config loaded!")
 
 func save_settings():
 	var options = {
-		"latitude": $VBoxContainer/Settings/GeoLocation/LatitudeSpinBox.value,
-		"longitude": $VBoxContainer/Settings/GeoLocation/LongitudeSpinBox.value,
-		"minmagnitude": $VBoxContainer/Settings/MagnitudeIntensity/MagSpinBox.value,
-		"minintensity": $VBoxContainer/Settings/MagnitudeIntensity/IntenSpinBox.value,
-		"fanapi": $VBoxContainer/Settings/FanApi/LineEdit.text,
-		"whewsapi": $VBoxContainer/Settings/WHEWSApi/LineEdit.text
+		"latitude": $VBoxContainer/TabContainer/General/GeoLocation/LatitudeSpinBox.value,
+		"longitude": $VBoxContainer/TabContainer/General/GeoLocation/LongitudeSpinBox.value,
+		"minmagnitude": $VBoxContainer/TabContainer/General/MagnitudeIntensity/MagSpinBox.value,
+		"minintensity": $VBoxContainer/TabContainer/General/MagnitudeIntensity/IntenSpinBox.value,
+		"fanapi": $"VBoxContainer/TabContainer/API Keys/FanApi/LineEdit".text,
+		"whewsapi": $"VBoxContainer/TabContainer/API Keys/WHEWSApi/LineEdit".text,
+		"whewsceaid": $"VBoxContainer/TabContainer/API Keys/WHEWSCEAID/LineEdit".text,
+		"whewsceasecret": $"VBoxContainer/TabContainer/API Keys/WHEWSCEASecret/LineEdit".text
 	}
 	var f = FileAccess.open(Utils.config_path, FileAccess.WRITE)
 	f.store_string(JSON.stringify(options, "  "))
@@ -39,8 +43,8 @@ func save_settings():
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
-	$VBoxContainer/Settings/GeoLocation/LatitudeSpinBox.step = 0.000001
-	$VBoxContainer/Settings/GeoLocation/LongitudeSpinBox.step = 0.000001
+	$VBoxContainer/TabContainer/General/GeoLocation/LatitudeSpinBox.step = 0.000001
+	$VBoxContainer/TabContainer/General/GeoLocation/LongitudeSpinBox.step = 0.000001
 	load_settings()
 
 
