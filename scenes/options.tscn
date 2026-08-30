@@ -151,19 +151,19 @@ metadata/_tab_index = 2
 
 [node name="Wolfx" type="CheckBox" parent="VBoxContainer/TabContainer/Providers" unique_id=484523697]
 layout_mode = 2
-text = "P2P"
+text = "Enable Wolfx"
 
 [node name="FanStudio" type="CheckBox" parent="VBoxContainer/TabContainer/Providers" unique_id=1098097584]
 layout_mode = 2
-text = "P2P"
+text = "Enable FAN Studio"
 
 [node name="Whews" type="CheckBox" parent="VBoxContainer/TabContainer/Providers" unique_id=1029487706]
 layout_mode = 2
-text = "P2P"
+text = "Enable WHEWS"
 
 [node name="P2P" type="CheckBox" parent="VBoxContainer/TabContainer/Providers" unique_id=1422743594]
 layout_mode = 2
-text = "P2P"
+text = "Enable P2PQuake"
 
 [node name="Actions" type="HBoxContainer" parent="VBoxContainer" unique_id=1295576382]
 layout_mode = 2
