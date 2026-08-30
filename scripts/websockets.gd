@@ -705,14 +705,16 @@ func poll_whews():
 				else:
 					match message_type:
 						"hello":
-							var auth_payload = {
-								"type": "auth",
-								"data": {
-									"appId": "app_63d2a04f72f1327c",
-									"appSecret": OS.get_environment("WHEWS_APP_SECRET")
+							var secret = OS.get_environment("WHEWS_APP_SECRET")
+							if len(secret) > 0:
+								var auth_payload = {
+									"type": "auth",
+									"data": {
+										"appId": "app_63d2a04f72f1327c",
+										"appSecret": secret
+									}
 								}
-							}
-							whews.send_text(JSON.stringify(auth_payload))
+								whews.send_text(JSON.stringify(auth_payload))
 						"auth_ok":
 							whews_cea_token = data.get("accessToken")
 							$"WHEWS-CEA-Auth".start(data.get("expiresIn", 600) - 60)
