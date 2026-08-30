@@ -2,111 +2,168 @@
 
 [ext_resource type="Script" uid="uid://x5idn3ptpek" path="res://scripts/options.gd" id="1_c2u1v"]
 
-[node name="Options" type="TabContainer" unique_id=555193361]
+[node name="Options" type="PanelContainer" unique_id=850327733]
 offset_right = 640.0
 offset_bottom = 480.0
-tab_alignment = 1
-current_tab = 0
 script = ExtResource("1_c2u1v")
 
 [node name="VBoxContainer" type="VBoxContainer" parent="." unique_id=1027649418]
 layout_mode = 2
 theme_override_constants/separation = 8
-metadata/_tab_index = 0
 
-[node name="Settings" type="VBoxContainer" parent="VBoxContainer" unique_id=354752920]
+[node name="TabContainer" type="TabContainer" parent="VBoxContainer" unique_id=1106025279]
 layout_mode = 2
 size_flags_vertical = 3
+tab_alignment = 1
+current_tab = 0
 
-[node name="GeoLocation" type="HBoxContainer" parent="VBoxContainer/Settings" unique_id=1851765578]
+[node name="General" type="VBoxContainer" parent="VBoxContainer/TabContainer" unique_id=354752920]
+layout_mode = 2
+size_flags_vertical = 3
+metadata/_tab_index = 0
+
+[node name="GeoLocation" type="HBoxContainer" parent="VBoxContainer/TabContainer/General" unique_id=1851765578]
 layout_mode = 2
 alignment = 1
 
-[node name="LatitudeLabel" type="Label" parent="VBoxContainer/Settings/GeoLocation" unique_id=995817575]
+[node name="LatitudeLabel" type="Label" parent="VBoxContainer/TabContainer/General/GeoLocation" unique_id=995817575]
 layout_mode = 2
 text = "Latitude"
 
-[node name="LatitudeSpinBox" type="SpinBox" parent="VBoxContainer/Settings/GeoLocation" unique_id=2092512546]
+[node name="LatitudeSpinBox" type="SpinBox" parent="VBoxContainer/TabContainer/General/GeoLocation" unique_id=2092512546]
 custom_minimum_size = Vector2(130, 0)
 layout_mode = 2
 min_value = -90.0
 max_value = 90.0
 step = 0.0
 
-[node name="LongitudeLabel" type="Label" parent="VBoxContainer/Settings/GeoLocation" unique_id=731564790]
+[node name="LongitudeLabel" type="Label" parent="VBoxContainer/TabContainer/General/GeoLocation" unique_id=731564790]
 layout_mode = 2
 text = "Longitude"
 
-[node name="LongitudeSpinBox" type="SpinBox" parent="VBoxContainer/Settings/GeoLocation" unique_id=221531876]
+[node name="LongitudeSpinBox" type="SpinBox" parent="VBoxContainer/TabContainer/General/GeoLocation" unique_id=221531876]
 custom_minimum_size = Vector2(140, 0)
 layout_mode = 2
 min_value = -180.0
 max_value = 180.0
 step = 0.0
 
-[node name="LocateButton" type="Button" parent="VBoxContainer/Settings/GeoLocation" unique_id=354174840]
+[node name="LocateButton" type="Button" parent="VBoxContainer/TabContainer/General/GeoLocation" unique_id=354174840]
 layout_mode = 2
 text = "Locate Using IP"
 
-[node name="MagnitudeIntensity" type="HBoxContainer" parent="VBoxContainer/Settings" unique_id=352613047]
+[node name="MagnitudeIntensity" type="HBoxContainer" parent="VBoxContainer/TabContainer/General" unique_id=352613047]
 layout_mode = 2
 alignment = 1
 
-[node name="MagLabel" type="Label" parent="VBoxContainer/Settings/MagnitudeIntensity" unique_id=980061800]
+[node name="MagLabel" type="Label" parent="VBoxContainer/TabContainer/General/MagnitudeIntensity" unique_id=980061800]
 layout_mode = 2
 text = "Unknown Source Min Magnitude"
 
-[node name="MagSpinBox" type="SpinBox" parent="VBoxContainer/Settings/MagnitudeIntensity" unique_id=1068096392]
+[node name="MagSpinBox" type="SpinBox" parent="VBoxContainer/TabContainer/General/MagnitudeIntensity" unique_id=1068096392]
 layout_mode = 2
 tooltip_text = "Fliter all earthquake information sources but CENC, JMA, CWA, "
 step = 0.1
 value = 1.0
 
-[node name="IntenLabel" type="Label" parent="VBoxContainer/Settings/MagnitudeIntensity" unique_id=1627747439]
+[node name="IntenLabel" type="Label" parent="VBoxContainer/TabContainer/General/MagnitudeIntensity" unique_id=1627747439]
 layout_mode = 2
 text = "EEW Min Intensity"
 
-[node name="IntenSpinBox" type="SpinBox" parent="VBoxContainer/Settings/MagnitudeIntensity" unique_id=1910350469]
+[node name="IntenSpinBox" type="SpinBox" parent="VBoxContainer/TabContainer/General/MagnitudeIntensity" unique_id=1910350469]
 layout_mode = 2
 max_value = 12.0
 step = 0.1
 value = 5.0
 
-[node name="FanApi" type="HBoxContainer" parent="VBoxContainer/Settings" unique_id=35183253]
+[node name="API Keys" type="VBoxContainer" parent="VBoxContainer/TabContainer" unique_id=2103533890]
+visible = false
+layout_mode = 2
+metadata/_tab_index = 1
+
+[node name="FanApi" type="HBoxContainer" parent="VBoxContainer/TabContainer/API Keys" unique_id=35183253]
 layout_mode = 2
 alignment = 1
 
-[node name="Label" type="Label" parent="VBoxContainer/Settings/FanApi" unique_id=62292584]
+[node name="Label" type="Label" parent="VBoxContainer/TabContainer/API Keys/FanApi" unique_id=62292584]
 layout_mode = 2
 text = "FAN Studio API Key"
 
-[node name="LineEdit" type="LineEdit" parent="VBoxContainer/Settings/FanApi" unique_id=415794163]
+[node name="LineEdit" type="LineEdit" parent="VBoxContainer/TabContainer/API Keys/FanApi" unique_id=415794163]
 custom_minimum_size = Vector2(300, 0)
 layout_mode = 2
 placeholder_text = "Enter API key here..."
 secret = true
 
-[node name="Button" type="Button" parent="VBoxContainer/Settings/FanApi" unique_id=124445181]
+[node name="Button" type="Button" parent="VBoxContainer/TabContainer/API Keys/FanApi" unique_id=124445181]
 layout_mode = 2
 text = "Get a Key"
 
-[node name="WHEWSApi" type="HBoxContainer" parent="VBoxContainer/Settings" unique_id=1830950988]
+[node name="WHEWSApi" type="HBoxContainer" parent="VBoxContainer/TabContainer/API Keys" unique_id=1830950988]
 layout_mode = 2
 alignment = 1
 
-[node name="Label" type="Label" parent="VBoxContainer/Settings/WHEWSApi" unique_id=617498522]
+[node name="Label" type="Label" parent="VBoxContainer/TabContainer/API Keys/WHEWSApi" unique_id=617498522]
 layout_mode = 2
 text = "WHEWS API Key"
 
-[node name="LineEdit" type="LineEdit" parent="VBoxContainer/Settings/WHEWSApi" unique_id=844811130]
+[node name="LineEdit" type="LineEdit" parent="VBoxContainer/TabContainer/API Keys/WHEWSApi" unique_id=844811130]
 custom_minimum_size = Vector2(300, 0)
 layout_mode = 2
 placeholder_text = "Enter API key here..."
 secret = true
 
-[node name="Button" type="Button" parent="VBoxContainer/Settings/WHEWSApi" unique_id=567249916]
+[node name="Button" type="Button" parent="VBoxContainer/TabContainer/API Keys/WHEWSApi" unique_id=567249916]
 layout_mode = 2
 text = "Get a Key"
+
+[node name="WHEWSCEAID" type="HBoxContainer" parent="VBoxContainer/TabContainer/API Keys" unique_id=1841175407]
+layout_mode = 2
+alignment = 1
+
+[node name="Label" type="Label" parent="VBoxContainer/TabContainer/API Keys/WHEWSCEAID" unique_id=507147520]
+layout_mode = 2
+text = "WHEWS CEA App ID"
+
+[node name="LineEdit" type="LineEdit" parent="VBoxContainer/TabContainer/API Keys/WHEWSCEAID" unique_id=186910752]
+custom_minimum_size = Vector2(300, 0)
+layout_mode = 2
+placeholder_text = "Enter API key here..."
+
+[node name="WHEWSCEASecret" type="HBoxContainer" parent="VBoxContainer/TabContainer/API Keys" unique_id=213617104]
+layout_mode = 2
+alignment = 1
+
+[node name="Label" type="Label" parent="VBoxContainer/TabContainer/API Keys/WHEWSCEASecret" unique_id=232487391]
+layout_mode = 2
+text = "WHEWS CEA App Secret"
+
+[node name="LineEdit" type="LineEdit" parent="VBoxContainer/TabContainer/API Keys/WHEWSCEASecret" unique_id=1166424339]
+custom_minimum_size = Vector2(300, 0)
+layout_mode = 2
+placeholder_text = "Enter API key here..."
+secret = true
+
+[node name="Providers" type="VBoxContainer" parent="VBoxContainer/TabContainer" unique_id=1737357298]
+visible = false
+layout_mode = 2
+metadata/_tab_index = 2
+
+[node name="Wolfx" type="CheckBox" parent="VBoxContainer/TabContainer/Providers" unique_id=484523697]
+layout_mode = 2
+text = "P2P"
+
+[node name="FanStudio" type="CheckBox" parent="VBoxContainer/TabContainer/Providers" unique_id=1098097584]
+layout_mode = 2
+text = "P2P"
+
+[node name="Whews" type="CheckBox" parent="VBoxContainer/TabContainer/Providers" unique_id=1029487706]
+layout_mode = 2
+text = "P2P"
+
+[node name="P2P" type="CheckBox" parent="VBoxContainer/TabContainer/Providers" unique_id=1422743594]
+layout_mode = 2
+text = "P2P"
 
 [node name="Actions" type="HBoxContainer" parent="VBoxContainer" unique_id=1295576382]
 layout_mode = 2
@@ -135,8 +192,8 @@ text = "Quit"
 
 [node name="HTTPRequest" type="HTTPRequest" parent="." unique_id=217248521]
 
-[connection signal="pressed" from="VBoxContainer/Settings/GeoLocation/LocateButton" to="." method="_on_locate_button_pressed"]
-[connection signal="pressed" from="VBoxContainer/Settings/FanApi/Button" to="." method="_on_fan_key_button_pressed"]
+[connection signal="pressed" from="VBoxContainer/TabContainer/General/GeoLocation/LocateButton" to="." method="_on_locate_button_pressed"]
+[connection signal="pressed" from="VBoxContainer/TabContainer/API Keys/FanApi/Button" to="." method="_on_fan_key_button_pressed"]
 [connection signal="pressed" from="VBoxContainer/Actions/SaveButton" to="." method="_on_save_button_pressed"]
 [connection signal="pressed" from="VBoxContainer/Actions/SaveOnlyButton" to="." method="_on_save_only_button_pressed"]
 [connection signal="pressed" from="VBoxContainer/Actions/DiscardButton" to="." method="_on_discard_button_pressed"]
