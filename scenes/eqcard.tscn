@@ -1,0 +1,90 @@
+[gd_scene format=3 uid="uid://brj80lt8enape"]
+
+[ext_resource type="Script" uid="uid://yy4u2ic2if1s" path="res://scripts/eqcard.gd" id="1_nprb6"]
+
+[node name="eqcard" type="Control" unique_id=1545216675]
+custom_minimum_size = Vector2(550, 120)
+custom_maximum_size = Vector2(550, 120)
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_right = -602.0
+offset_bottom = -528.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_nprb6")
+
+[node name="Panel" type="PanelContainer" parent="." unique_id=500247933]
+custom_maximum_size = Vector2(550, 120)
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="HBox" type="HBoxContainer" parent="Panel" unique_id=61829616]
+layout_mode = 2
+
+[node name="Intensity" type="PanelContainer" parent="Panel/HBox" unique_id=1682473274]
+custom_minimum_size = Vector2(120, 120)
+custom_maximum_size = Vector2(120, 120)
+layout_mode = 2
+
+[node name="BgColor" type="ColorRect" parent="Panel/HBox/Intensity" unique_id=326448677]
+layout_mode = 2
+color = Color(0, 0, 0, 1)
+
+[node name="value" type="Label" parent="Panel/HBox/Intensity" unique_id=474448930]
+layout_mode = 2
+theme_override_font_sizes/font_size = 72
+text = "?"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="VBox" type="VBoxContainer" parent="Panel/HBox" unique_id=998192742]
+custom_minimum_size = Vector2(0, 120)
+custom_maximum_size = Vector2(-1, 120)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 0
+
+[node name="Location" type="Label" parent="Panel/HBox/VBox" unique_id=263214668]
+custom_minimum_size = Vector2(0, 40)
+custom_maximum_size = Vector2(-1, 40)
+layout_mode = 2
+theme_override_font_sizes/font_size = 28
+text = "Test Location"
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Panel/HBox/VBox" unique_id=1958515786]
+layout_mode = 2
+
+[node name="Datetime" type="Label" parent="Panel/HBox/VBox/HBoxContainer" unique_id=1975372022]
+custom_minimum_size = Vector2(0, 40)
+custom_maximum_size = Vector2(-1, 40)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 28
+text = "2026-07-27 11:45:14"
+
+[node name="UTCOffset" type="Label" parent="Panel/HBox/VBox/HBoxContainer" unique_id=599371915]
+custom_minimum_size = Vector2(0, 40)
+custom_maximum_size = Vector2(-1, 40)
+layout_mode = 2
+theme_override_font_sizes/font_size = 28
+text = "UTC+9"
+
+[node name="HBox" type="HBoxContainer" parent="Panel/HBox/VBox" unique_id=2140202400]
+layout_mode = 2
+
+[node name="Info" type="Label" parent="Panel/HBox/VBox/HBox" unique_id=1284345064]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 28
+text = "M5.0 | 10 km"
+
+[node name="Source" type="Label" parent="Panel/HBox/VBox/HBox" unique_id=58905895]
+layout_mode = 2
+theme_override_font_sizes/font_size = 20
+text = "CENC"

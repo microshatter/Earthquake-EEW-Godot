@@ -92,8 +92,8 @@ func print_eew(header, title, desc, reportnum):
 func connect_wolfx():
 	wolfx.connect_to_url(API_URLs.eqUrls.wolfx_ws[0])
 	wolfx_pinged = false
-	$"../StatContainer/sources/Wolfx".text = "Wolfx(Connecting)"
-	$"../StatContainer/sources/Wolfx".add_theme_color_override("font_color", Color("ffff00"))
+	$"../stats/HBox/StatContainer/sources/Wolfx".text = "Wolfx(Connecting)"
+	$"../stats/HBox/StatContainer/sources/Wolfx".add_theme_color_override("font_color", Color("ffff00"))
 	$"Wolfx-Ping".start()
 
 func connect_fan():
@@ -110,21 +110,21 @@ func connect_fan():
 	if len(Utils.load_option().get("fanapi", "")) <= 0:
 		add_notification("You don't have FAN Studio API key entered! Most of the data source are restricted!", 30)
 	fan.connect_to_url(API_URLs.eqUrls.fan_ws[fan_url])
-	$"../StatContainer/sources/FanStudio".text = "FAN%s(Connecting)" % fan_con_type()
-	$"../StatContainer/sources/FanStudio".add_theme_color_override("font_color", Color("ffff00"))
+	$"../stats/HBox/StatContainer/sources/FanStudio".text = "FAN%s(Connecting)" % fan_con_type()
+	$"../stats/HBox/StatContainer/sources/FanStudio".add_theme_color_override("font_color", Color("ffff00"))
 	$"FanStudio-Ping".start()
 
 func connect_whews():
 	var key = Utils.load_option().get("whewsapi", "")
 	if len(key) <= 0:
 		whews_key_invalid = true
-		$"../StatContainer/sources/WHEWS".text = "WHEWS(Unauthorized)"
-		$"../StatContainer/sources/WHEWS".add_theme_color_override("font_color", Color("ff0000"))
+		$"../stats/HBox/StatContainer/sources/WHEWS".text = "WHEWS(Unauthorized)"
+		$"../stats/HBox/StatContainer/sources/WHEWS".add_theme_color_override("font_color", Color("ff0000"))
 		return
 	elif key == whews_last_invalid_key:
 		whews_key_invalid = true
-		$"../StatContainer/sources/WHEWS".text = "WHEWS(Invalid)"
-		$"../StatContainer/sources/WHEWS".add_theme_color_override("font_color", Color("ff0000"))
+		$"../stats/HBox/StatContainer/sources/WHEWS".text = "WHEWS(Invalid)"
+		$"../stats/HBox/StatContainer/sources/WHEWS".add_theme_color_override("font_color", Color("ff0000"))
 		return
 	whews.inbound_buffer_size = 8388608
 	whews.outbound_buffer_size = 8388608
@@ -134,16 +134,16 @@ func connect_whews():
 	whews_key_invalid = false
 	whews_current_key = key
 	whews.connect_to_url(API_URLs.eqUrls.whews_ws[0] + "?token=%s" % key)
-	$"../StatContainer/sources/WHEWS".text = "WHEWS(Connecting)"
-	$"../StatContainer/sources/WHEWS".add_theme_color_override("font_color", Color("ffff00"))
+	$"../stats/HBox/StatContainer/sources/WHEWS".text = "WHEWS(Connecting)"
+	$"../stats/HBox/StatContainer/sources/WHEWS".add_theme_color_override("font_color", Color("ffff00"))
 	$"WHEWS-Ping".start()
 
 func connect_p2pq():
 	p2pq.connect_to_url(API_URLs.eqUrls.p2pquake_ws[0])
 	p2p_pinged = false
 	#p2pq.connect_to_url("ws://localhost:3000/_ws")
-	$"../StatContainer/sources/P2P".text = "P2P(Connecting)"
-	$"../StatContainer/sources/P2P".add_theme_color_override("font_color", Color("ffff00"))
+	$"../stats/HBox/StatContainer/sources/P2P".text = "P2P(Connecting)"
+	$"../stats/HBox/StatContainer/sources/P2P".add_theme_color_override("font_color", Color("ffff00"))
 	$"P2P-Ping".start()
 
 func send_wolfx_ping():
@@ -183,8 +183,8 @@ func poll_wolfx():
 	wolfx.poll()
 	var state = wolfx.get_ready_state()
 	if state == WebSocketPeer.STATE_OPEN:
-		$"../StatContainer/sources/Wolfx".text = 'Wolfx(%s)' % return_ping_time_recieved("wolfx")
-		$"../StatContainer/sources/Wolfx".add_theme_color_override("font_color", Color("00ff00"))
+		$"../stats/HBox/StatContainer/sources/Wolfx".text = 'Wolfx(%s)' % return_ping_time_recieved("wolfx")
+		$"../stats/HBox/StatContainer/sources/Wolfx".add_theme_color_override("font_color", Color("00ff00"))
 		if not wolfx_pinged:
 			send_wolfx_ping()
 			wolfx_pinged = true
@@ -233,6 +233,7 @@ func poll_wolfx():
 					var depth = data.depth
 					var magnitude = data.magnitude
 					var tsunami_info = data.info
+					var intensity = data.shindo
 					var msg = news_message_scene.instantiate()
 					msg.set_text(PackedStringArray([
 						"日本地震%s" % title,
@@ -242,6 +243,7 @@ func poll_wolfx():
 						msg.add_text(tsunami_info)
 					msg.add_text("地震発生場所：%s | 緯度：%s | 経度：%s\nマグニチュード%s | 震源の深さ：%s" % [location, latitude, longitude, magnitude, depth])
 					$"../Flipping-Text-Window/VBoxContainer".add_child(msg)
+					$"../stats/HBox/eqHistory".add_history(intensity, 0, location, eqtime, float(magnitude), float(depth), "JMA", 9)
 				"cenc_eew", "cq_eew", "fj_eew", "sc_eew":
 					var shocktime = json_message.OriginTime
 					var location = json_message.HypoCenter
@@ -285,12 +287,14 @@ func poll_wolfx():
 					var magnitude = data.magnitude
 					var depth = data.depth
 					var msg = news_message_scene.instantiate()
+					var intensity = float(data.intensity)
 					msg.set_text(PackedStringArray([
 						"中国地震局地震情报(Wolfx)\nChina Earthquake Networks Center Earthquake Report\n以下内容将使用中文 The follow content will using Chinese",
 						"%s\n在%s发生了地震" % [shocktime, location],
 						"震源: %s | 纬度: %s | 经度: %s\nM%s | 深度: %s" % [location, latitude, longitude, magnitude, depth]
 					]))
 					$"../Flipping-Text-Window/VBoxContainer".add_child(msg)
+					$"../stats/HBox/eqHistory".add_history(intensity, 1, location, shocktime, float(magnitude), float(depth), "CENC", 8)
 				_:
 					var msg = news_message_scene.instantiate()
 					msg.set_text(PackedStringArray([
@@ -301,13 +305,13 @@ func poll_wolfx():
 					print("Received from wolfx: %s" % message) # placeholder for future wolfx websocket message handling
 
 	elif state == WebSocketPeer.STATE_CLOSING:
-		$"../StatContainer/sources/Wolfx".text = 'Wolfx(Closing)'
-		$"../StatContainer/sources/Wolfx".add_theme_color_override("font_color", Color("ff8000"))
+		$"../stats/HBox/StatContainer/sources/Wolfx".text = 'Wolfx(Closing)'
+		$"../stats/HBox/StatContainer/sources/Wolfx".add_theme_color_override("font_color", Color("ff8000"))
 	elif state == WebSocketPeer.STATE_CLOSED:
 		if $"Wolfx-Ping".time_left > 0:
 			$"Wolfx-Ping".stop()
-		$"../StatContainer/sources/Wolfx".text = 'Wolfx(Disconnected)'
-		$"../StatContainer/sources/Wolfx".add_theme_color_override("font_color", Color("ff0000"))
+		$"../stats/HBox/StatContainer/sources/Wolfx".text = 'Wolfx(Disconnected)'
+		$"../stats/HBox/StatContainer/sources/Wolfx".add_theme_color_override("font_color", Color("ff0000"))
 		var code = wolfx.get_close_code()
 		var reason = wolfx.get_close_reason()
 		var text = "Wolfx WebSocket closed with code: %d, reason %s. Clean: %s" % [code, reason, code != -1]
@@ -334,14 +338,14 @@ func poll_fan():
 				fan.send_text(JSON.stringify(auth_payload))
 				fan_key_sent = true
 			elif fan_key_sent:
-				$"../StatContainer/sources/FanStudio".text = "FAN%s(Authorizing)(%s)" % [fan_con_type(), return_ping_time_recieved("fan")]
-				$"../StatContainer/sources/FanStudio".add_theme_color_override("font_color", Color("ffff00"))
+				$"../stats/HBox/StatContainer/sources/FanStudio".text = "FAN%s(Authorizing)(%s)" % [fan_con_type(), return_ping_time_recieved("fan")]
+				$"../stats/HBox/StatContainer/sources/FanStudio".add_theme_color_override("font_color", Color("ffff00"))
 			else:
-				$"../StatContainer/sources/FanStudio".text = "FAN%s(Unauthorized)(%s)" % [fan_con_type(), return_ping_time_recieved("fan")]
-				$"../StatContainer/sources/FanStudio".add_theme_color_override("font_color", Color("ff8000"))
+				$"../stats/HBox/StatContainer/sources/FanStudio".text = "FAN%s(Unauthorized)(%s)" % [fan_con_type(), return_ping_time_recieved("fan")]
+				$"../stats/HBox/StatContainer/sources/FanStudio".add_theme_color_override("font_color", Color("ff8000"))
 		else:
-			$"../StatContainer/sources/FanStudio".text = "FAN%s(%s)" % [fan_con_type(), return_ping_time_recieved("fan")]
-			$"../StatContainer/sources/FanStudio".add_theme_color_override("font_color", Color("00ff00"))
+			$"../stats/HBox/StatContainer/sources/FanStudio".text = "FAN%s(%s)" % [fan_con_type(), return_ping_time_recieved("fan")]
+			$"../stats/HBox/StatContainer/sources/FanStudio".add_theme_color_override("font_color", Color("00ff00"))
 		if not fan_pinged:
 			send_fan_ping()
 			fan_pinged = true
@@ -446,13 +450,13 @@ func poll_fan():
 					add_notification("Received from FAN Studio\n%s" % message, 30)
 					print("Received from fan: %s" % message)
 	elif state == WebSocketPeer.STATE_CLOSING:
-		$"../StatContainer/sources/FanStudio".text = "FAN%s(Disconnected)" % fan_con_type()
-		$"../StatContainer/sources/FanStudio".add_theme_color_override("font_color", Color("ff8000"))
+		$"../stats/HBox/StatContainer/sources/FanStudio".text = "FAN%s(Disconnected)" % fan_con_type()
+		$"../stats/HBox/StatContainer/sources/FanStudio".add_theme_color_override("font_color", Color("ff8000"))
 	elif state == WebSocketPeer.STATE_CLOSED:
 		if $"FanStudio-Ping".time_left > 0:
 			$"FanStudio-Ping".stop()
-		$"../StatContainer/sources/FanStudio".text = "FAN%s(Disconnected)" % fan_con_type()
-		$"../StatContainer/sources/FanStudio".add_theme_color_override("font_color", Color("ff0000"))
+		$"../stats/HBox/StatContainer/sources/FanStudio".text = "FAN%s(Disconnected)" % fan_con_type()
+		$"../stats/HBox/StatContainer/sources/FanStudio".add_theme_color_override("font_color", Color("ff0000"))
 		var code = fan.get_close_code()
 		var reason = fan.get_close_reason()
 		print("FAN Studio WebSocket closed with code: %d, reason %s. Clean: %s" % [code, reason, code != -1])
@@ -472,8 +476,8 @@ func poll_whews():
 	whews.poll()
 	var state = whews.get_ready_state()
 	if state == WebSocketPeer.STATE_OPEN:
-		$"../StatContainer/sources/WHEWS".text = "WHEWS(%s)" % return_ping_time_recieved("whews")
-		$"../StatContainer/sources/WHEWS".add_theme_color_override("font_color", Color("00ff00"))
+		$"../stats/HBox/StatContainer/sources/WHEWS".text = "WHEWS(%s)" % return_ping_time_recieved("whews")
+		$"../stats/HBox/StatContainer/sources/WHEWS".add_theme_color_override("font_color", Color("00ff00"))
 		if not whews_pinged:
 			send_whews_ping()
 			whews_pinged = true
@@ -493,7 +497,22 @@ func poll_whews():
 							print("Duplicate entry ignored for %s with hash %s" % [data_source, hash_value])
 							continue
 						Deduplicate.add_hash(hash_value)
-					print(d)
+						var shocktime = data.get("shockTime", "")
+						var location = data.get("placeName")
+						var latitude = data.get("latitude")
+						var longitude = data.get("longitude")
+						var magnitude = data.get("magnitude")
+						var depth = data.get("depth", 0.0)
+						if depth == null:
+							depth = 0.0
+						if magnitude != null:
+							var intensity = data.get("maxIntensity", IntensityServices.calculate_estimated_intensity(magnitude, 0, depth, longitude))
+							if data_source == "jma" or data_source == "cwa":
+								$"../stats/HBox/eqHistory".add_history(intensity, 0, location, shocktime, magnitude, depth, data_source, (9 if data_source == "jma" else 8))
+							elif data_source.ends_with("eew") or data_source.begins_with("cea"):
+								pass
+							else:
+								$"../stats/HBox/eqHistory".add_history(intensity, 1, location, shocktime, magnitude, depth, data_source, 8)
 			elif json_type == TYPE_DICTIONARY:
 				var message_type = json_message.get("type")
 				var data = json_message.get("Data", json_message.get("data", {}))
@@ -638,6 +657,7 @@ func poll_whews():
 							var longitude = data.longitude
 							var magnitude = data.magnitude
 							var depth = data.depth
+							var intensity = IntensityServices.calculate_estimated_intensity(magnitude, 0, depth, longitude)
 							var msg = news_message_scene.instantiate()
 							msg.set_text(PackedStringArray([
 								"中国地震局地震情报\nChina Earthquake Networks Center Earthquake Report\n以下内容将使用中文 The follow content will using Chinese",
@@ -645,6 +665,7 @@ func poll_whews():
 								"震源: %s | 纬度: %s | 经度: %s\nM%s | 深度: %s" % [location, latitude, longitude, magnitude, depth]
 							]))
 							$"../Flipping-Text-Window/VBoxContainer".add_child(msg)
+							$"../stats/HBox/eqHistory".add_history(intensity, 1, location, shocktime, magnitude, depth, data_source, 8)
 						"jma":
 							var title = data.title
 							var eqtime = data.shockTime
@@ -653,6 +674,7 @@ func poll_whews():
 							var longitude = data.longitude
 							var depth = data.depth
 							var magnitude = data.magnitude
+							var intensity = data.maxIntensity
 							var msg = news_message_scene.instantiate()
 							msg.set_text(PackedStringArray([
 								"日本地震%s" % title,
@@ -660,6 +682,7 @@ func poll_whews():
 							]))
 							msg.add_text("地震発生場所：%s | 緯度：%s | 経度：%s\nマグニチュード%s | 震源の深さ：%s" % [location, latitude, longitude, magnitude, depth])
 							$"../Flipping-Text-Window/VBoxContainer".add_child(msg)
+							$"../stats/HBox/eqHistory".add_history(intensity, 0, location, eqtime, magnitude, depth, data_source, 9)
 						"cwa":
 							var shocktime = data.shockTime
 							var location = data.placeName
@@ -667,14 +690,16 @@ func poll_whews():
 							var longitude = data.longitude
 							var magnitude = data.magnitude
 							var depth = data.depth
-							if magnitude >= Utils.load_option().get("minmagnitude", 0.0):
-								var msg = news_message_scene.instantiate()
-								msg.set_text(PackedStringArray([
-									"台灣氣象署地震情报",
-									"In %s\nAn earthquake happans in %s" % [shocktime, location],
-									"Hypocenter: %s | Latitude: %s | Longitude: %s\nM%s | Depth: %s km" % [location, latitude, longitude, magnitude, depth]
-								]))
-								$"../Flipping-Text-Window/VBoxContainer".add_child(msg)
+							var intensity = data.maxIntensity
+							#if magnitude >= Utils.load_option().get("minmagnitude", 0.0):
+							var msg = news_message_scene.instantiate()
+							msg.set_text(PackedStringArray([
+								"台灣氣象署地震情报",
+								"In %s\nAn earthquake happans in %s" % [shocktime, location],
+								"Hypocenter: %s | Latitude: %s | Longitude: %s\nM%s | Depth: %s km" % [location, latitude, longitude, magnitude, depth]
+							]))
+							$"../Flipping-Text-Window/VBoxContainer".add_child(msg)
+							$"../stats/HBox/eqHistory".add_history(intensity, 0, location, shocktime, magnitude, depth, data_source, 8)
 						"usgs", "bmkg", "geonet", "tmd", "usp", "gfz", "ingv", "emsc", "hko", "bcsf", "nrcan", "mmd", "phivolcs", "sgc", "ga", "cenais", "gsras", "bgs", "scsn", "noa", "afad", "sed", "ssw", "ssn", "ipma":
 							var shocktime = data.shockTime
 							var location = data.placeName
@@ -682,6 +707,7 @@ func poll_whews():
 							var longitude = data.longitude
 							var magnitude = data.magnitude
 							var depth = data.depth
+							var intensity = float(data.get("maxIntensity", IntensityServices.calculate_estimated_intensity(magnitude, 0, depth, longitude)))
 							if magnitude >= Utils.load_option().get("minmagnitude", 0.0):
 								var msg = news_message_scene.instantiate()
 								msg.set_text(PackedStringArray([
@@ -692,6 +718,7 @@ func poll_whews():
 								$"../Flipping-Text-Window/VBoxContainer".add_child(msg)
 							else:
 								print("Earthquake happaned in %s with magnitude %s. (%s)" % [location, magnitude, data_source.to_upper()])
+							$"../stats/HBox/eqHistory".add_history(intensity, 1, location, shocktime, magnitude, depth, data_source, 8)
 						"va":
 							print("%s don't recieve message but via print: %s" % [data_source.to_upper(), JSON.stringify(data)])
 						_:
@@ -743,8 +770,8 @@ func poll_whews():
 	elif state == WebSocketPeer.STATE_CLOSED:
 		if $"WHEWS-Ping".time_left > 0:
 			$"WHEWS-Ping".stop()
-		$"../StatContainer/sources/WHEWS".text = "WHEWS(Disconnected)"
-		$"../StatContainer/sources/WHEWS".add_theme_color_override("font_color", Color("ff0000"))
+		$"../stats/HBox/StatContainer/sources/WHEWS".text = "WHEWS(Disconnected)"
+		$"../stats/HBox/StatContainer/sources/WHEWS".add_theme_color_override("font_color", Color("ff0000"))
 		var code = whews.get_close_code()
 		var reason = whews.get_close_reason()
 		print("WHEWS WebSocket closed with code: %d, reason %s. Clean: %s" % [code, reason, code != -1])
@@ -762,8 +789,8 @@ func poll_p2pq():
 	p2pq.poll()
 	var state = p2pq.get_ready_state()
 	if state == WebSocketPeer.STATE_OPEN:
-		$"../StatContainer/sources/P2P".text = "P2P(%s)" % return_ping_time_recieved("p2p")
-		$"../StatContainer/sources/P2P".add_theme_color_override("font_color", Color("00ff00"))
+		$"../stats/HBox/StatContainer/sources/P2P".text = "P2P(%s)" % return_ping_time_recieved("p2p")
+		$"../stats/HBox/StatContainer/sources/P2P".add_theme_color_override("font_color", Color("00ff00"))
 		if not p2p_pinged:
 			send_p2p_ping()
 			p2p_pinged = true
@@ -786,6 +813,7 @@ func poll_p2pq():
 					var tsunami_info = eq.domesticTsunami
 					var foreign_info = eq.foreignTsunami
 					var msg = news_message_scene.instantiate()
+					var intensity = IntensityServices.p2p_scale_to_shindo(eq.get("maxScale", 0))
 					msg.set_text(PackedStringArray([
 						title,
 						"%s\n%sに地震が発生しました。" % [eqtime, location],
@@ -793,6 +821,7 @@ func poll_p2pq():
 						"地震発生場所：%s | 緯度：%s | 経度：%s\nマグニチュード%s | 震源の深さ：%s" % [location, latitude, longitude, magnitude, depth]
 					]))
 					$"../Flipping-Text-Window/VBoxContainer".add_child(msg)
+					$"../stats/HBox/eqHistory".add_history(intensity, 0, location, eqtime, magnitude, depth, "JMA", 9)
 				552:
 					var msg = news_message_scene.instantiate()
 					msg.set_text(PackedStringArray([
@@ -829,8 +858,8 @@ func poll_p2pq():
 	elif state == WebSocketPeer.STATE_CLOSED:
 		if $"P2P-Ping".time_left > 0:
 			$"P2P-Ping".stop()
-		$"../StatContainer/sources/P2P".text = "P2P(Disconnected)"
-		$"../StatContainer/sources/P2P".add_theme_color_override("font_color", Color("ff0000"))
+		$"../stats/HBox/StatContainer/sources/P2P".text = "P2P(Disconnected)"
+		$"../stats/HBox/StatContainer/sources/P2P".add_theme_color_override("font_color", Color("ff0000"))
 		var code = p2pq.get_close_code()
 		var reason = p2pq.get_close_reason()
 		print("P2PQuake WebSocket closed with code: %d, reason %s. Clean: %s" % [code, reason, code != -1])
@@ -843,7 +872,6 @@ func _process(delta: float) -> void:
 	poll_fan()
 	poll_p2pq()
 	poll_whews()
-	$"../StatContainer/sources/Label2".text = "(%d)" % $"P2P-Ping".time_left
 
 
 func _on_wolfx_timeout() -> void:

@@ -12,6 +12,7 @@
 [ext_resource type="AudioStream" uid="uid://dlmn2o4bpn61a" path="res://assets/audio/srev/update.mp3" id="7_eb6dy"]
 [ext_resource type="Script" uid="uid://c040ea5amhptl" path="res://scripts/shakealert.gd" id="8_choun"]
 [ext_resource type="AudioStream" uid="uid://cxwqjt2qe7b45" path="res://assets/audio/srev/final.mp3" id="8_trceg"]
+[ext_resource type="Script" uid="uid://xwwqt0ef7lwk" path="res://scripts/eq_history.gd" id="13_trceg"]
 
 [node name="Main" type="Node" unique_id=1409934259]
 script = ExtResource("1_0wfyh")
@@ -137,79 +138,88 @@ unresizable = true
 
 [node name="Options" parent="Options" unique_id=113722268 instance=ExtResource("3_jyhfs")]
 
-[node name="Button" type="Button" parent="." unique_id=1469330578]
-anchors_preset = 5
-anchor_left = 0.5
-anchor_right = 0.5
-offset_left = -66.5
-offset_right = 66.5
-offset_bottom = 30.0
-grow_horizontal = 2
-text = "Open Settings"
-
-[node name="Label" type="Label" parent="." unique_id=1763767071]
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -557.0
-offset_top = -43.0
-offset_right = 557.0
-offset_bottom = 43.0
+[node name="stats" type="VBoxContainer" parent="." unique_id=1643789250]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_font_sizes/font_size = 56
-text = "You can hide this window now!
-你现在可以隐藏此窗口了！
-このウィンドウを非表示にできます！"
+
+[node name="HBox" type="HBoxContainer" parent="stats" unique_id=1169951978]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="eqHistory" type="VBoxContainer" parent="stats/HBox" unique_id=429274497]
+custom_minimum_size = Vector2(550, 0)
+custom_maximum_size = Vector2(550, -1)
+layout_mode = 2
+script = ExtResource("13_trceg")
+
+[node name="Label" type="Label" parent="stats/HBox/eqHistory" unique_id=899431470]
+layout_mode = 2
+theme_override_font_sizes/font_size = 32
+text = "Recent Earthquakes"
 horizontal_alignment = 1
+vertical_alignment = 1
 
-[node name="StatContainer" type="VBoxContainer" parent="." unique_id=2130361054]
-anchors_preset = 7
-anchor_left = 0.5
-anchor_top = 1.0
-anchor_right = 0.5
-anchor_bottom = 1.0
-offset_left = -427.5
-offset_top = -80.0
-offset_right = 427.5
-grow_horizontal = 2
-grow_vertical = 0
+[node name="ScrollContainer" type="ScrollContainer" parent="stats/HBox/eqHistory" unique_id=800807088]
+layout_mode = 2
+size_flags_vertical = 3
 
-[node name="Label" type="Label" parent="StatContainer" unique_id=1408072562]
+[node name="eqlist" type="VBoxContainer" parent="stats/HBox/eqHistory/ScrollContainer" unique_id=1024546688]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="StatContainer" type="VBoxContainer" parent="stats/HBox" unique_id=1563123696]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Label" type="Label" parent="stats/HBox/StatContainer" unique_id=1156944217]
 layout_mode = 2
 theme_override_font_sizes/font_size = 32
 text = "STATUS"
 horizontal_alignment = 1
 
-[node name="sources" type="HBoxContainer" parent="StatContainer" unique_id=632691299]
+[node name="sources" type="VBoxContainer" parent="stats/HBox/StatContainer" unique_id=865739270]
 layout_mode = 2
 theme_override_constants/separation = 12
 alignment = 1
 
-[node name="Wolfx" type="Label" parent="StatContainer/sources" unique_id=252531457]
+[node name="Wolfx" type="Label" parent="stats/HBox/StatContainer/sources" unique_id=1129434176]
 layout_mode = 2
 theme_override_font_sizes/font_size = 24
 text = "Wolfx(disabled)"
+horizontal_alignment = 1
+vertical_alignment = 1
 
-[node name="FanStudio" type="Label" parent="StatContainer/sources" unique_id=1343439604]
+[node name="FanStudio" type="Label" parent="stats/HBox/StatContainer/sources" unique_id=193265520]
 layout_mode = 2
 theme_override_font_sizes/font_size = 24
 text = "FAN(Disabled)"
+horizontal_alignment = 1
+vertical_alignment = 1
 
-[node name="WHEWS" type="Label" parent="StatContainer/sources" unique_id=997699266]
+[node name="WHEWS" type="Label" parent="stats/HBox/StatContainer/sources" unique_id=427678505]
 layout_mode = 2
 theme_override_font_sizes/font_size = 24
 text = "WHEWS(Disabled)"
+horizontal_alignment = 1
+vertical_alignment = 1
 
-[node name="P2P" type="Label" parent="StatContainer/sources" unique_id=182336624]
+[node name="P2P" type="Label" parent="stats/HBox/StatContainer/sources" unique_id=1816524774]
 layout_mode = 2
 theme_override_font_sizes/font_size = 24
 text = "P2P(Disabled)"
+horizontal_alignment = 1
+vertical_alignment = 1
 
-[node name="Label2" type="Label" parent="StatContainer/sources" unique_id=290333774]
+[node name="QuickActions" type="HBoxContainer" parent="stats" unique_id=145881315]
 layout_mode = 2
+alignment = 1
+
+[node name="Button" type="Button" parent="stats/QuickActions" unique_id=1469330578]
+layout_mode = 2
+text = "Open Settings"
 
 [connection signal="id_pressed" from="StatusIndicator/PopupMenu" to="." method="_on_popup_menu_id_pressed"]
 [connection signal="fanstudio_pong" from="Websockets" to="Websockets" method="_on_fanstudio_pong"]
@@ -232,4 +242,4 @@ layout_mode = 2
 [connection signal="pressed" from="Flipping-Text-Window/CloseAllButton" to="Flipping-Text-Window" method="_on_close_all_button_pressed"]
 [connection signal="close_requested" from="Options" to="Options/Options" method="_on_options_close_requested"]
 [connection signal="visibility_changed" from="Options" to="." method="_on_options_visibility_changed"]
-[connection signal="pressed" from="Button" to="." method="_on_button_pressed"]
+[connection signal="pressed" from="stats/QuickActions/Button" to="." method="_on_button_pressed"]

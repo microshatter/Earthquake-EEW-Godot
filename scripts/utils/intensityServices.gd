@@ -125,3 +125,42 @@ static func classify_measured_intensity(value: float):
 		return 0.0
 	# 更低的负值不映射到 0，交由 format_measured_intensity_display 显示“0以下”
 	return null
+
+static func p2p_scale_to_shindo(value: int):
+	match value:
+		0:
+			return "0"
+		10:
+			return "1"
+		20:
+			return "2"
+		30:
+			return "3"
+		40:
+			return "4"
+		45:
+			return "5-"
+		50:
+			return "5+"
+		55:
+			return "6-"
+		60:
+			return "6+"
+		70:
+			return "7"
+		_:
+			return "?"
+
+static func return_correct_font_color(bg_color: Color) -> Color:
+	var lin_r = linear_color(bg_color.r)
+	var lin_g = linear_color(bg_color.g)
+	var lin_b = linear_color(bg_color.b)
+	
+	var linear = (0.2126 * lin_r) + (0.7152 * lin_g) + (0.0722 * lin_b)
+	return Color.BLACK if linear > 0.179 else Color.WHITE
+
+static func linear_color(c: float):
+	if c <= 0.04045:
+		return c / 12.92
+	else:
+		return pow((c + 0.055) / 1.055, 2.4)
