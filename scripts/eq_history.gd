@@ -39,7 +39,7 @@ func _process(delta: float) -> void:
 	var child_count = $ScrollContainer/eqlist.get_child_count()
 	if child_count > max_list:
 		for i in range(child_count - 1, max_list, -1):
-			var child = get_child(i)
+			var child = $ScrollContainer/eqlist.get_child(i)
 			child.queue_free()
 	
 # %07.3f
