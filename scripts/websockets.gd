@@ -515,7 +515,7 @@ func poll_whews():
 							elif data_source.ends_with("eew") or data_source.begins_with("cea"):
 								pass
 							else:
-								$"../stats/HBox/eqHistory".add_history(intensity, 1, location, shocktime, magnitude, depth, data_source, 8, id)
+								$"../stats/HBox/eqHistory".add_history(float(intensity), 1, location, shocktime, magnitude, depth, data_source, 8, id)
 			elif json_type == TYPE_DICTIONARY:
 				var message_type = json_message.get("type")
 				var data = json_message.get("Data", json_message.get("data", {}))
