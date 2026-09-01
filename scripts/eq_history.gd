@@ -5,6 +5,7 @@ var max_list = 50
 
 func add_history(intensity, mode: int, location: String, datetime: String, magnitude: float, depth: float, source: String, offset: int = 0, id: String = ""):
 	var found = false
+	datetime = datetime.replace("/", "-")
 	if len(id) > 0:
 		for i in $ScrollContainer/eqlist.get_children():
 			if i.id == id:
@@ -30,6 +31,7 @@ func add_history(intensity, mode: int, location: String, datetime: String, magni
 		eqcard_inst.source = source
 		eqcard_inst.datetime_offset_hr = offset
 		$ScrollContainer/eqlist.add_child(eqcard_inst)
+		sort_children()
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:

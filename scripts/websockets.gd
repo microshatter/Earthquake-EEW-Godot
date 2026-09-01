@@ -225,8 +225,10 @@ func poll_wolfx():
 					print_eew(title, "%sで地震 強い揺れに警戒" % location, w, json_message.Serial)
 				"jma_eqlist":
 					var data = json_message["No1"]
+					var id = data.EventID
 					var title = data.Title
 					var eqtime = data.time
+					var eqtime_full = data.time_full
 					var location = data.location
 					var latitude = data.latitude
 					var longitude = data.longitude
@@ -243,7 +245,7 @@ func poll_wolfx():
 						msg.add_text(tsunami_info)
 					msg.add_text("地震発生場所：%s | 緯度：%s | 経度：%s\nマグニチュード%s | 震源の深さ：%s" % [location, latitude, longitude, magnitude, depth])
 					$"../Flipping-Text-Window/VBoxContainer".add_child(msg)
-					$"../stats/HBox/eqHistory".add_history(intensity, 0, location, eqtime, float(magnitude), float(depth), "JMA", 9)
+					$"../stats/HBox/eqHistory".add_history(intensity, 0, location, eqtime_full, float(magnitude), float(depth), "JMA", 9, id)
 				"cenc_eew", "cq_eew", "fj_eew", "sc_eew":
 					var shocktime = json_message.OriginTime
 					var location = json_message.HypoCenter
@@ -280,6 +282,7 @@ func poll_wolfx():
 					print_eew(eew_header, eew_title, eew_desc, json_message.ReportNum)
 				"cenc_eqlist":
 					var data = json_message["No1"]
+					var id = data.EventID
 					var shocktime = data.time
 					var location = data.location
 					var latitude = data.latitude
@@ -294,7 +297,7 @@ func poll_wolfx():
 						"震源: %s | 纬度: %s | 经度: %s\nM%s | 深度: %s" % [location, latitude, longitude, magnitude, depth]
 					]))
 					$"../Flipping-Text-Window/VBoxContainer".add_child(msg)
-					$"../stats/HBox/eqHistory".add_history(intensity, 1, location, shocktime, float(magnitude), float(depth), "CENC", 8)
+					$"../stats/HBox/eqHistory".add_history(intensity, 1, location, shocktime, float(magnitude), float(depth), "CENC", 8, id)
 				_:
 					var msg = news_message_scene.instantiate()
 					msg.set_text(PackedStringArray([
@@ -828,7 +831,7 @@ func poll_p2pq():
 			var message_type = int(json_message.code)
 			match message_type:
 				551:
-					var id = json_message.get("id")
+					var id = json_message.get("id", "")
 					var eq = json_message.earthquake
 					var hypocenter = eq.hypocenter
 					var depth = hypocenter.depth
@@ -840,8 +843,8 @@ func poll_p2pq():
 					var location = hypocenter.name
 					var tsunami_info = eq.domesticTsunami
 					var foreign_info = eq.foreignTsunami
-					var msg = news_message_scene.instantiate()
 					var intensity = IntensityServices.p2p_scale_to_shindo(eq.get("maxScale", 0))
+					var msg = news_message_scene.instantiate()
 					msg.set_text(PackedStringArray([
 						title,
 						"%s\n%sに地震が発生しました。" % [eqtime, location],
@@ -857,6 +860,7 @@ func poll_p2pq():
 						message
 					]))
 					$"../Flipping-Text-Window/VBoxContainer".add_child(msg)
+					print("Received from p2pquake: %s" % message)
 				555, 561, 9611:
 					pass
 				556:
