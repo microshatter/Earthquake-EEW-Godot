@@ -71,8 +71,8 @@ func _locate_complete(result, response_code, headers, body):
 	json.parse(body.get_string_from_utf8())
 	var response = json.get_data()
 	print(response)
-	$VBoxContainer/Settings/GeoLocation/LatitudeSpinBox.value = response.latitude
-	$VBoxContainer/Settings/GeoLocation/LongitudeSpinBox.value = response.longitude
+	$VBoxContainer/TabContainer/General/GeoLocation/LatitudeSpinBox.value = response.latitude
+	$VBoxContainer/TabContainer/General/GeoLocation/LongitudeSpinBox.value = response.longitude
 
 
 func _on_options_close_requested() -> void:

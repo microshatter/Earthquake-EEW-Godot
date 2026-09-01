@@ -497,6 +497,7 @@ func poll_whews():
 							print("Duplicate entry ignored for %s with hash %s" % [data_source, hash_value])
 							continue
 						Deduplicate.add_hash(hash_value)
+						var id = data.get("id", "")
 						var shocktime = data.get("shockTime", "")
 						var location = data.get("placeName")
 						var latitude = data.get("latitude")
@@ -507,12 +508,14 @@ func poll_whews():
 							depth = 0.0
 						if magnitude != null:
 							var intensity = data.get("maxIntensity", IntensityServices.calculate_estimated_intensity(magnitude, 0, depth, longitude))
+							if data_source == "kma" and typeof(intensity) == TYPE_STRING:
+								intensity = IntensityServices.kma_scale_to_intensity(data.get("maxIntensity"))
 							if data_source == "jma" or data_source == "cwa":
-								$"../stats/HBox/eqHistory".add_history(intensity, 0, location, shocktime, magnitude, depth, data_source, (9 if data_source == "jma" else 8))
+								$"../stats/HBox/eqHistory".add_history(intensity, 0, location, shocktime, magnitude, depth, data_source, (9 if data_source == "jma" else 8), id)
 							elif data_source.ends_with("eew") or data_source.begins_with("cea"):
 								pass
 							else:
-								$"../stats/HBox/eqHistory".add_history(intensity, 1, location, shocktime, magnitude, depth, data_source, 8)
+								$"../stats/HBox/eqHistory".add_history(intensity, 1, location, shocktime, magnitude, depth, data_source, 8, id)
 			elif json_type == TYPE_DICTIONARY:
 				var message_type = json_message.get("type")
 				var data = json_message.get("Data", json_message.get("data", {}))
@@ -651,6 +654,7 @@ func poll_whews():
 							var eew_desc = w
 							$"../EEW-Popup-Window".send_eew(eew_header, eew_title, eew_desc, distance, local_intensity)
 						"cenc":
+							var id = data.get("id", "")
 							var shocktime = data.shockTime
 							var location = data.placeName
 							var latitude = data.latitude
@@ -665,8 +669,9 @@ func poll_whews():
 								"震源: %s | 纬度: %s | 经度: %s\nM%s | 深度: %s" % [location, latitude, longitude, magnitude, depth]
 							]))
 							$"../Flipping-Text-Window/VBoxContainer".add_child(msg)
-							$"../stats/HBox/eqHistory".add_history(intensity, 1, location, shocktime, magnitude, depth, data_source, 8)
+							$"../stats/HBox/eqHistory".add_history(intensity, 1, location, shocktime, magnitude, depth, data_source, 8, id)
 						"jma":
+							var id = data.get("id", "")
 							var title = data.title
 							var eqtime = data.shockTime
 							var location = data.placeName
@@ -682,8 +687,9 @@ func poll_whews():
 							]))
 							msg.add_text("地震発生場所：%s | 緯度：%s | 経度：%s\nマグニチュード%s | 震源の深さ：%s" % [location, latitude, longitude, magnitude, depth])
 							$"../Flipping-Text-Window/VBoxContainer".add_child(msg)
-							$"../stats/HBox/eqHistory".add_history(intensity, 0, location, eqtime, magnitude, depth, data_source, 9)
+							$"../stats/HBox/eqHistory".add_history(intensity, 0, location, eqtime, magnitude, depth, data_source, 9, id)
 						"cwa":
+							var id = data.get("id", "")
 							var shocktime = data.shockTime
 							var location = data.placeName
 							var latitude = data.latitude
@@ -699,8 +705,29 @@ func poll_whews():
 								"Hypocenter: %s | Latitude: %s | Longitude: %s\nM%s | Depth: %s km" % [location, latitude, longitude, magnitude, depth]
 							]))
 							$"../Flipping-Text-Window/VBoxContainer".add_child(msg)
-							$"../stats/HBox/eqHistory".add_history(intensity, 0, location, shocktime, magnitude, depth, data_source, 8)
+							$"../stats/HBox/eqHistory".add_history(intensity, 0, location, shocktime, magnitude, depth, data_source, 8, id)
+						"kma": 
+							var id = data.get("id", "")
+							var shocktime = data.shockTime
+							var location = data.placeName
+							var latitude = data.latitude
+							var longitude = data.longitude
+							var magnitude = data.magnitude
+							var depth = data.depth
+							var intensity = IntensityServices.kma_scale_to_intensity(data.get("maxIntensity"))
+							if magnitude >= Utils.load_option().get("minmagnitude", 0.0):
+								var msg = news_message_scene.instantiate()
+								msg.set_text(PackedStringArray([
+									"%s地震情报" % data_source.to_upper(),
+									"In %s\nAn earthquake happans in %s" % [shocktime, location],
+									"Hypocenter: %s | Latitude: %s | Longitude: %s\nM%s | Depth: %s km" % [location, latitude, longitude, magnitude, depth]
+								]))
+								$"../Flipping-Text-Window/VBoxContainer".add_child(msg)
+							else:
+								print("Earthquake happaned in %s with magnitude %s. (%s)" % [location, magnitude, data_source.to_upper()])
+							$"../stats/HBox/eqHistory".add_history(intensity, 1, location, shocktime, magnitude, depth, data_source, 8, id)
 						"usgs", "bmkg", "geonet", "tmd", "usp", "gfz", "ingv", "emsc", "hko", "bcsf", "nrcan", "mmd", "phivolcs", "sgc", "ga", "cenais", "gsras", "bgs", "scsn", "noa", "afad", "sed", "ssw", "ssn", "ipma":
+							var id = data.get("id", "")
 							var shocktime = data.shockTime
 							var location = data.placeName
 							var latitude = data.latitude
@@ -718,7 +745,7 @@ func poll_whews():
 								$"../Flipping-Text-Window/VBoxContainer".add_child(msg)
 							else:
 								print("Earthquake happaned in %s with magnitude %s. (%s)" % [location, magnitude, data_source.to_upper()])
-							$"../stats/HBox/eqHistory".add_history(intensity, 1, location, shocktime, magnitude, depth, data_source, 8)
+							$"../stats/HBox/eqHistory".add_history(intensity, 1, location, shocktime, magnitude, depth, data_source, 8, id)
 						"va":
 							print("%s don't recieve message but via print: %s" % [data_source.to_upper(), JSON.stringify(data)])
 						_:
@@ -801,6 +828,7 @@ func poll_p2pq():
 			var message_type = int(json_message.code)
 			match message_type:
 				551:
+					var id = json_message.get("id")
 					var eq = json_message.earthquake
 					var hypocenter = eq.hypocenter
 					var depth = hypocenter.depth
@@ -821,7 +849,7 @@ func poll_p2pq():
 						"地震発生場所：%s | 緯度：%s | 経度：%s\nマグニチュード%s | 震源の深さ：%s" % [location, latitude, longitude, magnitude, depth]
 					]))
 					$"../Flipping-Text-Window/VBoxContainer".add_child(msg)
-					$"../stats/HBox/eqHistory".add_history(intensity, 0, location, eqtime, magnitude, depth, "JMA", 9)
+					$"../stats/HBox/eqHistory".add_history(intensity, 0, location, eqtime, magnitude, depth, "JMA", 9, id)
 				552:
 					var msg = news_message_scene.instantiate()
 					msg.set_text(PackedStringArray([

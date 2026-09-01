@@ -151,6 +151,31 @@ static func p2p_scale_to_shindo(value: int):
 		_:
 			return "?"
 
+static func kma_scale_to_intensity(value: String):
+	match value:
+		"Ⅰ":
+			return "1"
+		"Ⅱ":
+			return "2"
+		"Ⅲ":
+			return "3"
+		"Ⅳ":
+			return "4"
+		"Ⅴ":
+			return "5"
+		"Ⅵ":
+			return "6"
+		"Ⅶ":
+			return "7"
+		"Ⅷ":
+			return "8"
+		"Ⅸ":
+			return "9"
+		"Ⅹ":
+			return "10"
+		_:
+			return "?"
+
 static func return_correct_font_color(bg_color: Color) -> Color:
 	var lin_r = linear_color(bg_color.r)
 	var lin_g = linear_color(bg_color.g)

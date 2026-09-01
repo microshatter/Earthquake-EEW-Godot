@@ -3,19 +3,33 @@ extends VBoxContainer
 @onready var eqcard = preload("res://scenes/eqcard.tscn")
 var max_list = 50
 
-func add_history(intensity, mode: int, location: String, datetime: String, magnitude: float, depth: float, source: String, offset: int = 0):
-	var eqcard_inst = eqcard.instantiate()
-	if mode == 0:
-		eqcard_inst.set_Shindo(intensity)
-	else:
-		eqcard_inst.set_Intensity(intensity)
-	eqcard_inst.location = location
-	eqcard_inst.datetime = datetime
-	eqcard_inst.magnitude = magnitude
-	eqcard_inst.depth = depth
-	eqcard_inst.source = source
-	eqcard_inst.datetime_offset_hr = offset
-	$ScrollContainer/eqlist.add_child(eqcard_inst)
+func add_history(intensity, mode: int, location: String, datetime: String, magnitude: float, depth: float, source: String, offset: int = 0, id: String = ""):
+	var found = false
+	if len(id) > 0:
+		for i in $ScrollContainer/eqlist.get_children():
+			if i.id == id:
+				found = true
+				i.location = location
+				i.datetime = datetime
+				i.magnitude = magnitude
+				i.depth = depth
+				i.source = source
+				i.datetime_offset_hr = offset
+				break
+	if not found:
+		var eqcard_inst = eqcard.instantiate()
+		if mode == 0:
+			eqcard_inst.set_Shindo(intensity)
+		else:
+			eqcard_inst.set_Intensity(intensity)
+		eqcard_inst.id = id
+		eqcard_inst.location = location
+		eqcard_inst.datetime = datetime
+		eqcard_inst.magnitude = magnitude
+		eqcard_inst.depth = depth
+		eqcard_inst.source = source
+		eqcard_inst.datetime_offset_hr = offset
+		$ScrollContainer/eqlist.add_child(eqcard_inst)
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
