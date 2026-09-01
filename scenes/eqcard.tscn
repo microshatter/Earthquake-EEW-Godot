@@ -56,6 +56,8 @@ custom_maximum_size = Vector2(-1, 40)
 layout_mode = 2
 theme_override_font_sizes/font_size = 28
 text = "Test Location"
+clip_text = true
+text_overrun_behavior = 3
 
 [node name="HBoxContainer" type="HBoxContainer" parent="Panel/HBox/VBox" unique_id=1958515786]
 layout_mode = 2
