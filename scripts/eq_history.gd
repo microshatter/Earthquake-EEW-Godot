@@ -14,7 +14,7 @@ func add_history(intensity, mode: int, location: String, datetime: String, magni
 				i.datetime = datetime
 				i.magnitude = magnitude
 				i.depth = depth
-				i.source = source
+				i.source = source.to_upper()
 				i.datetime_offset_hr = offset
 				break
 	if not found:
@@ -28,7 +28,7 @@ func add_history(intensity, mode: int, location: String, datetime: String, magni
 		eqcard_inst.datetime = datetime
 		eqcard_inst.magnitude = magnitude
 		eqcard_inst.depth = depth
-		eqcard_inst.source = source
+		eqcard_inst.source = source.to_upper()
 		eqcard_inst.datetime_offset_hr = offset
 		$ScrollContainer/eqlist.add_child(eqcard_inst)
 		sort_children()
