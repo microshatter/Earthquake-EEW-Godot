@@ -20,7 +20,7 @@ jobs:
       # Always include the checkout step so that
       # your project is available for Godot to export
     - name: checkout
-      uses: actions/checkout@v5
+      uses: actions/checkout@v7
 
     # - name: setup env
     #   uses: SpicyPizza/create-envfile@v2.0
@@ -42,12 +42,12 @@ jobs:
       # https://github.com/ncipollo/release-action
     - name: create release
       if: ${{ startsWith(github.ref, 'refs/tags') }}
-      uses: ncipollo/release-action@v1.18.0
+      uses: ncipollo/release-action@v1
       with:
         token: ${{ secrets.GITHUB_TOKEN }}
         generateReleaseNotes: true
         tag: ${{ github.ref_name }}
-        allowUpdates: true
+        # allowUpdates: true
         artifacts: ${{ steps.export.outputs.archive_directory }}/*
 
     - name: upload artifacts
