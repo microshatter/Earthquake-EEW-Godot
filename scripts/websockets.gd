@@ -257,11 +257,13 @@ func poll_wolfx():
 					if depth == null:
 						depth = 0
 					var estint = json_message.MaxIntensity
+					var reports = json_message.get("ReportNum", 0)
+					var isFinal = json_message.get("isFinal", false)
 					var local_intensity = IntensityServices.calculate_estimated_intensity(magnitude, distance, depth, longitude)
 					var eew_header = "Wolfx紧急地震速报（中国地震预警网）"
 					var eew_title = "%s发生了地震 M%.1f 请注意强烈摇晃" % [location, magnitude]
 					var eew_desc = "M%s | 预估最大烈度：%s | 深度：%s | 纬度: %s | 经度: %s\n发生时间： %s" % [magnitude, estint, depth, latitude, longitude, shocktime]
-					$"../EEW-Popup-Window".send_eew(eew_header, eew_title, eew_desc, distance, local_intensity)
+					$"../EEW-Popup-Window".send_eew(eew_header, eew_title, eew_desc, distance, local_intensity, reports)
 					print_eew(eew_header, eew_title, eew_desc, json_message.ReportNum)
 				"cwa_eew":
 					var shocktime = json_message.OriginTime
@@ -274,12 +276,14 @@ func poll_wolfx():
 					if depth == null:
 						depth = 0
 					var estint = json_message.MaxIntensity
+					var reports = json_message.get("ReportNum", 0)
+					var isFinal = json_message.get("isFinal", false)
 					var local_intensity = IntensityServices.calculate_estimated_intensity(magnitude, distance, depth, longitude)
 					var eew_header = "緊急地震速報（台灣氣象署）"
 					var eew_title = "%s發生了地震 M%.1f 請注意強烈搖晃" % [location, magnitude]
 					var eew_desc = "M%s | 預估最大震度：%s | 深度：%s | 緯度: %s | 經度: %s\n發生時間： %s" % [magnitude, estint, depth, latitude, longitude, shocktime]
-					$"../EEW-Popup-Window".send_eew(eew_header, eew_title, eew_desc, distance, local_intensity)
-					print_eew(eew_header, eew_title, eew_desc, json_message.ReportNum)
+					$"../EEW-Popup-Window".send_eew(eew_header, eew_title, eew_desc, distance, local_intensity, reports)
+					print_eew(eew_header, eew_title, eew_desc, reports)
 				"cenc_eqlist":
 					var data = json_message["No1"]
 					var id = data.EventID
@@ -319,7 +323,8 @@ func poll_wolfx():
 		var reason = wolfx.get_close_reason()
 		var text = "Wolfx WebSocket closed with code: %d, reason %s. Clean: %s" % [code, reason, code != -1]
 		print(text)
-		add_notification("Connect to Wolfx Lost\n%s\nReconnect in 5s" % text, 5)
+		if code != -1:
+			add_notification("Connect to Wolfx Lost\n%s\nReconnect in 5s" % text, 5)
 		$"../Reconnect Timer/Wolfx".start()
 
 
@@ -441,6 +446,26 @@ func poll_fan():
 							var eew_title = "%s發生了地震 M%.1f 請注意強烈搖晃" % [location, magnitude]
 							var eew_desc = "  ".join(affected)
 							$"../EEW-Popup-Window".send_eew(eew_header, eew_title, eew_desc, distance, local_intensity)
+						"fssn":
+							var id = data.get("id")
+							var shocktime = data.shockTime
+							var location = data.placeName
+							var latitude = data.latitude
+							var longitude = data.longitude
+							var magnitude = data.magnitude
+							var depth = data.depth
+							var intensity = IntensityServices.calculate_estimated_intensity(magnitude, 0, depth, longitude)
+							if magnitude >= Utils.load_option().get("minmagnitude", 0.0):
+								var msg = news_message_scene.instantiate()
+								msg.set_text(PackedStringArray([
+									"Earthquake Information From %s" % data_source.to_upper(),
+									"In %s\nAn earthquake happans in %s" % [shocktime, location],
+									"Hypocenter: %s | Latitude: %s | Longitude: %s\nM%s | Depth: %s km" % [location, latitude, longitude, magnitude, depth]
+								]))
+								$"../Flipping-Text-Window/VBoxContainer".add_child(msg)
+							else:
+								print("Earthquake happaned in %s with magnitude %s. (%s)" % [location, magnitude, data_source.to_upper()])
+							$"../stats/HBox/eqHistory".add_history(intensity, 1, location, shocktime, magnitude, depth, data_source, 8, id)
 						_:
 							var msg = news_message_scene.instantiate()
 							msg.set_text(PackedStringArray([
@@ -468,7 +493,8 @@ func poll_fan():
 			fan_attempts -= 1
 			$"../Reconnect Timer/FanStudio".start(60)
 		else:
-			add_notification(("Connect to FAN Studio%s Lost\n" % fan_con_type(true)) + ("FAN Studio WebSocket closed with code: %d, reason: %s. Clean: %s" % [code, reason, code != -1]) + "\nReconnect in 5s", 5)
+			if code != -1:
+				add_notification(("Connect to FAN Studio%s Lost\n" % fan_con_type(true)) + ("FAN Studio WebSocket closed with code: %d, reason: %s. Clean: %s" % [code, reason, code != -1]) + "\nReconnect in 5s", 5)
 			$"../Reconnect Timer/FanStudio".start()
 
 func poll_whews():
@@ -809,7 +835,7 @@ func poll_whews():
 			whews_last_invalid_key = whews_current_key
 			whews_key_invalid = true
 			add_notification("WHEWS Authentication failed! Please check your API key, and restart the program!", INT32_MAX)
-		else:
+		elif code != -1:
 			add_notification("Connection to WHEWS lost\n" + ("WHEWS WebSocket closed with code: %d, reason: %s. Clean: %s" % [code, reason, code != -1]) + "\nReconnect in 5s", 5)
 		$"../Reconnect Timer/WHEWS".start()
 
@@ -895,7 +921,8 @@ func poll_p2pq():
 		var code = p2pq.get_close_code()
 		var reason = p2pq.get_close_reason()
 		print("P2PQuake WebSocket closed with code: %d, reason %s. Clean: %s" % [code, reason, code != -1])
-		add_notification("Connection to P2PQuake lost\n" + ("P2PQuake WebSocket closed with code: %d, reason: %s. Clean: %s" % [code, reason, code != -1]) + "\nReconnect in 5s", 5)
+		if code != -1:
+			add_notification("Connection to P2PQuake lost\n" + ("P2PQuake WebSocket closed with code: %d, reason: %s. Clean: %s" % [code, reason, code != -1]) + "\nReconnect in 5s", 5)
 		$"../Reconnect Timer/P2P".start()
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
