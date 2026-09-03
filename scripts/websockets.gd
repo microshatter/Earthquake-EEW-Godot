@@ -319,7 +319,8 @@ func poll_wolfx():
 		var reason = wolfx.get_close_reason()
 		var text = "Wolfx WebSocket closed with code: %d, reason %s. Clean: %s" % [code, reason, code != -1]
 		print(text)
-		add_notification("Connect to Wolfx Lost\n%s\nReconnect in 5s" % text, 5)
+		if code != -1:
+			add_notification("Connect to Wolfx Lost\n%s\nReconnect in 5s" % text, 5)
 		$"../Reconnect Timer/Wolfx".start()
 
 
@@ -468,7 +469,8 @@ func poll_fan():
 			fan_attempts -= 1
 			$"../Reconnect Timer/FanStudio".start(60)
 		else:
-			add_notification(("Connect to FAN Studio%s Lost\n" % fan_con_type(true)) + ("FAN Studio WebSocket closed with code: %d, reason: %s. Clean: %s" % [code, reason, code != -1]) + "\nReconnect in 5s", 5)
+			if code != -1:
+				add_notification(("Connect to FAN Studio%s Lost\n" % fan_con_type(true)) + ("FAN Studio WebSocket closed with code: %d, reason: %s. Clean: %s" % [code, reason, code != -1]) + "\nReconnect in 5s", 5)
 			$"../Reconnect Timer/FanStudio".start()
 
 func poll_whews():
@@ -809,7 +811,7 @@ func poll_whews():
 			whews_last_invalid_key = whews_current_key
 			whews_key_invalid = true
 			add_notification("WHEWS Authentication failed! Please check your API key, and restart the program!", INT32_MAX)
-		else:
+		elif code != -1:
 			add_notification("Connection to WHEWS lost\n" + ("WHEWS WebSocket closed with code: %d, reason: %s. Clean: %s" % [code, reason, code != -1]) + "\nReconnect in 5s", 5)
 		$"../Reconnect Timer/WHEWS".start()
 
@@ -895,7 +897,8 @@ func poll_p2pq():
 		var code = p2pq.get_close_code()
 		var reason = p2pq.get_close_reason()
 		print("P2PQuake WebSocket closed with code: %d, reason %s. Clean: %s" % [code, reason, code != -1])
-		add_notification("Connection to P2PQuake lost\n" + ("P2PQuake WebSocket closed with code: %d, reason: %s. Clean: %s" % [code, reason, code != -1]) + "\nReconnect in 5s", 5)
+		if code != -1:
+			add_notification("Connection to P2PQuake lost\n" + ("P2PQuake WebSocket closed with code: %d, reason: %s. Clean: %s" % [code, reason, code != -1]) + "\nReconnect in 5s", 5)
 		$"../Reconnect Timer/P2P".start()
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
