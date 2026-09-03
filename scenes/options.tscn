@@ -203,7 +203,6 @@ text = "CWA (EEW)"
 [node name="SAEEW" type="CheckBox" parent="VBoxContainer/TabContainer/Sources/ScrollContainer/Toggles" unique_id=503905824]
 layout_mode = 2
 size_flags_horizontal = 3
-button_pressed = true
 text = "SA (EEW)"
 
 [node name="KMAEEW" type="CheckBox" parent="VBoxContainer/TabContainer/Sources/ScrollContainer/Toggles" unique_id=1755837098]
