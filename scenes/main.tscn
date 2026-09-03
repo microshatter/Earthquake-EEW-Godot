@@ -165,6 +165,7 @@ vertical_alignment = 1
 [node name="ScrollContainer" type="ScrollContainer" parent="stats/HBox/eqHistory" unique_id=800807088]
 layout_mode = 2
 size_flags_vertical = 3
+vertical_scroll_mode = 3
 
 [node name="eqlist" type="VBoxContainer" parent="stats/HBox/eqHistory/ScrollContainer" unique_id=1024546688]
 layout_mode = 2
