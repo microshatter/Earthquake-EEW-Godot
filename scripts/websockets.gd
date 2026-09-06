@@ -755,7 +755,7 @@ func poll_whews():
 							else:
 								print("Earthquake happaned in %s with magnitude %s. (%s)" % [location, magnitude, data_source.to_upper()])
 							$"../stats/HBox/eqHistory".add_history(intensity, 1, location, shocktime, magnitude, depth, data_source, 8, id)
-						"usgs", "bmkg", "geonet", "tmd", "usp", "gfz", "ingv", "emsc", "hko", "bcsf", "nrcan", "mmd", "phivolcs", "sgc", "ga", "cenais", "gsras", "bgs", "scsn", "noa", "afad", "sed", "ssw", "ssn", "ipma":
+						"usgs", "bmkg", "geonet", "tmd", "usp", "gfz", "ingv", "emsc", "hko", "bcsf", "nrcan", "mmd", "phivolcs", "sgc", "ga", "cenais", "gsras", "bgs", "ipma", "ssn", "afad", "sed", "noa", "scsn", "ssw", "iag", "igp", "nepal":
 							var id = data.get("id", "")
 							var shocktime = data.shockTime
 							var location = data.placeName
