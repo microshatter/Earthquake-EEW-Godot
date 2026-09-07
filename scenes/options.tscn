@@ -186,7 +186,7 @@ size_flags_vertical = 3
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
-columns = 5
+columns = 4
 
 [node name="JMAEEW" type="CheckBox" parent="VBoxContainer/TabContainer/Sources/ScrollContainer/Toggles" unique_id=1327043772]
 layout_mode = 2
@@ -214,6 +214,9 @@ size_flags_horizontal = 3
 button_pressed = true
 text = "KMA (EEW)"
 
+[node name="Spacer" type="Control" parent="VBoxContainer/TabContainer/Sources/ScrollContainer/Toggles" unique_id=1146061355]
+layout_mode = 2
+
 [node name="CEA" type="CheckBox" parent="VBoxContainer/TabContainer/Sources/ScrollContainer/Toggles" unique_id=841181540]
 layout_mode = 2
 size_flags_horizontal = 3
@@ -222,22 +225,13 @@ Available on Wolfx, FAN Studio and WHEWS"
 button_pressed = true
 text = "CEA (EEW)"
 
-[node name="Spacer" type="Control" parent="VBoxContainer/TabContainer/Sources/ScrollContainer/Toggles" unique_id=1146061355]
-layout_mode = 2
-
-[node name="Spacer2" type="Control" parent="VBoxContainer/TabContainer/Sources/ScrollContainer/Toggles" unique_id=1887585628]
-layout_mode = 2
-
 [node name="CEAPR" type="CheckBox" parent="VBoxContainer/TabContainer/Sources/ScrollContainer/Toggles" unique_id=164284716]
 layout_mode = 2
 size_flags_horizontal = 3
 button_pressed = true
 text = "CEA-PR (EEW)"
 
-[node name="Spacer3" type="Control" parent="VBoxContainer/TabContainer/Sources/ScrollContainer/Toggles" unique_id=1770817267]
-layout_mode = 2
-
-[node name="Spacer4" type="Control" parent="VBoxContainer/TabContainer/Sources/ScrollContainer/Toggles" unique_id=1791291154]
+[node name="Spacer2" type="Control" parent="VBoxContainer/TabContainer/Sources/ScrollContainer/Toggles" unique_id=1887585628]
 layout_mode = 2
 
 [node name="JMA" type="CheckBox" parent="VBoxContainer/TabContainer/Sources/ScrollContainer/Toggles" unique_id=1630553690]
@@ -420,23 +414,57 @@ layout_mode = 2
 size_flags_horizontal = 3
 text = "Ningxia"
 
-[node name="Spacer5" type="Control" parent="VBoxContainer/TabContainer/Sources/ScrollContainer/Toggles" unique_id=1378024410]
-layout_mode = 2
-
-[node name="Spacer6" type="Control" parent="VBoxContainer/TabContainer/Sources/ScrollContainer/Toggles" unique_id=2019367548]
-layout_mode = 2
-
 [node name="FSSN" type="CheckBox" parent="VBoxContainer/TabContainer/Sources/ScrollContainer/Toggles" unique_id=1268858171]
 layout_mode = 2
 size_flags_horizontal = 3
 button_pressed = true
 text = "FSSN"
 
-[node name="Spacer7" type="Control" parent="VBoxContainer/TabContainer/Sources/ScrollContainer/Toggles" unique_id=579292937]
+[node name="Tsunami" type="CheckBox" parent="VBoxContainer/TabContainer/Sources/ScrollContainer/Toggles" unique_id=129029245]
 layout_mode = 2
+size_flags_horizontal = 3
+button_pressed = true
+text = "NMEFC"
 
-[node name="Spacer8" type="Control" parent="VBoxContainer/TabContainer/Sources/ScrollContainer/Toggles" unique_id=1528191777]
+[node name="NTWC" type="CheckBox" parent="VBoxContainer/TabContainer/Sources/ScrollContainer/Toggles" unique_id=1130126043]
 layout_mode = 2
+size_flags_horizontal = 3
+button_pressed = true
+text = "NTWC"
+
+[node name="PTWC" type="CheckBox" parent="VBoxContainer/TabContainer/Sources/ScrollContainer/Toggles" unique_id=1794043961]
+layout_mode = 2
+size_flags_horizontal = 3
+button_pressed = true
+text = "PTWC"
+
+[node name="INCOIS" type="CheckBox" parent="VBoxContainer/TabContainer/Sources/ScrollContainer/Toggles" unique_id=1108974968]
+layout_mode = 2
+size_flags_horizontal = 3
+button_pressed = true
+text = "INCOIS"
+
+[node name="CatTsunami" type="CheckBox" parent="VBoxContainer/TabContainer/Sources/ScrollContainer/Toggles" unique_id=1308264962]
+layout_mode = 2
+size_flags_horizontal = 3
+button_pressed = true
+text = "Cat Tsunami"
+
+[node name="Weather" type="CheckBox" parent="VBoxContainer/TabContainer/Sources/ScrollContainer/Toggles" unique_id=767802230]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Weather Alarm"
+
+[node name="VA" type="CheckBox" parent="VBoxContainer/TabContainer/Sources/ScrollContainer/Toggles" unique_id=728921514]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "VA"
+
+[node name="JMATsunami" type="CheckBox" parent="VBoxContainer/TabContainer/Sources/ScrollContainer/Toggles" unique_id=1758141473]
+layout_mode = 2
+size_flags_horizontal = 3
+button_pressed = true
+text = "JMA Tsunami"
 
 [node name="Actions" type="HBoxContainer" parent="VBoxContainer" unique_id=1295576382]
 layout_mode = 2
