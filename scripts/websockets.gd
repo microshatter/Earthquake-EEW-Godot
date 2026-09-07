@@ -187,6 +187,7 @@ func poll_wolfx():
 		$"../stats/HBox/StatContainer/sources/Wolfx".add_theme_color_override("font_color", Color("00ff00"))
 		if not wolfx_pinged:
 			send_wolfx_ping()
+			$"../Http_Requests".request_wolfx()
 			wolfx_pinged = true
 		while wolfx.get_available_packet_count():
 			var packet = wolfx.get_packet()
