@@ -191,6 +191,7 @@ columns = 5
 [node name="JMAEEW" type="CheckBox" parent="VBoxContainer/TabContainer/Sources/ScrollContainer/Toggles" unique_id=1327043772]
 layout_mode = 2
 size_flags_horizontal = 3
+tooltip_text = "日本緊急地震速報"
 button_pressed = true
 text = "JMA (EEW)"
 
@@ -203,6 +204,8 @@ text = "CWA (EEW)"
 [node name="SAEEW" type="CheckBox" parent="VBoxContainer/TabContainer/Sources/ScrollContainer/Toggles" unique_id=503905824]
 layout_mode = 2
 size_flags_horizontal = 3
+tooltip_text = "ShakeAlert
+Available on WHEWS"
 text = "SA (EEW)"
 
 [node name="KMAEEW" type="CheckBox" parent="VBoxContainer/TabContainer/Sources/ScrollContainer/Toggles" unique_id=1755837098]
@@ -214,14 +217,10 @@ text = "KMA (EEW)"
 [node name="CEA" type="CheckBox" parent="VBoxContainer/TabContainer/Sources/ScrollContainer/Toggles" unique_id=841181540]
 layout_mode = 2
 size_flags_horizontal = 3
+tooltip_text = "中国地震局地震预警
+Available on Wolfx, FAN Studio and WHEWS"
 button_pressed = true
 text = "CEA (EEW)"
-
-[node name="CEAPR" type="CheckBox" parent="VBoxContainer/TabContainer/Sources/ScrollContainer/Toggles" unique_id=164284716]
-layout_mode = 2
-size_flags_horizontal = 3
-button_pressed = true
-text = "CEA-PR (EEW)"
 
 [node name="Spacer" type="Control" parent="VBoxContainer/TabContainer/Sources/ScrollContainer/Toggles" unique_id=1146061355]
 layout_mode = 2
@@ -229,10 +228,214 @@ layout_mode = 2
 [node name="Spacer2" type="Control" parent="VBoxContainer/TabContainer/Sources/ScrollContainer/Toggles" unique_id=1887585628]
 layout_mode = 2
 
+[node name="CEAPR" type="CheckBox" parent="VBoxContainer/TabContainer/Sources/ScrollContainer/Toggles" unique_id=164284716]
+layout_mode = 2
+size_flags_horizontal = 3
+button_pressed = true
+text = "CEA-PR (EEW)"
+
 [node name="Spacer3" type="Control" parent="VBoxContainer/TabContainer/Sources/ScrollContainer/Toggles" unique_id=1770817267]
 layout_mode = 2
 
 [node name="Spacer4" type="Control" parent="VBoxContainer/TabContainer/Sources/ScrollContainer/Toggles" unique_id=1791291154]
+layout_mode = 2
+
+[node name="JMA" type="CheckBox" parent="VBoxContainer/TabContainer/Sources/ScrollContainer/Toggles" unique_id=1630553690]
+layout_mode = 2
+size_flags_horizontal = 3
+button_pressed = true
+text = "JMA"
+
+[node name="CWA" type="CheckBox" parent="VBoxContainer/TabContainer/Sources/ScrollContainer/Toggles" unique_id=813052800]
+layout_mode = 2
+size_flags_horizontal = 3
+button_pressed = true
+text = "CWA"
+
+[node name="CENC" type="CheckBox" parent="VBoxContainer/TabContainer/Sources/ScrollContainer/Toggles" unique_id=127003528]
+layout_mode = 2
+size_flags_horizontal = 3
+button_pressed = true
+text = "CENC"
+
+[node name="KMA" type="CheckBox" parent="VBoxContainer/TabContainer/Sources/ScrollContainer/Toggles" unique_id=291579225]
+layout_mode = 2
+size_flags_horizontal = 3
+button_pressed = true
+text = "KMA"
+
+[node name="BMKG" type="CheckBox" parent="VBoxContainer/TabContainer/Sources/ScrollContainer/Toggles" unique_id=163913508]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "BMKG"
+
+[node name="GEONET" type="CheckBox" parent="VBoxContainer/TabContainer/Sources/ScrollContainer/Toggles" unique_id=1663855159]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "GEONET"
+
+[node name="TMD" type="CheckBox" parent="VBoxContainer/TabContainer/Sources/ScrollContainer/Toggles" unique_id=1652840331]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "TMD"
+
+[node name="USP" type="CheckBox" parent="VBoxContainer/TabContainer/Sources/ScrollContainer/Toggles" unique_id=1752671903]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "USP"
+
+[node name="GFZ" type="CheckBox" parent="VBoxContainer/TabContainer/Sources/ScrollContainer/Toggles" unique_id=833357460]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "GFZ"
+
+[node name="INGV" type="CheckBox" parent="VBoxContainer/TabContainer/Sources/ScrollContainer/Toggles" unique_id=1984839720]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "INGV"
+
+[node name="USGS" type="CheckBox" parent="VBoxContainer/TabContainer/Sources/ScrollContainer/Toggles" unique_id=1546417773]
+layout_mode = 2
+size_flags_horizontal = 3
+button_pressed = true
+text = "USGS"
+
+[node name="EMSC" type="CheckBox" parent="VBoxContainer/TabContainer/Sources/ScrollContainer/Toggles" unique_id=346244391]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "EMSC"
+
+[node name="HKO" type="CheckBox" parent="VBoxContainer/TabContainer/Sources/ScrollContainer/Toggles" unique_id=948223694]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "HKO"
+
+[node name="BCSF" type="CheckBox" parent="VBoxContainer/TabContainer/Sources/ScrollContainer/Toggles" unique_id=2896081]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "BCSF"
+
+[node name="NRCAN" type="CheckBox" parent="VBoxContainer/TabContainer/Sources/ScrollContainer/Toggles" unique_id=2069642520]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "NRCAN"
+
+[node name="MMD" type="CheckBox" parent="VBoxContainer/TabContainer/Sources/ScrollContainer/Toggles" unique_id=1162362099]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "MMD"
+
+[node name="Phivolcs" type="CheckBox" parent="VBoxContainer/TabContainer/Sources/ScrollContainer/Toggles" unique_id=895852315]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Phivolcs"
+
+[node name="SGC" type="CheckBox" parent="VBoxContainer/TabContainer/Sources/ScrollContainer/Toggles" unique_id=1178285064]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "SGC"
+
+[node name="GA" type="CheckBox" parent="VBoxContainer/TabContainer/Sources/ScrollContainer/Toggles" unique_id=779251688]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "GA"
+
+[node name="CENAIS" type="CheckBox" parent="VBoxContainer/TabContainer/Sources/ScrollContainer/Toggles" unique_id=1084862329]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "CENAIS"
+
+[node name="GSRAS" type="CheckBox" parent="VBoxContainer/TabContainer/Sources/ScrollContainer/Toggles" unique_id=1467139306]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "GSRAS"
+
+[node name="BGS" type="CheckBox" parent="VBoxContainer/TabContainer/Sources/ScrollContainer/Toggles" unique_id=464780621]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "BGS"
+
+[node name="IPMA" type="CheckBox" parent="VBoxContainer/TabContainer/Sources/ScrollContainer/Toggles" unique_id=1655017471]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "IPMA"
+
+[node name="SSN" type="CheckBox" parent="VBoxContainer/TabContainer/Sources/ScrollContainer/Toggles" unique_id=717459664]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "SSN"
+
+[node name="AFAD" type="CheckBox" parent="VBoxContainer/TabContainer/Sources/ScrollContainer/Toggles" unique_id=460283860]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "AFAD"
+
+[node name="SED" type="CheckBox" parent="VBoxContainer/TabContainer/Sources/ScrollContainer/Toggles" unique_id=1239848980]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "SED"
+
+[node name="NOA" type="CheckBox" parent="VBoxContainer/TabContainer/Sources/ScrollContainer/Toggles" unique_id=55661565]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "NOA"
+
+[node name="SCSN" type="CheckBox" parent="VBoxContainer/TabContainer/Sources/ScrollContainer/Toggles" unique_id=951089251]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "SCSN"
+
+[node name="SSW" type="CheckBox" parent="VBoxContainer/TabContainer/Sources/ScrollContainer/Toggles" unique_id=131751481]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "SSW"
+
+[node name="IAG" type="CheckBox" parent="VBoxContainer/TabContainer/Sources/ScrollContainer/Toggles" unique_id=1287601626]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "IAG"
+
+[node name="IGP" type="CheckBox" parent="VBoxContainer/TabContainer/Sources/ScrollContainer/Toggles" unique_id=949374692]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "IGP"
+
+[node name="NEPAL" type="CheckBox" parent="VBoxContainer/TabContainer/Sources/ScrollContainer/Toggles" unique_id=1195682442]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "NEPAL"
+
+[node name="Beijing" type="CheckBox" parent="VBoxContainer/TabContainer/Sources/ScrollContainer/Toggles" unique_id=2081999635]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Beijing"
+
+[node name="Yunnan" type="CheckBox" parent="VBoxContainer/TabContainer/Sources/ScrollContainer/Toggles" unique_id=395910589]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Yunnan"
+
+[node name="Ningxia" type="CheckBox" parent="VBoxContainer/TabContainer/Sources/ScrollContainer/Toggles" unique_id=2109816818]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Ningxia"
+
+[node name="Spacer5" type="Control" parent="VBoxContainer/TabContainer/Sources/ScrollContainer/Toggles" unique_id=1378024410]
+layout_mode = 2
+
+[node name="Spacer6" type="Control" parent="VBoxContainer/TabContainer/Sources/ScrollContainer/Toggles" unique_id=2019367548]
+layout_mode = 2
+
+[node name="FSSN" type="CheckBox" parent="VBoxContainer/TabContainer/Sources/ScrollContainer/Toggles" unique_id=1268858171]
+layout_mode = 2
+size_flags_horizontal = 3
+button_pressed = true
+text = "FSSN"
+
+[node name="Spacer7" type="Control" parent="VBoxContainer/TabContainer/Sources/ScrollContainer/Toggles" unique_id=579292937]
+layout_mode = 2
+
+[node name="Spacer8" type="Control" parent="VBoxContainer/TabContainer/Sources/ScrollContainer/Toggles" unique_id=1528191777]
 layout_mode = 2
 
 [node name="Actions" type="HBoxContainer" parent="VBoxContainer" unique_id=1295576382]
