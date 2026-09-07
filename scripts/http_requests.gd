@@ -31,7 +31,8 @@ func _on_wolfx_cenc_eq_request_completed(result: int, response_code: int, header
 		return
 	var json_message = JSON.parse_string(body.get_string_from_utf8())
 	for i in range(1, 51):
-		var data = json_message["No1"]
+		var noid = "No%d" % i
+		var data = json_message[noid]
 		var id = data.EventID
 		var shocktime = data.time
 		var location = data.location
