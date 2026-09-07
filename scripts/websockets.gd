@@ -373,8 +373,13 @@ func poll_fan():
 				"query_response":
 					pass
 				"auth_required":
-					if len(key) > 0 and not fan_key_sent and not fan_key_invalid:
-						fan.send_text(key)
+					if len(key) > 0 and not fan_key_sent and not fan_key_invalid and Utils.FAN_STUDIO_APP_ID != null:
+						var auth_payload = {
+							"type": 'auth',
+							"appId": Utils.FAN_STUDIO_APP_ID,
+							"key": key
+						}
+						fan.send_text(auth_payload)
 				"auth_success":
 					fan_is_authorized = true
 					add_notification("FAN Studio API authorize success!")
