@@ -187,6 +187,7 @@ func poll_wolfx():
 		$"../stats/HBox/StatContainer/sources/Wolfx".add_theme_color_override("font_color", Color("00ff00"))
 		if not wolfx_pinged:
 			send_wolfx_ping()
+			$"../Http_Requests".request_wolfx()
 			wolfx_pinged = true
 		while wolfx.get_available_packet_count():
 			var packet = wolfx.get_packet()
@@ -373,8 +374,13 @@ func poll_fan():
 				"query_response":
 					pass
 				"auth_required":
-					if len(key) > 0 and not fan_key_sent and not fan_key_invalid:
-						fan.send_text(key)
+					if len(key) > 0 and not fan_key_sent and not fan_key_invalid and Utils.FAN_STUDIO_APP_ID != null:
+						var auth_payload = {
+							"type": 'auth',
+							"appId": Utils.FAN_STUDIO_APP_ID,
+							"key": key
+						}
+						fan.send_text(auth_payload)
 				"auth_success":
 					fan_is_authorized = true
 					add_notification("FAN Studio API authorize success!")
@@ -474,6 +480,9 @@ func poll_fan():
 							]))
 							$"../Flipping-Text-Window/VBoxContainer".add_child(msg)
 							print("Received from %s(FAN Studio): %s" % [data_source, JSON.stringify(data)])
+				"error":
+					var reason = json_message.get("reason")
+					add_notification("FAN Studio throw an error\n%s" % reason, 30)
 				_:
 					add_notification("Received from FAN Studio\n%s" % message, 30)
 					print("Received from fan: %s" % message)
@@ -755,7 +764,7 @@ func poll_whews():
 							else:
 								print("Earthquake happaned in %s with magnitude %s. (%s)" % [location, magnitude, data_source.to_upper()])
 							$"../stats/HBox/eqHistory".add_history(intensity, 1, location, shocktime, magnitude, depth, data_source, 8, id)
-						"usgs", "bmkg", "geonet", "tmd", "usp", "gfz", "ingv", "emsc", "hko", "bcsf", "nrcan", "mmd", "phivolcs", "sgc", "ga", "cenais", "gsras", "bgs", "scsn", "noa", "afad", "sed", "ssw", "ssn", "ipma":
+						"usgs", "bmkg", "geonet", "tmd", "usp", "gfz", "ingv", "emsc", "hko", "bcsf", "nrcan", "mmd", "phivolcs", "sgc", "ga", "cenais", "gsras", "bgs", "ipma", "ssn", "afad", "sed", "noa", "scsn", "ssw", "iag", "igp", "nepal":
 							var id = data.get("id", "")
 							var shocktime = data.shockTime
 							var location = data.placeName
