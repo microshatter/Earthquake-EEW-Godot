@@ -480,6 +480,9 @@ func poll_fan():
 							]))
 							$"../Flipping-Text-Window/VBoxContainer".add_child(msg)
 							print("Received from %s(FAN Studio): %s" % [data_source, JSON.stringify(data)])
+				"error":
+					var reason = json_message.get("reason")
+					add_notification("FAN Studio throw an error\n%s" % reason, 30)
 				_:
 					add_notification("Received from FAN Studio\n%s" % message, 30)
 					print("Received from fan: %s" % message)
