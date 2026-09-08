@@ -14,7 +14,9 @@ func _on_wolfx_jma_eq_request_completed(result: int, response_code: int, headers
 	var json_message = JSON.parse_string(body.get_string_from_utf8())
 	for i in range(1, 51):
 		var noid = "No%d" % i
-		var data = json_message[noid]
+		var data = json_message.get(noid)
+		if data == null:
+			continue
 		var id = data.get("EventID")
 		var eqtime_full = data.get("time_full")
 		var location = data.get("location")
@@ -32,7 +34,9 @@ func _on_wolfx_cenc_eq_request_completed(result: int, response_code: int, header
 	var json_message = JSON.parse_string(body.get_string_from_utf8())
 	for i in range(1, 51):
 		var noid = "No%d" % i
-		var data = json_message[noid]
+		var data = json_message.get(noid)
+		if data == null:
+			continue
 		var id = data.EventID
 		var shocktime = data.time
 		var location = data.location
