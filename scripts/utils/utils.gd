@@ -184,3 +184,10 @@ static func calculate_local_intensity_magnitude(distance: float, magnitude: floa
 	# ⚠️ Same simplified empirical model — ±1 unit uncertainty, educational use only.
 	var epicentral := magnitude_to_intensity(magnitude, depth)
 	return calculate_local_intensity(distance, epicentral.og_shindo, depth)
+	
+static func to_unix_utc(timestring: String, offset_hr: float):
+	var time_offset_secs := offset_hr * 60 * 60
+	var timestamp := Time.get_unix_time_from_datetime_string(timestring)
+	var utc_unix := timestamp - time_offset_secs
+	return utc_unix
+	

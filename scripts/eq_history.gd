@@ -41,8 +41,8 @@ func sort_children():
 	var children = $ScrollContainer/eqlist.get_children()
 	children.sort_custom(
 		func(a, b): 
-			var unix_a = Time.get_unix_time_from_datetime_string(a.datetime) - a.datetime_offset_hr * 60 * 60
-			var unix_b = Time.get_unix_time_from_datetime_string(b.datetime) - b.datetime_offset_hr * 60 * 60
+			var unix_a = Utils.to_unix_utc(a.datetime, a.datetime_offset_hr)
+			var unix_b = Utils.to_unix_utc(b.datetime, b.datetime_offset_hr)
 			return unix_a > unix_b
 	)
 	for i in range(children.size()):

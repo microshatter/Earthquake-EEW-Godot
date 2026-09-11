@@ -2,7 +2,7 @@ class_name Deduplicate
 extends RefCounted
 
 static var hash_list = PackedStringArray()
-static var MAX_HASH_LIMIT: int = 5000
+static var MAX_HASH_LIMIT: int = 1000
 
 static func add_hash(hash_value: String):
 	if not is_in_hash(hash_value):
