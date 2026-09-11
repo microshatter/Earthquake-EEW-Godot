@@ -15,11 +15,21 @@ func send_eew(
 	header: String, 
 	brief: String, 
 	desc: String, 
+	time: String,
 	distance: float = 0, 
 	intensity: float = 0, 
 	report: int = 0, 
-	is_final: bool = false
+	is_final: bool = false,
+	time_offset_hr: float = 0
 ):
+	var timestamp = Utils.to_unix_utc(time, time_offset_hr)
+	var current_time = Time.get_unix_time_from_system()
+	if timestamp + 600 < current_time and not visible:
+		push_warning("Can't send EEW that was passed over 10 minutes")
+		return
+	$"../PWave".start(IntensityServices.calculatePwaveCountdown(distance, timestamp * 1000))
+	$"../SWave".start(IntensityServices.calculateSwaveCountdown(distance, timestamp * 1000))
+	IntensityServices.calculateSwaveCountdown(distance, timestamp * 1000)
 	var reportstr = PackedStringArray()
 	if report > 0:
 		reportstr.append("#%s" % report)

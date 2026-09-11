@@ -189,3 +189,42 @@ static func linear_color(c: float):
 		return c / 12.92
 	else:
 		return pow((c + 0.055) / 1.055, 2.4)
+
+
+static func calculatePwaveCountdown(
+	distanceKm: float, 
+	originTimeMillis: int, 
+	pWaveSpeedKmPerSec: float = 6.0
+):
+	if (is_nan(distanceKm) or distanceKm < 0 or 
+		originTimeMillis <= 0 or pWaveSpeedKmPerSec <= 0):
+		push_warning("P-wave Countdown Calculator: Invalid argument, skipping")
+		return null
+
+	var travelTimeSec = distanceKm / pWaveSpeedKmPerSec
+	var arrivalTimeMillis = (originTimeMillis + (travelTimeSec * 1000))
+
+	var remainingMs = arrivalTimeMillis - (Time.get_unix_time_from_system() * 1000)
+	var remainingSecs = max(0.0, (remainingMs / 1000))
+
+	print("P-wave countdown result: distance=%.2fkm, Travel=%.3f, Remaining=%.3f" % [distanceKm, travelTimeSec, remainingSecs])
+	return remainingSecs
+
+static func calculateSwaveCountdown(
+	distanceKm: float, 
+	originTimeMillis: int, 
+	sWaveSpeedKmPerSec: float = 3.5
+):
+	if (is_nan(distanceKm) or distanceKm < 0 or 
+		originTimeMillis <= 0 or sWaveSpeedKmPerSec <= 0):
+		push_warning("S-wave Countdown Calculator: Invalid argument, skipping")
+		return null
+
+	var travelTimeSec = distanceKm / sWaveSpeedKmPerSec
+	var arrivalTimeMillis = (originTimeMillis + (travelTimeSec * 1000))
+
+	var remainingMs = arrivalTimeMillis - (Time.get_unix_time_from_system() * 1000)
+	var remainingSecs = max(0.0, (remainingMs / 1000))
+	
+	print("P-wave countdown result: distance=%.2fkm, Travel=%.3f, Remaining=%.3f" % [distanceKm, travelTimeSec, remainingSecs])
+	return remainingSecs

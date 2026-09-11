@@ -87,6 +87,10 @@ one_shot = true
 wait_time = 5.0
 one_shot = true
 
+[node name="PWave" type="Timer" parent="." unique_id=1880657344]
+
+[node name="SWave" type="Timer" parent="." unique_id=282641177]
+
 [node name="EEW-Popup-Window" type="Window" parent="." unique_id=2040913522]
 transparent_bg = true
 oversampling_override = 1.0
