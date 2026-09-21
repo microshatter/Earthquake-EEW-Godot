@@ -208,7 +208,7 @@ static func calculatePwaveCountdown(
 	var remainingSecs = max(0.0, (remainingMs / 1000))
 
 	print("P-wave countdown result: distance=%.2fkm, Travel=%.3f, Remaining=%.3f" % [distanceKm, travelTimeSec, remainingSecs])
-	return remainingSecs
+	return [remainingSecs, travelTimeSec]
 
 static func calculateSwaveCountdown(
 	distanceKm: float, 
@@ -227,4 +227,4 @@ static func calculateSwaveCountdown(
 	var remainingSecs = max(0.0, (remainingMs / 1000))
 	
 	print("P-wave countdown result: distance=%.2fkm, Travel=%.3f, Remaining=%.3f" % [distanceKm, travelTimeSec, remainingSecs])
-	return remainingSecs
+	return [remainingSecs, travelTimeSec]

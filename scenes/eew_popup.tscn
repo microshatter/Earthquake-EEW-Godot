@@ -1,6 +1,7 @@
 [gd_scene format=3 uid="uid://bhl7wlfwwwfbm"]
 
 [ext_resource type="Script" uid="uid://c66f274dxi8o1" path="res://scripts/eew_popup.gd" id="1_3cp8q"]
+[ext_resource type="FontFile" uid="uid://dithjm3lqqvnn" path="res://assets/fonts/DSEG7-Modern/DSEG7Modern-BoldItalic.ttf" id="2_emysb"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_fjcr2"]
 bg_color = Color(0.6, 0.6, 0.6, 0)
@@ -54,17 +55,6 @@ horizontal_alignment = 1
 vertical_alignment = 1
 autowrap_mode = 3
 
-[node name="Local" type="Label" parent="VBoxContainer/BodyContent/VBoxContainer" unique_id=393074091]
-custom_minimum_size = Vector2(800, 50)
-custom_maximum_size = Vector2(800, -1)
-layout_mode = 2
-theme_override_colors/font_color = Color(1, 1, 0, 1)
-theme_override_font_sizes/font_size = 24
-text = "Distance from epicenter: 9 km | Estimated local seismic intensity: 6-"
-horizontal_alignment = 1
-vertical_alignment = 1
-autowrap_mode = 3
-
 [node name="RichTextLabel" type="RichTextLabel" parent="VBoxContainer/BodyContent/VBoxContainer" unique_id=1016756316]
 layout_mode = 2
 size_flags_vertical = 3
@@ -74,3 +64,56 @@ theme_override_font_sizes/bold_italics_font_size = 28
 theme_override_font_sizes/italics_font_size = 28
 theme_override_font_sizes/mono_font_size = 28
 text = "Enter affected city here"
+
+[node name="Local" type="Label" parent="VBoxContainer/BodyContent/VBoxContainer" unique_id=393074091]
+custom_maximum_size = Vector2(800, -1)
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 0, 1)
+theme_override_font_sizes/font_size = 24
+text = "9 km | Local Intensity 6-"
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 3
+
+[node name="HBoxContainer" type="VBoxContainer" parent="VBoxContainer/BodyContent/VBoxContainer" unique_id=1662033395]
+layout_mode = 2
+
+[node name="PWave" type="HBoxContainer" parent="VBoxContainer/BodyContent/VBoxContainer/HBoxContainer" unique_id=495016109]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="VBoxContainer/BodyContent/VBoxContainer/HBoxContainer/PWave" unique_id=556654500]
+layout_mode = 2
+text = "P-Wave"
+
+[node name="Remain" type="ProgressBar" parent="VBoxContainer/BodyContent/VBoxContainer/HBoxContainer/PWave" unique_id=1759455768]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Timer" type="Label" parent="VBoxContainer/BodyContent/VBoxContainer/HBoxContainer/PWave" unique_id=1814612760]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("2_emysb")
+text = "000.00"
+
+[node name="Label2" type="Label" parent="VBoxContainer/BodyContent/VBoxContainer/HBoxContainer/PWave" unique_id=333512097]
+layout_mode = 2
+text = "s"
+
+[node name="SWave" type="HBoxContainer" parent="VBoxContainer/BodyContent/VBoxContainer/HBoxContainer" unique_id=831235437]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="VBoxContainer/BodyContent/VBoxContainer/HBoxContainer/SWave" unique_id=1909470953]
+layout_mode = 2
+text = "S-Wave"
+
+[node name="Remain" type="ProgressBar" parent="VBoxContainer/BodyContent/VBoxContainer/HBoxContainer/SWave" unique_id=1576112856]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Timer" type="Label" parent="VBoxContainer/BodyContent/VBoxContainer/HBoxContainer/SWave" unique_id=587895454]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("2_emysb")
+text = "000.00"
+
+[node name="Label2" type="Label" parent="VBoxContainer/BodyContent/VBoxContainer/HBoxContainer/SWave" unique_id=100740671]
+layout_mode = 2
+text = "s"

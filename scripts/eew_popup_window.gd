@@ -4,6 +4,7 @@ extends Window
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	pass # Replace with function body.
+	send_eew("Test EEW", "Just a test btw", "TESTING", Time.get_datetime_string_from_unix_time(Time.get_unix_time_from_system()), 750, IntensityServices.calculate_estimated_intensity(7.0, 750), 1, true)
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -25,10 +26,12 @@ func send_eew(
 	var timestamp = Utils.to_unix_utc(time, time_offset_hr)
 	var current_time = Time.get_unix_time_from_system()
 	if timestamp + 600 < current_time and not visible:
-		push_warning("Can't send EEW that was passed over 10 minutes")
+		push_warning("Can't send EEW that was passed over 10 minutes: %s (UTC%s)" % [time, time_offset_hr])
 		return
-	$"../PWave".start(IntensityServices.calculatePwaveCountdown(distance, timestamp * 1000))
-	$"../SWave".start(IntensityServices.calculateSwaveCountdown(distance, timestamp * 1000))
+	var ptimer = IntensityServices.calculatePwaveCountdown(distance, timestamp * 1000)
+	var stimer = IntensityServices.calculateSwaveCountdown(distance, timestamp * 1000)
+	$"../PWave".start(ptimer[0])
+	$"../SWave".start(stimer[0])
 	IntensityServices.calculateSwaveCountdown(distance, timestamp * 1000)
 	var reportstr = PackedStringArray()
 	if report > 0:
@@ -42,6 +45,7 @@ func send_eew(
 	$"EEW-Popup".set_text(brief)
 	$"EEW-Popup".set_affected_cities(desc)
 	$"EEW-Popup".set_local_eq_info(distance, intensity)
+	$"EEW-Popup".set_max_prograss(ptimer[1], stimer[1])
 	show()
 	if is_final:
 		$final.play()
