@@ -942,7 +942,7 @@ func poll_p2pq():
 		$"../Reconnect Timer/P2P".start()
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta: float) -> void:
+func _process(_delta: float) -> void:
 	poll_wolfx()
 	poll_fan()
 	poll_p2pq()

@@ -97,7 +97,7 @@ func _ready() -> void:
 	text_lines = return_fixed_message_content()
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta: float) -> void:
+func _process(_delta: float) -> void:
 	$Label.custom_minimum_size.x = size.x
 	$Label.text = text_lines[current_line]
 	$Label.position = Vector2((size.x / 2) - ($Label.size.x / 2), (size.y / 2) - ($Label.size.y / 2))

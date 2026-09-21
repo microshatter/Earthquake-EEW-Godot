@@ -49,7 +49,7 @@ func _ready() -> void:
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta: float) -> void:
+func _process(_delta: float) -> void:
 	pass
 
 
@@ -66,7 +66,7 @@ func _on_locate_button_pressed() -> void:
 	http_request.request_completed.connect(_locate_complete)
 	http_request.request(request_api)
 
-func _locate_complete(result, response_code, headers, body):
+func _locate_complete(_result, _response_code, _headers, body):
 	var json = JSON.new()
 	json.parse(body.get_string_from_utf8())
 	var response = json.get_data()

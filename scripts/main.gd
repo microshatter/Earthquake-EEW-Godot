@@ -22,7 +22,7 @@ func _ready() -> void:
 		print("It seems your OS/Desktop Environment doesn't support indicator yet...")
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta: float) -> void:
+func _process(_delta: float) -> void:
 	pass
 
 

@@ -49,7 +49,7 @@ func sort_children():
 		$ScrollContainer/eqlist.move_child(children[i], i)
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta: float) -> void:
+func _process(_delta: float) -> void:
 	$"../..".custom_maximum_size = get_window().size
 	sort_children()
 	var child_count = $ScrollContainer/eqlist.get_child_count()
