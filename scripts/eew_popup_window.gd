@@ -4,7 +4,7 @@ extends Window
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	pass # Replace with function body.
-	send_eew("Test EEW", "Just a test btw", "TESTING", Time.get_datetime_string_from_unix_time(Time.get_unix_time_from_system()), 750, IntensityServices.calculate_estimated_intensity(7.0, 750), 1, true)
+	#send_eew("Test EEW", "Just a test btw", "TESTING", Time.get_datetime_string_from_unix_time(Time.get_unix_time_from_system()), 750, IntensityServices.calculate_estimated_intensity(7.0, 750), 1, true)
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
