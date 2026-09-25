@@ -788,7 +788,7 @@ func poll_whews():
 							else:
 								print("Earthquake happaned in %s with magnitude %s. (%s)" % [location, magnitude, data_source.to_upper()])
 							$"../stats/HBox/eqHistory".add_history(intensity, 1, location, shocktime, magnitude, depth, data_source, 8, id)
-						"va":
+						"va", "early_est":
 							print("%s don't recieve message but via print: %s" % [data_source.to_upper(), JSON.stringify(data)])
 						_:
 							var msg = news_message_scene.instantiate()
