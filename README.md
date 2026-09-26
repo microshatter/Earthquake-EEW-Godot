@@ -19,9 +19,10 @@ FAN Studio API 停止运营通知
 推荐替代 API
 如果你还在寻找可用的接口，不妨看看下面，由其他优秀的爱好者维护的服务。
 
-https://api.odysphere.tech/
-https://api.2v8.cn/docs
-https://ws.mangxufurry.cc.cd/
+- https://api.odysphere.tech/
+- https://api.2v8.cn/docs
+- https://ws.mangxufurry.cc.cd/
+
 FAN Studio 团队
 2026 · 感谢一路同行
 
