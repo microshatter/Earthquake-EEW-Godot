@@ -18,6 +18,8 @@ This project is currently made with Godot 4.7, may update engine later
 
 > [!NOTE]
 > The intensity calculations are **simplified empirical models for educational use only**, with roughly ±1 unit of uncertainty. They must **not** be used for life-safety decisions or official reporting. For production use, rely on official JMA/CENC real-time systems.
+> 
+> Countdown is inaccuate: longer than usual.
 
 # Data Source
 > Copied from [https://github.com/Lipomoea/kanameishi/blob/dev/README.md#数据来源]
