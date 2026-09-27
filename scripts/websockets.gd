@@ -214,7 +214,7 @@ func poll_wolfx():
 					var reports = json_message.get("ReportNum", 0)
 					var isFinal = json_message.get("isFinal", false)
 					var local_intensity = IntensityServices.calculate_estimated_intensity(magnitude, distance, depth, longitude)
-					var eew_header = "Wolfx紧急地震速报（中国地震预警网）"
+					var eew_header = "中国地震预警网 - 地震预警"
 					var eew_title = "%s发生了地震 M%.1f 请注意强烈摇晃" % [location, magnitude]
 					var eew_desc = "M%s | 预估最大烈度：%s | 深度：%s | 纬度: %s | 经度: %s\n发生时间： %s" % [magnitude, estint, depth, latitude, longitude, shocktime]
 					$"../EEW-Popup-Window".send_eew(eew_header, eew_title, eew_desc, shocktime, distance, local_intensity, reports, false, 8)
@@ -233,7 +233,7 @@ func poll_wolfx():
 					var reports = json_message.get("ReportNum", 0)
 					var isFinal = json_message.get("isFinal", false)
 					var local_intensity = IntensityServices.calculate_estimated_intensity(magnitude, distance, depth, longitude)
-					var eew_header = "緊急地震速報（台灣氣象署）"
+					var eew_header = "中央氣象署強震即時警報"
 					var eew_title = "%s發生了地震 M%.1f 請注意強烈搖晃" % [location, magnitude]
 					var eew_desc = "M%s | 預估最大震度：%s | 深度：%s | 緯度: %s | 經度: %s\n發生時間： %s" % [magnitude, estint, depth, latitude, longitude, shocktime]
 					$"../EEW-Popup-Window".send_eew(eew_header, eew_title, eew_desc, shocktime, distance, local_intensity, reports, false, 8)
@@ -391,7 +391,7 @@ func poll_whews():
 							var reports = data.get("updates", 0)
 							var distance = get_distance_from_source(latitude, longitude)
 							var local_intensity = IntensityServices.calculate_estimated_intensity(magnitude, distance, depth, longitude)
-							var eew_header = "紧急地震速报（中国地震预警网）"
+							var eew_header = "中国地震预警网 - 地震预警"
 							var eew_title = "%s发生了地震 M%.1f 请注意强烈摇晃" % [location, magnitude]
 							var eew_desc = "M%s | 预估最大烈度：%s | 深度：%s | 纬度: %s | 经度: %s\n发生时间： %s" % [magnitude, estint, depth, latitude, longitude, shocktime]
 							$"../EEW-Popup-Window".send_eew(eew_header, eew_title, eew_desc, shocktime, distance, local_intensity, reports, false, 8)
@@ -409,7 +409,7 @@ func poll_whews():
 							var reports = data.get("updates", 0)
 							var distance = get_distance_from_source(latitude, longitude)
 							var local_intensity = IntensityServices.calculate_estimated_intensity(magnitude, distance, depth, longitude)
-							var eew_header = "紧急地震速报（中国%s地震预警网）" % province
+							var eew_header = "%s地震局 - 地震预警" % province
 							var eew_title = "%s发生了地震 M%.1f 请注意强烈摇晃" % [location, magnitude]
 							var eew_desc = "M%s | 预估最大烈度：%s | 深度：%s | 纬度: %s | 经度: %s\n发生时间： %s" % [magnitude, estint, depth, latitude, longitude, shocktime]
 							$"../EEW-Popup-Window".send_eew(eew_header, eew_title, eew_desc, shocktime, distance, local_intensity, reports, false, 8)
@@ -443,7 +443,7 @@ func poll_whews():
 							var final_report = data.get("final", false)
 							var distance = get_distance_from_source(latitude, longitude)
 							var local_intensity = IntensityServices.calculate_estimated_intensity(magnitude, distance, depth, longitude)
-							var eew_header = "緊急地震速報（台灣氣象署）"
+							var eew_header = "中央氣象署強震即時警報"
 							var eew_title = "%s發生了地震 M%.1f 請注意強烈搖晃" % [location, magnitude]
 							var eew_desc = "M%s | 預估最大震度：%s | 深度：%s | 緯度: %s | 經度: %s\n發生時間： %s" % [magnitude, estint, depth, latitude, longitude, shocktime]
 							$"../EEW-Popup-Window".send_eew(eew_header, eew_title, eew_desc, shocktime, distance, local_intensity, reports, final_report, 8)
@@ -529,7 +529,13 @@ func poll_whews():
 							var longitude = data.longitude
 							var magnitude = data.magnitude
 							var depth = data.depth
-							var intensity = IntensityServices.kma_scale_to_intensity(data.get("maxIntensity"))
+							var distance = get_distance_from_source(latitude, longitude)
+							var int_raw = data.get("maxIntensity")
+							var intensity
+							if int_raw == null:
+								IntensityServices.calculate_estimated_intensity(magnitude, distance, depth, longitude)
+							else:
+								intensity = IntensityServices.kma_scale_to_intensity(int_raw)
 							if magnitude >= Utils.load_option().get("minmagnitude", 0.0):
 								var msg = news_message_scene.instantiate()
 								msg.set_text(PackedStringArray([
@@ -621,6 +627,10 @@ func poll_whews():
 			whews_last_invalid_key = whews_current_key
 			whews_key_invalid = true
 			add_notification("WHEWS Authentication failed! Please check your API key, and restart the program!", INT32_MAX)
+		elif code == 4403:
+			add_notification("You were banned for using WHEWS API. Reason: %s.\nThis ban expires in 5 hours.", 3600 * 5)
+			Utils.save_ban_stats("WHEWS", 3600 * 5)
+			$"../Reconnect Timer/WHEWS".start(3600 * 5)
 		elif code != -1:
 			add_notification("Connection to WHEWS lost\n" + ("WHEWS WebSocket closed with code: %d, reason: %s. Clean: %s" % [code, reason, code != -1]) + "\nReconnect in 5s", 5)
 		$"../Reconnect Timer/WHEWS".start()

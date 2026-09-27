@@ -191,3 +191,5 @@ static func to_unix_utc(timestring: String, offset_hr: float):
 	var utc_unix := timestamp - time_offset_secs
 	return utc_unix
 	
+static func save_ban_stats(platform, duration, reason=null):
+	pass
