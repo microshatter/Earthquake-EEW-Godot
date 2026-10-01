@@ -631,6 +631,7 @@ func poll_whews():
 			add_notification("You were banned for using WHEWS API. Reason: %s.\nThis ban expires in 5 hours.", 3600 * 5)
 			Utils.save_ban_stats("WHEWS", 3600 * 5)
 			$"../Reconnect Timer/WHEWS".start(3600 * 5)
+			return
 		elif code != -1:
 			add_notification("Connection to WHEWS lost\n" + ("WHEWS WebSocket closed with code: %d, reason: %s. Clean: %s" % [code, reason, code != -1]) + "\nReconnect in 5s", 5)
 		$"../Reconnect Timer/WHEWS".start()
