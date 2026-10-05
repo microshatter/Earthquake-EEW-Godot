@@ -4,7 +4,6 @@ extends RefCounted
 # API Enabled
 static var api_enabled = {
 	"wolfx": true,
-	"fan": true, # Full name: FAN Studio | FSSN is only recieved unless I apply for app id request
 	"whews": false, # disabled unless authorized
 	"p2p": true, # Full name: P2PQuake
 }
