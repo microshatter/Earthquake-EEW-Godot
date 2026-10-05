@@ -4,6 +4,8 @@ var wolfx = WebSocketPeer.new()
 var p2pq = WebSocketPeer.new()
 var whews = WebSocketPeer.new()
 
+var reconnection_timer = [3, 5, 10, 30, 60]
+
 var news_message_scene = preload("res://scenes/newswindow.tscn")
 
 var wolfx_pinged = false
@@ -30,6 +32,12 @@ var recieved_pinged = {
 }
 
 var recieved_time = {
+	"wolfx": 0,
+	"p2p": 0,
+	"whews": 0
+}
+
+var disconnects = {
 	"wolfx": 0,
 	"p2p": 0,
 	"whews": 0
@@ -269,6 +277,7 @@ func poll_wolfx():
 		$"../stats/HBox/StatContainer/sources/Wolfx".text = 'Wolfx(Closing)'
 		$"../stats/HBox/StatContainer/sources/Wolfx".add_theme_color_override("font_color", Color("ff8000"))
 	elif state == WebSocketPeer.STATE_CLOSED:
+		disconnects.set("wolfx", disconnects.get("wolfx", 0) + 1)
 		if $"Wolfx-Ping".time_left > 0:
 			$"Wolfx-Ping".stop()
 		$"../stats/HBox/StatContainer/sources/Wolfx".text = 'Wolfx(Disconnected)'
@@ -279,7 +288,7 @@ func poll_wolfx():
 		print(text)
 		if code != -1:
 			add_notification("Connect to Wolfx Lost\n%s\nReconnect in 5s" % text, 5)
-		$"../Reconnect Timer/Wolfx".start()
+		$"../Reconnect Timer/Wolfx".start(reconnection_timer[min(disconnects.get("wolfx") - 1, len(reconnection_timer) - 1)])
 
 func poll_whews():
 	if $"../Reconnect Timer/WHEWS".time_left > 0: # Don't pull if connection lost
@@ -616,6 +625,7 @@ func poll_whews():
 	elif state == WebSocketPeer.STATE_CLOSING:
 		pass
 	elif state == WebSocketPeer.STATE_CLOSED:
+		disconnects.set("whews", disconnects.get("whews", 0) + 1)
 		if $"WHEWS-Ping".time_left > 0:
 			$"WHEWS-Ping".stop()
 		$"../stats/HBox/StatContainer/sources/WHEWS".text = "WHEWS(Disconnected)"
@@ -634,7 +644,7 @@ func poll_whews():
 			return
 		elif code != -1:
 			add_notification("Connection to WHEWS lost\n" + ("WHEWS WebSocket closed with code: %d, reason: %s. Clean: %s" % [code, reason, code != -1]) + "\nReconnect in 5s", 5)
-		$"../Reconnect Timer/WHEWS".start()
+		$"../Reconnect Timer/WHEWS".start(reconnection_timer[min(disconnects.get("whews") - 1, len(reconnection_timer) - 1)])
 
 func poll_p2pq():
 	if $"../Reconnect Timer/P2P".time_left > 0: # Don't pull if connection lost
@@ -642,6 +652,7 @@ func poll_p2pq():
 	p2pq.poll()
 	var state = p2pq.get_ready_state()
 	if state == WebSocketPeer.STATE_OPEN:
+		disconnects.set("p2p", 0)
 		$"../stats/HBox/StatContainer/sources/P2P".text = "P2P(%s)" % return_ping_time_recieved("p2p")
 		$"../stats/HBox/StatContainer/sources/P2P".add_theme_color_override("font_color", Color("00ff00"))
 		if not p2p_pinged:
@@ -714,6 +725,7 @@ func poll_p2pq():
 	elif state == WebSocketPeer.STATE_CLOSING:
 		add_notification("P2PQuake connection is closing!", 10)
 	elif state == WebSocketPeer.STATE_CLOSED:
+		disconnects.set("p2p", disconnects.get("p2p", 0) + 1)
 		if $"P2P-Ping".time_left > 0:
 			$"P2P-Ping".stop()
 		$"../stats/HBox/StatContainer/sources/P2P".text = "P2P(Disconnected)"
@@ -723,7 +735,7 @@ func poll_p2pq():
 		print("P2PQuake WebSocket closed with code: %d, reason %s. Clean: %s" % [code, reason, code != -1])
 		if code != -1:
 			add_notification("Connection to P2PQuake lost\n" + ("P2PQuake WebSocket closed with code: %d, reason: %s. Clean: %s" % [code, reason, code != -1]) + "\nReconnect in 5s", 5)
-		$"../Reconnect Timer/P2P".start()
+		$"../Reconnect Timer/P2P".start(reconnection_timer[min(disconnects.get("p2p") - 1, len(reconnection_timer) - 1)])
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(_delta: float) -> void:
@@ -768,16 +780,19 @@ func _on_whews_ping_timeout() -> void:
 
 
 func _on_wolfx_pong() -> void:
+	disconnects.set("wolfx", 0)
 	recieved_pinged.set("wolfx", true)
 	recieved_time.set("wolfx", Time.get_ticks_msec())
 
 
 func _on_p_2_pquake_pong() -> void:
+	disconnects.set("p2p", 0)
 	recieved_pinged.set("p2p", true)
 	recieved_time.set("p2p", Time.get_ticks_msec())
 
 
 func _on_whews_pong() -> void:
+	disconnects.set("whews", 0)
 	recieved_pinged.set("whews", true)
 	recieved_time.set("whews", Time.get_ticks_msec())
 
