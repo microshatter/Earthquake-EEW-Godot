@@ -1,3 +1,7 @@
+# REMOVAL OF FAN STUDIO NOTICE
+
+FAN Studio API server shutdown on **2026-12-31 15:59:00 (UTC)**. After that time this service is no longer available. More info on https://api.fanstudio.tech/
+
 # Project Info
 This is a software that notify users EEW and earthquake information.  EEW don't have a map, and earthquake information are aligned at center
 This project is currently made with Godot 4.7, may update engine later
@@ -14,6 +18,8 @@ This project is currently made with Godot 4.7, may update engine later
 
 > [!NOTE]
 > The intensity calculations are **simplified empirical models for educational use only**, with roughly ±1 unit of uncertainty. They must **not** be used for life-safety decisions or official reporting. For production use, rely on official JMA/CENC real-time systems.
+> 
+> Countdown is inaccurate: longer than usual.
 
 # Data Source
 > Copied from [https://github.com/Lipomoea/kanameishi/blob/dev/README.md#数据来源]

@@ -19,7 +19,6 @@ func load_settings():
 		$VBoxContainer/TabContainer/General/GeoLocation/LongitudeSpinBox.value = options.get("longitude", 0.0)
 		$VBoxContainer/TabContainer/General/MagnitudeIntensity/MagSpinBox.value = options.get("minmagnitude", 0)
 		$VBoxContainer/TabContainer/General/MagnitudeIntensity/IntenSpinBox.value = options.get("minintensity", 5)
-		$"VBoxContainer/TabContainer/API Keys/FanApi/LineEdit".text = options.get("fanapi", "")
 		$"VBoxContainer/TabContainer/API Keys/WHEWSApi/LineEdit".text = options.get("whewsapi", "")
 		$"VBoxContainer/TabContainer/API Keys/WHEWSCEAID/LineEdit".text = options.get("whewsceaid", "")
 		$"VBoxContainer/TabContainer/API Keys/WHEWSCEASecret/LineEdit".text = options.get("whewsceasecret", "")
@@ -31,7 +30,6 @@ func save_settings():
 		"longitude": $VBoxContainer/TabContainer/General/GeoLocation/LongitudeSpinBox.value,
 		"minmagnitude": $VBoxContainer/TabContainer/General/MagnitudeIntensity/MagSpinBox.value,
 		"minintensity": $VBoxContainer/TabContainer/General/MagnitudeIntensity/IntenSpinBox.value,
-		"fanapi": $"VBoxContainer/TabContainer/API Keys/FanApi/LineEdit".text,
 		"whewsapi": $"VBoxContainer/TabContainer/API Keys/WHEWSApi/LineEdit".text,
 		"whewsceaid": $"VBoxContainer/TabContainer/API Keys/WHEWSCEAID/LineEdit".text,
 		"whewsceasecret": $"VBoxContainer/TabContainer/API Keys/WHEWSCEASecret/LineEdit".text
@@ -49,7 +47,7 @@ func _ready() -> void:
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta: float) -> void:
+func _process(_delta: float) -> void:
 	pass
 
 
@@ -66,7 +64,7 @@ func _on_locate_button_pressed() -> void:
 	http_request.request_completed.connect(_locate_complete)
 	http_request.request(request_api)
 
-func _locate_complete(result, response_code, headers, body):
+func _locate_complete(_result, _response_code, _headers, body):
 	var json = JSON.new()
 	json.parse(body.get_string_from_utf8())
 	var response = json.get_data()
@@ -91,7 +89,3 @@ func _on_discard_button_pressed() -> void:
 
 func _on_reload_button_pressed() -> void:
 	load_settings()
-
-
-func _on_fan_key_button_pressed() -> void:
-	OS.shell_open("https://api.fanstudio.tech/dev-platform/")

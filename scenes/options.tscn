@@ -81,24 +81,6 @@ visible = false
 layout_mode = 2
 metadata/_tab_index = 1
 
-[node name="FanApi" type="HBoxContainer" parent="VBoxContainer/TabContainer/API Keys" unique_id=35183253]
-layout_mode = 2
-alignment = 1
-
-[node name="Label" type="Label" parent="VBoxContainer/TabContainer/API Keys/FanApi" unique_id=62292584]
-layout_mode = 2
-text = "FAN Studio API Key"
-
-[node name="LineEdit" type="LineEdit" parent="VBoxContainer/TabContainer/API Keys/FanApi" unique_id=415794163]
-custom_minimum_size = Vector2(300, 0)
-layout_mode = 2
-placeholder_text = "Enter API key here..."
-secret = true
-
-[node name="Button" type="Button" parent="VBoxContainer/TabContainer/API Keys/FanApi" unique_id=124445181]
-layout_mode = 2
-text = "Get a Key"
-
 [node name="WHEWSApi" type="HBoxContainer" parent="VBoxContainer/TabContainer/API Keys" unique_id=1830950988]
 layout_mode = 2
 alignment = 1
@@ -118,6 +100,7 @@ layout_mode = 2
 text = "Get a Key"
 
 [node name="WHEWSCEAID" type="HBoxContainer" parent="VBoxContainer/TabContainer/API Keys" unique_id=1841175407]
+visible = false
 layout_mode = 2
 alignment = 1
 
@@ -131,6 +114,7 @@ layout_mode = 2
 placeholder_text = "Enter API key here..."
 
 [node name="WHEWSCEASecret" type="HBoxContainer" parent="VBoxContainer/TabContainer/API Keys" unique_id=213617104]
+visible = false
 layout_mode = 2
 alignment = 1
 
@@ -415,10 +399,14 @@ size_flags_horizontal = 3
 text = "Ningxia"
 
 [node name="FSSN" type="CheckBox" parent="VBoxContainer/TabContainer/Sources/ScrollContainer/Toggles" unique_id=1268858171]
+visible = false
 layout_mode = 2
 size_flags_horizontal = 3
 button_pressed = true
 text = "FSSN"
+
+[node name="Spacer3" type="Control" parent="VBoxContainer/TabContainer/Sources/ScrollContainer/Toggles" unique_id=150608322]
+layout_mode = 2
 
 [node name="Tsunami" type="CheckBox" parent="VBoxContainer/TabContainer/Sources/ScrollContainer/Toggles" unique_id=129029245]
 layout_mode = 2
@@ -494,7 +482,6 @@ text = "Quit"
 [node name="HTTPRequest" type="HTTPRequest" parent="." unique_id=217248521]
 
 [connection signal="pressed" from="VBoxContainer/TabContainer/General/GeoLocation/LocateButton" to="." method="_on_locate_button_pressed"]
-[connection signal="pressed" from="VBoxContainer/TabContainer/API Keys/FanApi/Button" to="." method="_on_fan_key_button_pressed"]
 [connection signal="pressed" from="VBoxContainer/Actions/SaveButton" to="." method="_on_save_button_pressed"]
 [connection signal="pressed" from="VBoxContainer/Actions/SaveOnlyButton" to="." method="_on_save_only_button_pressed"]
 [connection signal="pressed" from="VBoxContainer/Actions/DiscardButton" to="." method="_on_discard_button_pressed"]

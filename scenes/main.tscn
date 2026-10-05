@@ -54,10 +54,6 @@ script = ExtResource("3_tbgi4")
 wait_time = 60.0
 one_shot = true
 
-[node name="FanStudio-Ping" type="Timer" parent="Websockets" unique_id=272677208]
-wait_time = 60.0
-one_shot = true
-
 [node name="WHEWS-Ping" type="Timer" parent="Websockets" unique_id=610771098]
 wait_time = 60.0
 one_shot = true
@@ -75,10 +71,6 @@ one_shot = true
 wait_time = 5.0
 one_shot = true
 
-[node name="FanStudio" type="Timer" parent="Reconnect Timer" unique_id=162330161]
-wait_time = 5.0
-one_shot = true
-
 [node name="WHEWS" type="Timer" parent="Reconnect Timer" unique_id=1510524988]
 wait_time = 5.0
 one_shot = true
@@ -88,8 +80,10 @@ wait_time = 5.0
 one_shot = true
 
 [node name="PWave" type="Timer" parent="." unique_id=1880657344]
+one_shot = true
 
 [node name="SWave" type="Timer" parent="." unique_id=282641177]
+one_shot = true
 
 [node name="EEW-Popup-Window" type="Window" parent="." unique_id=2040913522]
 transparent_bg = true
@@ -213,13 +207,6 @@ text = "Wolfx(disabled)"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="FanStudio" type="Label" parent="stats/HBox/StatContainer/sources" unique_id=193265520]
-layout_mode = 2
-theme_override_font_sizes/font_size = 24
-text = "FAN(Disabled)"
-horizontal_alignment = 1
-vertical_alignment = 1
-
 [node name="WHEWS" type="Label" parent="stats/HBox/StatContainer/sources" unique_id=427678505]
 layout_mode = 2
 theme_override_font_sizes/font_size = 24
@@ -245,16 +232,13 @@ text = "Open Settings"
 [connection signal="id_pressed" from="StatusIndicator/PopupMenu" to="." method="_on_popup_menu_id_pressed"]
 [connection signal="request_completed" from="Http_Requests/Wolfx_JMA_EQ" to="Http_Requests" method="_on_wolfx_jma_eq_request_completed"]
 [connection signal="request_completed" from="Http_Requests/Wolfx_CENC_EQ" to="Http_Requests" method="_on_wolfx_cenc_eq_request_completed"]
-[connection signal="fanstudio_pong" from="Websockets" to="Websockets" method="_on_fanstudio_pong"]
 [connection signal="p2pquake_pong" from="Websockets" to="Websockets" method="_on_p_2_pquake_pong"]
 [connection signal="whews_pong" from="Websockets" to="Websockets" method="_on_whews_pong"]
 [connection signal="wolfx_pong" from="Websockets" to="Websockets" method="_on_wolfx_pong"]
 [connection signal="timeout" from="Websockets/Wolfx-Ping" to="Websockets" method="_on_wolfx_ping_timeout"]
-[connection signal="timeout" from="Websockets/FanStudio-Ping" to="Websockets" method="_on_fan_studio_ping_timeout"]
 [connection signal="timeout" from="Websockets/WHEWS-Ping" to="Websockets" method="_on_whews_ping_timeout"]
 [connection signal="timeout" from="Websockets/WHEWS-CEA-Auth" to="Websockets" method="_on_whewscea_auth_timeout"]
 [connection signal="timeout" from="Reconnect Timer/Wolfx" to="Websockets" method="_on_wolfx_timeout"]
-[connection signal="timeout" from="Reconnect Timer/FanStudio" to="Websockets" method="_on_fan_studio_timeout"]
 [connection signal="timeout" from="Reconnect Timer/WHEWS" to="Websockets" method="_on_whews_timeout"]
 [connection signal="timeout" from="Reconnect Timer/P2P" to="Websockets" method="_on_p2p_timeout"]
 [connection signal="visibility_changed" from="EEW-Popup-Window" to="EEW-Popup-Window" method="_on_visibility_changed"]

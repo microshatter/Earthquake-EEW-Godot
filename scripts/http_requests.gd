@@ -8,7 +8,7 @@ func request_wolfx():
 	$Wolfx_JMA_EQ.request(jma_url)
 	$Wolfx_CENC_EQ.request(cenc_url)
 
-func _on_wolfx_jma_eq_request_completed(result: int, response_code: int, headers: PackedStringArray, body: PackedByteArray) -> void:
+func _on_wolfx_jma_eq_request_completed(_result: int, response_code: int, _headers: PackedStringArray, body: PackedByteArray) -> void:
 	if response_code != 200:
 		return
 	var json_message = JSON.parse_string(body.get_string_from_utf8())
@@ -28,7 +28,7 @@ func _on_wolfx_jma_eq_request_completed(result: int, response_code: int, headers
 	$Wolfx_JMA_EQ/Interval.start()
 
 
-func _on_wolfx_cenc_eq_request_completed(result: int, response_code: int, headers: PackedStringArray, body: PackedByteArray) -> void:
+func _on_wolfx_cenc_eq_request_completed(_result: int, response_code: int, _headers: PackedStringArray, body: PackedByteArray) -> void:
 	if response_code != 200:
 		return
 	var json_message = JSON.parse_string(body.get_string_from_utf8())
