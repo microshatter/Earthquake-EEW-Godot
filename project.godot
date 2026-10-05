@@ -23,6 +23,14 @@ window/stretch/mode="canvas_items"
 window/stretch/aspect="keep_width"
 window/per_pixel_transparency/allowed=true
 
+[file_customization]
+
+folder_colors={
+"res://assets/": "yellow",
+"res://scenes/": "purple",
+"res://scripts/": "red"
+}
+
 [gui]
 
 theme/custom_font="uid://dt2b0j7v7ehgo"
