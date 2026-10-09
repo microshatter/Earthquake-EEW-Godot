@@ -198,8 +198,10 @@ size_flags_horizontal = 3
 button_pressed = true
 text = "KMA (EEW)"
 
-[node name="Spacer" type="Control" parent="VBoxContainer/TabContainer/Sources/ScrollContainer/Toggles" unique_id=1146061355]
+[node name="Early_EST" type="CheckBox" parent="VBoxContainer/TabContainer/Sources/ScrollContainer/Toggles" unique_id=2076440095]
 layout_mode = 2
+size_flags_horizontal = 3
+text = "Early EST"
 
 [node name="CEA" type="CheckBox" parent="VBoxContainer/TabContainer/Sources/ScrollContainer/Toggles" unique_id=841181540]
 layout_mode = 2
@@ -398,15 +400,11 @@ layout_mode = 2
 size_flags_horizontal = 3
 text = "Ningxia"
 
-[node name="FSSN" type="CheckBox" parent="VBoxContainer/TabContainer/Sources/ScrollContainer/Toggles" unique_id=1268858171]
-visible = false
+[node name="FUNVISIS" type="CheckBox" parent="VBoxContainer/TabContainer/Sources/ScrollContainer/Toggles" unique_id=1268858171]
 layout_mode = 2
 size_flags_horizontal = 3
 button_pressed = true
-text = "FSSN"
-
-[node name="Spacer3" type="Control" parent="VBoxContainer/TabContainer/Sources/ScrollContainer/Toggles" unique_id=150608322]
-layout_mode = 2
+text = "FUNVISIS"
 
 [node name="Tsunami" type="CheckBox" parent="VBoxContainer/TabContainer/Sources/ScrollContainer/Toggles" unique_id=129029245]
 layout_mode = 2
