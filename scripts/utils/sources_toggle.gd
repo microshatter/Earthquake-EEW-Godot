@@ -17,6 +17,7 @@ static var sources_enabled = {
 	"kma_eew": true,
 	"cea": true,
 	"cea_pr": true,
+	"early_est": false,
 	# Information
 	"jma": true,
 	"cwa": true,
@@ -54,6 +55,7 @@ static var sources_enabled = {
 	"yunnan": false,
 	"ningxia": false,
 	"fssn": true,
+	"funvisis": false,
 	# Tsunami and Other alerts
 	"tsunami": true,
 	"ntwc": true,
