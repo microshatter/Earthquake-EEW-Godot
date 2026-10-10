@@ -15,7 +15,7 @@ var max_char = INT64_MAX
 func set_text(text_line: Array[String]):
 	text_lines = text_line.duplicate()
 	for i in range(len(text_lines)):
-		text_lines[i].strip_edges()
+		text_lines[i] = text_lines[i].strip_edges()
 
 func add_text(text: String):
 	text_lines.append(text.strip_edges())
