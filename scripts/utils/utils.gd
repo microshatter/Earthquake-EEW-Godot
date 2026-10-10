@@ -32,22 +32,27 @@ static func send_system_notification(title: String, body: String):
 			OS.execute("notify-send", [title, body])
 
 static func wrap_string(text: String, max_length: int):
-	var a = text
-	var final = ""
-	while len(a) > 0:
-		if len(a) <= max_length:
-			final += a
-			return final
-		var s = a.left(max_length).strip_edges()
-		var last_space = max(s.rfind(" "), s.rfind("\t"), s.rfind("\n"), s.rfind("\r"))
-		if last_space > 0:
-			final += a.left(last_space) + "\n"
-			a = a.substr(last_space + 1)
-		else:
-			final += s + "\n"
-			a = a.substr(max_length)
-
-	return final
+	if max_length <= 0:
+		return text
+	var str_process = PackedStringArray()
+	for text_line in text.split("\n"):
+		var a = text_line
+		var final = ""
+		while len(a) > 0:
+			if len(a) <= max_length:
+				final += a
+				break
+			var prefix = a.left(max_length)
+			var last_space = max(prefix.rfind(" "), prefix.rfind("\t"), prefix.rfind("\r"))
+			if last_space >= 0:
+				final += a.left(last_space) + "\n"
+				a = a.substr(last_space + 1)
+			else:
+				final += prefix + "\n"
+				a = a.substr(max_length)
+	
+		str_process.append(final.strip_edges())
+	return "\n".join(str_process)
 
 static func calculate_distance(lat1: float, long1: float, lat2: float, long2: float) -> float:
 	# Earth's radius in kilometers
