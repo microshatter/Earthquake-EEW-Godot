@@ -13,6 +13,7 @@
 [ext_resource type="AudioStream" uid="uid://dlmn2o4bpn61a" path="res://assets/audio/srev/update.mp3" id="7_eb6dy"]
 [ext_resource type="Script" uid="uid://c040ea5amhptl" path="res://scripts/shakealert.gd" id="8_choun"]
 [ext_resource type="AudioStream" uid="uid://cxwqjt2qe7b45" path="res://assets/audio/srev/final.mp3" id="8_trceg"]
+[ext_resource type="AudioStream" uid="uid://c3ka6bkucsep3" path="res://assets/audio/srev/cancel.mp3" id="10_jkv2x"]
 [ext_resource type="Script" uid="uid://xwwqt0ef7lwk" path="res://scripts/eq_history.gd" id="13_trceg"]
 
 [node name="Main" type="Node" unique_id=1409934259]
@@ -116,6 +117,9 @@ stream = ExtResource("7_eb6dy")
 
 [node name="final" type="AudioStreamPlayer" parent="EEW-Popup-Window" unique_id=1361849081]
 stream = ExtResource("8_trceg")
+
+[node name="cancel" type="AudioStreamPlayer" parent="EEW-Popup-Window" unique_id=1754085618]
+stream = ExtResource("10_jkv2x")
 
 [node name="shakealert" type="AudioStreamPlayer" parent="EEW-Popup-Window" unique_id=2061236957]
 stream = ExtResource("6_85g3d")
