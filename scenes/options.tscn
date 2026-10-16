@@ -76,6 +76,26 @@ max_value = 12.0
 step = 0.1
 value = 5.0
 
+[node name="langBox" type="HBoxContainer" parent="VBoxContainer/TabContainer/General" unique_id=605291033]
+layout_mode = 2
+alignment = 1
+
+[node name="Label" type="Label" parent="VBoxContainer/TabContainer/General/langBox" unique_id=646171511]
+layout_mode = 2
+text = "Language"
+
+[node name="LangBox" type="OptionButton" parent="VBoxContainer/TabContainer/General/langBox" unique_id=983170854]
+custom_minimum_size = Vector2(130, 0)
+layout_mode = 2
+selected = 0
+item_count = 3
+popup/item_0/text = "English"
+popup/item_0/id = 0
+popup/item_1/text = "简体中文 Simplified Chinese"
+popup/item_1/id = 1
+popup/item_2/text = "日本語 Japanese"
+popup/item_2/id = 2
+
 [node name="API Keys" type="VBoxContainer" parent="VBoxContainer/TabContainer" unique_id=2103533890]
 visible = false
 layout_mode = 2
