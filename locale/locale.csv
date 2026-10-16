@@ -1,0 +1,41 @@
+keys,en_US,zh_CN,ja_JP
+language.name,English,简体中文,日本語
+main_window.earthquake,Recent Earthquakes,近期地震,最新の地震
+main_window.tsunami,Tsunami Information,海啸信息,津波情報
+main_window.stats,Status,服务状态,サービス状態
+
+context.settings,Settings,设置,設定
+
+eew.info,%.2f km | Intensity %.1f,距震中 %.2f km | 本地烈度 %.1f,震源からの距離 %.2f km | 震度 %.1f
+
+message.eqinfo.title,Earthquake Information From %s,来自%s的地震信息,%sからの地震情報
+message.eqinfo.desc,"In %s\nAn earthquake happens in %s","%s\n在%s发生了地震","%s\n%sに地震が発生しました。"
+message.eqinfo.info,"Hypocenter: %s | Latitude: %s | Longitude: %s\nM%s | Depth: %s km","震源: %s | 纬度: %s | 经度: %s\nM%s | 深度: %s km","地震発生場所：%s | 緯度：%s | 経度：%s\nマグニチュード%s | 震源の深さ：%s km"
+
+config.tab.general,General,常规,一般
+config.tab.api,API Keys,API密钥,APIキー
+config.tab.provider,Providers,数据源,プロバイダー
+config.tab.sources,Sources,情报源,情報源
+
+# General words
+general.latitude,Latitude,纬度,緯度
+general.longitude,Longitude,经度,経度
+general.language,Language,语言,言語
+
+# General Tab
+config.general.locate,Locate Using IP,使用IP定位,IPで位置情報を取得
+config.general.receive_min_mag,Unknown Source Min Magnitude,"地震情报震级阈值(非CENC, JMA, CWA)",不明なソースの最小マグニチュード
+config.general.eew_local_min_intensity,EEW min intensity,本地烈度警报阈值(EEW),EEWの最小震度
+
+# API keys tab
+config.api.get,Get a key,获取API密钥,APIキーを取得
+
+# Providers tab
+config.provider.string,Enable %s,启用%s,%sを有効にする
+
+# Action buttons
+config.action.save,Save,保存,保存
+config.action.save_and_close,Save and Close,保存并关闭,保存して閉じる
+config.action.discard_and_close,Discard and Close,放弃更改并关闭,破棄して閉じる
+config.action.reload,Reload,重载,再読み込み
+config.action.quit,Quit,退出,終了

@@ -27,9 +27,9 @@ menu = NodePath("PopupMenu")
 item_count = 3
 item_0/text = "Clear Notifications"
 item_0/id = 0
-item_1/text = "Settings"
+item_1/text = "context.settings"
 item_1/id = 1
-item_2/text = "Quit"
+item_2/text = "config.action.quit"
 item_2/id = 2
 
 [node name="Http_Requests" type="Node" parent="." unique_id=2054105356]
@@ -54,6 +54,10 @@ script = ExtResource("3_tbgi4")
 wait_time = 60.0
 one_shot = true
 
+[node name="FSSN-Ping" type="Timer" parent="Websockets" unique_id=238140327]
+wait_time = 60.0
+one_shot = true
+
 [node name="WHEWS-Ping" type="Timer" parent="Websockets" unique_id=610771098]
 wait_time = 60.0
 one_shot = true
@@ -69,6 +73,10 @@ one_shot = true
 
 [node name="Wolfx" type="Timer" parent="Reconnect Timer" unique_id=1569185851]
 wait_time = 5.0
+one_shot = true
+
+[node name="FSSN" type="Timer" parent="Reconnect Timer" unique_id=1867096836]
+wait_time = 60.0
 one_shot = true
 
 [node name="WHEWS" type="Timer" parent="Reconnect Timer" unique_id=1510524988]
@@ -172,7 +180,7 @@ script = ExtResource("13_trceg")
 [node name="Label" type="Label" parent="stats/HBox/eqHistory" unique_id=899431470]
 layout_mode = 2
 theme_override_font_sizes/font_size = 32
-text = "Recent Earthquakes"
+text = "main_window.earthquake"
 horizontal_alignment = 1
 vertical_alignment = 1
 
@@ -192,7 +200,7 @@ size_flags_horizontal = 3
 [node name="Label" type="Label" parent="stats/HBox/StatContainer" unique_id=1156944217]
 layout_mode = 2
 theme_override_font_sizes/font_size = 32
-text = "STATUS"
+text = "main_window.stats"
 horizontal_alignment = 1
 
 [node name="sources" type="VBoxContainer" parent="stats/HBox/StatContainer" unique_id=865739270]
@@ -204,6 +212,13 @@ alignment = 1
 layout_mode = 2
 theme_override_font_sizes/font_size = 24
 text = "Wolfx(disabled)"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="FSSN" type="Label" parent="stats/HBox/StatContainer/sources" unique_id=1252507809]
+layout_mode = 2
+theme_override_font_sizes/font_size = 24
+text = "FSSN(disabled)"
 horizontal_alignment = 1
 vertical_alignment = 1
 
@@ -221,6 +236,15 @@ text = "P2P(Disabled)"
 horizontal_alignment = 1
 vertical_alignment = 1
 
+[node name="Tsunami" type="VBoxContainer" parent="stats/HBox/StatContainer" unique_id=1473320068]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="stats/HBox/StatContainer/Tsunami" unique_id=1329084765]
+layout_mode = 2
+theme_override_font_sizes/font_size = 32
+text = "main_window.tsunami"
+horizontal_alignment = 1
+
 [node name="QuickActions" type="HBoxContainer" parent="stats" unique_id=145881315]
 layout_mode = 2
 alignment = 1
@@ -232,13 +256,16 @@ text = "Open Settings"
 [connection signal="id_pressed" from="StatusIndicator/PopupMenu" to="." method="_on_popup_menu_id_pressed"]
 [connection signal="request_completed" from="Http_Requests/Wolfx_JMA_EQ" to="Http_Requests" method="_on_wolfx_jma_eq_request_completed"]
 [connection signal="request_completed" from="Http_Requests/Wolfx_CENC_EQ" to="Http_Requests" method="_on_wolfx_cenc_eq_request_completed"]
+[connection signal="fssn_pong" from="Websockets" to="Websockets" method="_on_fssn_pong"]
 [connection signal="p2pquake_pong" from="Websockets" to="Websockets" method="_on_p_2_pquake_pong"]
 [connection signal="whews_pong" from="Websockets" to="Websockets" method="_on_whews_pong"]
 [connection signal="wolfx_pong" from="Websockets" to="Websockets" method="_on_wolfx_pong"]
 [connection signal="timeout" from="Websockets/Wolfx-Ping" to="Websockets" method="_on_wolfx_ping_timeout"]
+[connection signal="timeout" from="Websockets/FSSN-Ping" to="Websockets" method="_on_fssn_ping_timeout"]
 [connection signal="timeout" from="Websockets/WHEWS-Ping" to="Websockets" method="_on_whews_ping_timeout"]
 [connection signal="timeout" from="Websockets/WHEWS-CEA-Auth" to="Websockets" method="_on_whewscea_auth_timeout"]
 [connection signal="timeout" from="Reconnect Timer/Wolfx" to="Websockets" method="_on_wolfx_timeout"]
+[connection signal="timeout" from="Reconnect Timer/FSSN" to="Websockets" method="_on_fssn_timeout"]
 [connection signal="timeout" from="Reconnect Timer/WHEWS" to="Websockets" method="_on_whews_timeout"]
 [connection signal="timeout" from="Reconnect Timer/P2P" to="Websockets" method="_on_p2p_timeout"]
 [connection signal="visibility_changed" from="EEW-Popup-Window" to="EEW-Popup-Window" method="_on_visibility_changed"]
