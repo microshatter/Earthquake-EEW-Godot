@@ -1,7 +1,3 @@
-# REMOVAL OF FAN STUDIO NOTICE
-
-FAN Studio API server shutdown on **2026-12-31 15:59:00 (UTC)**. After that time this service is no longer available. More info on https://api.fanstudio.tech/
-
 # Project Info
 This is a software that notify users EEW and earthquake information.  EEW don't have a map, and earthquake information are aligned at center
 This project is currently made with Godot 4.7, may update engine later
