@@ -365,12 +365,13 @@ func poll_fssn():
 	elif state == WebSocketPeer.STATE_CONNECTING:
 			pass
 	elif state == WebSocketPeer.STATE_CLOSING:
-			pass
+		$"../stats/HBox/StatContainer/sources/FSSN".text = 'FSSN(Closing)'
+		$"../stats/HBox/StatContainer/sources/FSSN".add_theme_color_override("font_color", Color("ff8000"))
 	elif state == WebSocketPeer.STATE_CLOSED:
 		disconnects.set("fssn", disconnects.get("fssn", 0) + 1)
 		if $"FSSN-Ping".time_left > 0:
 			$"FSSN-Ping".stop()
-		$"../stats/HBox/StatContainer/sources/FSSN".text = 'Wolfx(Disconnected)'
+		$"../stats/HBox/StatContainer/sources/FSSN".text = 'FSSN(Disconnected)'
 		$"../stats/HBox/StatContainer/sources/FSSN".add_theme_color_override("font_color", Color("ff0000"))
 		var code = fssn.get_close_code()
 		var reason = fssn.get_close_reason()
@@ -378,7 +379,7 @@ func poll_fssn():
 		print(text)
 		if code != -1:
 			add_notification("Connect to FSSN Lost\n%s\nReconnect in 5s" % text, 5)
-		$"../Reconnect Timer/Wolfx".start(reconnection_timer[min(disconnects.get("fssn") - 1, len(reconnection_timer) - 1)])
+		$"../Reconnect Timer/FSSN".start(reconnection_timer[min(disconnects.get("fssn") - 1, len(reconnection_timer) - 1)])
 
 func poll_whews():
 	if $"../Reconnect Timer/WHEWS".time_left > 0: # Don't pull if connection lost
@@ -414,7 +415,7 @@ func poll_whews():
 						var location = data.get("placeName", "Unknown")
 						var latitude = data.get("latitude")
 						var longitude = data.get("longitude", 0.0)
-						var magnitude = data.get("magnitude", 0.0)
+						var magnitude = data.get("magnitude")
 						var depth = data.get("depth", 0.0)
 						if depth == null:
 							depth = 0.0
@@ -580,7 +581,7 @@ func poll_whews():
 							msg.set_text(PackedStringArray([
 								"中国地震局地震情报\nChina Earthquake Networks Center Earthquake Report\n以下内容将使用中文 The follow content will using Chinese",
 								"%s\n在%s发生了地震" % [shocktime, location],
-								"震源: %s | 纬度: %s | 经度: %s\nM%s | 深度: %s" % [location, latitude, longitude, magnitude, depth]
+								"震源: %s | 纬度: %s | 经度: %s\nM%s | 深度: %s km" % [location, latitude, longitude, magnitude, depth]
 							]))
 							$"../Flipping-Text-Window/VBoxContainer".add_child(msg)
 							$"../stats/HBox/eqHistory".add_history(intensity, 1, location, shocktime, magnitude, depth, data_source, 8, id)
@@ -599,7 +600,7 @@ func poll_whews():
 								"日本地震%s" % title,
 								"%s\n%sに地震が発生しました。" % [eqtime, location]
 							]))
-							msg.add_text("地震発生場所：%s | 緯度：%s | 経度：%s\nマグニチュード%s | 震源の深さ：%s" % [location, latitude, longitude, magnitude, depth])
+							msg.add_text("地震発生場所：%s | 緯度：%s | 経度：%s\nマグニチュード%s | 震源の深さ：%s km" % [location, latitude, longitude, magnitude, depth])
 							$"../Flipping-Text-Window/VBoxContainer".add_child(msg)
 							$"../stats/HBox/eqHistory".add_history(intensity, 0, location, eqtime, magnitude, depth, data_source, 9, id)
 						"cwa":
@@ -614,9 +615,9 @@ func poll_whews():
 							#if magnitude >= Utils.load_option().get("minmagnitude", 0.0):
 							var msg = news_message_scene.instantiate()
 							msg.set_text(PackedStringArray([
-								"台灣氣象署地震情报",
-								"In %s\nAn earthquake happans in %s" % [shocktime, location],
-								"Hypocenter: %s | Latitude: %s | Longitude: %s\nM%s | Depth: %s km" % [location, latitude, longitude, magnitude, depth]
+								"台灣氣象署地震情報",
+								"於 %s\n%s 發生了地震" % [shocktime, location],
+								"震央：%s | 緯度：%s | 經度：%s\n規模：M%s | 深度：%s 公里" % [location, latitude, longitude, magnitude, depth]
 							]))
 							$"../Flipping-Text-Window/VBoxContainer".add_child(msg)
 							$"../stats/HBox/eqHistory".add_history(intensity, 0, location, shocktime, magnitude, depth, data_source, 8, id)
@@ -638,9 +639,9 @@ func poll_whews():
 							if magnitude >= Utils.load_option().get("minmagnitude", 0.0):
 								var msg = news_message_scene.instantiate()
 								msg.set_text(PackedStringArray([
-									"%s地震情报" % data_source.to_upper(),
-									"In %s\nAn earthquake happans in %s" % [shocktime, location],
-									"Hypocenter: %s | Latitude: %s | Longitude: %s\nM%s | Depth: %s km" % [location, latitude, longitude, magnitude, depth]
+									"%s 지진 정보" % data_source.to_upper(),
+									"%s\n%s에서 지진이 발생했습니다." % [shocktime, location],
+									"진원지: %s | 위도: %s | 경도: %s\n규모: M%s | 깊이: %s km" % [location, latitude, longitude, magnitude, depth]
 								]))
 								$"../Flipping-Text-Window/VBoxContainer".add_child(msg)
 							else:
@@ -713,7 +714,8 @@ func poll_whews():
 							add_notification("Received from WHEWS\n%s" % message, 300)
 							print("Received from WHEWS: %s" % message)
 	elif state == WebSocketPeer.STATE_CLOSING:
-		pass
+		$"../stats/HBox/StatContainer/sources/WHEWS".text = 'WHEWS(Closing)'
+		$"../stats/HBox/StatContainer/sources/WHEWS".add_theme_color_override("font_color", Color("ff8000"))
 	elif state == WebSocketPeer.STATE_CLOSED:
 		disconnects.set("whews", disconnects.get("whews", 0) + 1)
 		if $"WHEWS-Ping".time_left > 0:
