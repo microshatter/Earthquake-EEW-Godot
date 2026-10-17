@@ -67,7 +67,7 @@ func return_fixed_message_content():
 	return fixed_texts
 
 func start_different_hidden_timer(sec):
-	$HiddenTimer.start(sec)
+	$HiddenTimer.start(max(sec, len(text_lines) * 5))
 
 func test_simulated_eng_chars_in_line():
 	# ENSURE AUTO WRAP IS ENABLED!!!!!!
