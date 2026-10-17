@@ -183,7 +183,7 @@ metadata/_tab_index = 3
 metadata/_tab_name = "config.tab.sources"
 
 [node name="Label" type="Label" parent="VBoxContainer/TabContainer/Sources" unique_id=812379119]
-custom_maximum_size = Vector2(640, -1)
+custom_maximum_size = Vector2(800, -1)
 layout_mode = 2
 text = "Below you can enable or disable any source you don't want or want.
 Disable them will not show on recent earthquake and the scrolling bar"
