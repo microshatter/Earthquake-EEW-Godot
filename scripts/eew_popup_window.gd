@@ -37,7 +37,7 @@ func send_eew(
 	if report > 0:
 		reportstr.append("#%s" % report)
 	if is_final:
-		reportstr.append("FINAL")
+		reportstr.append(tr("eew.final_report"))
 	var r = ''
 	if len(reportstr) > 0:
 		r = "(%s)" % ", ".join(reportstr)
@@ -49,6 +49,17 @@ func send_eew(
 	show()
 	if is_final:
 		$final.play()
+
+func cancel_eew():
+	if not visible:
+		return
+	send_eew("", "", tr("eew.cancel_msg"), Time.get_datetime_string_from_unix_time(Time.get_unix_time_from_system()), 0, 0, 0, false)
+	$eew.stop()
+	$shakealert.stop()
+	$"../PWave".stop()
+	$"../SWave".stop()
+	$cancel.play()
+	$hidetimer.start(60)
 
 func _on_hidetimer_timeout() -> void:
 	hide()

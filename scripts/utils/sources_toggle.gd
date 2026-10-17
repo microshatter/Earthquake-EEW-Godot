@@ -4,6 +4,7 @@ extends RefCounted
 # API Enabled
 static var api_enabled = {
 	"wolfx": true,
+	"fssn": true,
 	"whews": false, # disabled unless authorized
 	"p2p": true, # Full name: P2PQuake
 }

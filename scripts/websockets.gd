@@ -1,6 +1,7 @@
 extends Node
 
 var wolfx = WebSocketPeer.new()
+var fssn = WebSocketPeer.new()
 var p2pq = WebSocketPeer.new()
 var whews = WebSocketPeer.new()
 
@@ -9,6 +10,7 @@ var reconnection_timer = [3, 5, 10, 30, 60]
 var news_message_scene = preload("res://scenes/newswindow.tscn")
 
 var wolfx_pinged = false
+var fssn_pinged = false
 var p2p_pinged = false
 var whews_pinged = false
 
@@ -21,24 +23,28 @@ var whews_cea_token = ""
 
 var pings = {
 	"wolfx": 0,
+	"fssn": 0,
 	"p2p": 0,
 	"whews": 0
 }
 
 var recieved_pinged = {
 	"wolfx": false,
+	"fssn": false,
 	"p2p": false,
 	"whews": false
 }
 
 var recieved_time = {
 	"wolfx": 0,
+	"fssn": 0,
 	"p2p": 0,
 	"whews": 0
 }
 
 var disconnects = {
 	"wolfx": 0,
+	"fssn": 0,
 	"p2p": 0,
 	"whews": 0
 }
@@ -51,6 +57,7 @@ func return_ping_time_recieved(service="wolfx"):
 		return "--- ms"
 
 signal wolfx_pong()
+signal fssn_pong()
 signal p2pquake_pong()
 signal whews_pong()
 
@@ -80,6 +87,13 @@ func connect_wolfx():
 	$"../stats/HBox/StatContainer/sources/Wolfx".text = "Wolfx(Connecting)"
 	$"../stats/HBox/StatContainer/sources/Wolfx".add_theme_color_override("font_color", Color("ffff00"))
 	$"Wolfx-Ping".start()
+
+func connect_fssn():
+	fssn.connect_to_url(API_URLs.eqUrls.fssn_ws[0])
+	fssn_pinged = false
+	$"../stats/HBox/StatContainer/sources/FSSN".text = "FSSN(Connecting)"
+	$"../stats/HBox/StatContainer/sources/FSSN".add_theme_color_override("font_color", Color("ffff00"))
+	$"FSSN-Ping".start()
 
 func connect_whews():
 	var key = Utils.load_option().get("whewsapi", "")
@@ -119,6 +133,13 @@ func send_wolfx_ping():
 	recieved_pinged.set("wolfx", false)
 	$"Wolfx-Ping".start()
 
+func send_fssn_ping():
+	print("Sending ping")
+	fssn.send_text("ping")
+	pings.set("fssn", Time.get_ticks_msec())
+	recieved_pinged.set("fssn", false)
+	$"FSSN-Ping".start()
+
 func send_whews_ping():
 	whews.send_text("ping")
 	pings.set("whews", Time.get_ticks_msec())
@@ -134,6 +155,7 @@ func send_p2p_ping():
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	connect_wolfx()
+	connect_fssn()
 	connect_p2pq()
 	connect_whews()
 
@@ -161,6 +183,9 @@ func poll_wolfx():
 					print("Wolfx pong recieved!")
 					wolfx_pong.emit()
 				"jma_eew":
+					if json_message.get("isCancel", false):
+						$"../EEW-Popup-Window".cancel_eew()
+						break
 					var shocktime = json_message.get("OriginTime", Time.get_datetime_string_from_unix_time(0)).replace("/", "-")
 					var title = json_message.Title
 					var location = json_message.Hypocenter
@@ -290,6 +315,71 @@ func poll_wolfx():
 			add_notification("Connect to Wolfx Lost\n%s\nReconnect in 5s" % text, 5)
 		$"../Reconnect Timer/Wolfx".start(reconnection_timer[min(disconnects.get("wolfx") - 1, len(reconnection_timer) - 1)])
 
+func poll_fssn():
+	if $"../Reconnect Timer/FSSN".time_left > 0:
+		return
+	fssn.poll()
+	var state = fssn.get_ready_state()
+	if state == WebSocketPeer.STATE_OPEN:
+		$"../stats/HBox/StatContainer/sources/FSSN".text = "FSSN(%s)" % return_ping_time_recieved("fssn")
+		$"../stats/HBox/StatContainer/sources/FSSN".add_theme_color_override("font_color", Color("00ff00"))
+		if not fssn_pinged:
+			send_fssn_ping()
+			fssn_pinged = true
+		while fssn.get_available_packet_count():
+			# Data source is already FSSN, no need to specified
+			var packet = fssn.get_packet()
+			var message = packet.get_string_from_utf8()
+			var json_message = JSON.parse_string(message)
+			var message_type = json_message.get("type")
+			var data = json_message.get("Data", json_message.get("data", {}))
+			var hash_value = json_message.get("md5", "")
+			match message_type:
+				"pong":
+					print("FSSN pong recieved!")
+					fssn_pong.emit()
+				"heartbeat":
+					print("Heartbeat recieved from FSSN.")
+				"initial", "update", "query_response":
+					var id = data.get("id")
+					var shocktime = data.get("shockTime", "")
+					var latitude = data.get("latitude", 0.0)
+					var longitude = data.get("longitude", 0.0)
+					var depth = data.get("depth", 0)
+					var magnitude = data.get("magnitude", "")
+					var location = data.get("placeName", "")
+					var intensity = IntensityServices.calculate_estimated_intensity(magnitude, 0, depth, longitude)
+					if message_type == "update":
+						if magnitude >= Utils.load_option().get("minmagnitude", 0.0):
+							var msg = news_message_scene.instantiate()
+							msg.set_text(PackedStringArray([
+								tr("message.eqinfo.title") % "FSSN",
+								tr("message.eqinfo.desc") % [shocktime, location],
+								tr("message.eqinfo.info") % [location, latitude, longitude, magnitude, depth]
+							]))
+							$"../Flipping-Text-Window/VBoxContainer".add_child(msg)
+						else:
+							print("Earthquake happaned in %s with magnitude %s. (FSSN)" % [location, magnitude])
+					$"../stats/HBox/eqHistory".add_history(intensity, 1, location, shocktime, magnitude, depth, "FSSN", 8, id)
+	
+	elif state == WebSocketPeer.STATE_CONNECTING:
+			pass
+	elif state == WebSocketPeer.STATE_CLOSING:
+			pass
+	elif state == WebSocketPeer.STATE_CLOSED:
+		disconnects.set("fssn", disconnects.get("fssn", 0) + 1)
+		if $"FSSN-Ping".time_left > 0:
+			$"FSSN-Ping".stop()
+		$"../stats/HBox/StatContainer/sources/FSSN".text = 'Wolfx(Disconnected)'
+		$"../stats/HBox/StatContainer/sources/FSSN".add_theme_color_override("font_color", Color("ff0000"))
+		var code = fssn.get_close_code()
+		var reason = fssn.get_close_reason()
+		var text = "FSSN WebSocket closed with code: %d, reason %s. Clean: %s" % [code, reason, code != -1]
+		print(text)
+		if code != -1:
+			add_notification("Connect to FSSN Lost\n%s\nReconnect in 5s" % text, 5)
+		$"../Reconnect Timer/Wolfx".start(reconnection_timer[min(disconnects.get("fssn") - 1, len(reconnection_timer) - 1)])
+
 func poll_whews():
 	if $"../Reconnect Timer/WHEWS".time_left > 0: # Don't pull if connection lost
 		return
@@ -321,15 +411,15 @@ func poll_whews():
 						Deduplicate.add_hash(hash_value)
 						var id = data.get("id", "")
 						var shocktime = data.get("shockTime", "")
-						var location = data.get("placeName")
+						var location = data.get("placeName", "Unknown")
 						var latitude = data.get("latitude")
-						var longitude = data.get("longitude")
-						var magnitude = data.get("magnitude")
+						var longitude = data.get("longitude", 0.0)
+						var magnitude = data.get("magnitude", 0.0)
 						var depth = data.get("depth", 0.0)
 						if depth == null:
 							depth = 0.0
 						if magnitude != null:
-							var intensity = data.get("maxIntensity", IntensityServices.calculate_estimated_intensity(magnitude, 0, depth, longitude))
+							var intensity = data.get("maxIntensity", IntensityServices.calculate_estimated_intensity(float(magnitude), 0, float(depth), longitude))
 							if data_source == "kma" and typeof(intensity) == TYPE_STRING:
 								intensity = IntensityServices.kma_scale_to_intensity(data.get("maxIntensity"))
 							if data_source == "jma" or data_source == "cwa":
@@ -556,7 +646,7 @@ func poll_whews():
 							else:
 								print("Earthquake happaned in %s with magnitude %s. (%s)" % [location, magnitude, data_source.to_upper()])
 							$"../stats/HBox/eqHistory".add_history(intensity, 1, location, shocktime, magnitude, depth, data_source, 8, id)
-						"usgs", "bmkg", "geonet", "tmd", "usp", "gfz", "ingv", "emsc", "hko", "bcsf", "nrcan", "mmd", "phivolcs", "sgc", "ga", "cenais", "gsras", "bgs", "ipma", "ssn", "afad", "sed", "noa", "scsn", "ssw", "iag", "igp", "nepal":
+						"usgs", "bmkg", "geonet", "tmd", "usp", "gfz", "ingv", "emsc", "hko", "bcsf", "nrcan", "mmd", "phivolcs", "sgc", "ga", "cenais", "gsras", "bgs", "ipma", "ssn", "afad", "sed", "noa", "scsn", "ssw", "iag", "igp", "nepal", "funvisis":
 							var id = data.get("id", "")
 							var shocktime = data.shockTime
 							var location = data.placeName
@@ -568,9 +658,9 @@ func poll_whews():
 							if magnitude >= Utils.load_option().get("minmagnitude", 0.0):
 								var msg = news_message_scene.instantiate()
 								msg.set_text(PackedStringArray([
-									"Earthquake Information From %s" % data_source.to_upper(),
-									"In %s\nAn earthquake happans in %s" % [shocktime, location],
-									"Hypocenter: %s | Latitude: %s | Longitude: %s\nM%s | Depth: %s km" % [location, latitude, longitude, magnitude, depth]
+									tr("message.eqinfo.title") % data_source.to_upper(),
+									tr("message.eqinfo.desc") % [shocktime, location],
+									tr("message.eqinfo.info") % [location, latitude, longitude, magnitude, depth]
 								]))
 								$"../Flipping-Text-Window/VBoxContainer".add_child(msg)
 							else:
@@ -740,6 +830,7 @@ func poll_p2pq():
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(_delta: float) -> void:
 	poll_wolfx()
+	poll_fssn()
 	poll_p2pq()
 	poll_whews()
 
@@ -747,6 +838,8 @@ func _process(_delta: float) -> void:
 func _on_wolfx_timeout() -> void:
 	connect_wolfx()
 
+func _on_fssn_timeout() -> void:
+	connect_fssn()
 
 func _on_p2p_timeout() -> void:
 	connect_p2pq()
@@ -763,6 +856,12 @@ func _on_wolfx_ping_timeout() -> void:
 		wolfx.close(1000, "Connection Time Out")
 		wolfx = WebSocketPeer.new()
 
+func _on_fssn_ping_timeout() -> void:
+	if recieved_pinged.get("fssn", false):
+		send_fssn_ping()
+	else:
+		fssn.close(1000, "Connection Time Out")
+		fssn = WebSocketPeer.new()
 
 func _on_p_2p_ping_timeout() -> void:
 	if recieved_pinged.get("p2p", false):
@@ -803,3 +902,9 @@ func _on_whewscea_auth_timeout() -> void:
 		"data": {"accessToken": whews_cea_token}
 	}
 	whews.send_text(JSON.stringify(refresh_payload))
+
+
+func _on_fssn_pong() -> void:
+	disconnects.set("fssn", 0)
+	recieved_pinged.set("fssn", true)
+	recieved_time.set("fssn", Time.get_ticks_msec())

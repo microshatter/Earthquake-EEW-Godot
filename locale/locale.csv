@@ -3,10 +3,14 @@ language.name,English,简体中文,日本語
 main_window.earthquake,Recent Earthquakes,近期地震,最新の地震
 main_window.tsunami,Tsunami Information,海啸信息,津波情報
 main_window.stats,Status,服务状态,サービス状態
+main_window.settings,Open Settings,打开设置,設定を開く
 
 context.settings,Settings,设置,設定
+context.clear_notification,Clear Notification,清除消息,______
 
 eew.info,%.2f km | Intensity %.1f,距震中 %.2f km | 本地烈度 %.1f,震源からの距離 %.2f km | 震度 %.1f
+eew.final_report,Final,最终报,最終報
+eew.cancel_msg,EEW has been cancelled by the provider,地震预警已被提供方取消,"提供元は\n先程の緊急地震速報を\n取り消しました"
 
 message.eqinfo.title,Earthquake Information From %s,来自%s的地震信息,%sからの地震情報
 message.eqinfo.desc,"In %s\nAn earthquake happens in %s","%s\n在%s发生了地震","%s\n%sに地震が発生しました。"
@@ -29,6 +33,7 @@ config.general.eew_local_min_intensity,EEW min intensity,本地烈度警报阈�
 
 # API keys tab
 config.api.get,Get a key,获取API密钥,APIキーを取得
+config.api.whews,WHEWS API Keys,WHEWS API密钥,WHEWS APIキー
 
 # Providers tab
 config.provider.string,Enable %s,启用%s,%sを有効にする
