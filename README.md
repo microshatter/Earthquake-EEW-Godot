@@ -1,6 +1,5 @@
-# REMOVAL OF FAN STUDIO NOTICE
+![GitHub Actions Workflow Status](https://img.shields.io/github/actions/workflow/status/microshatter/Earthquake-EEW-Godot/godot-build.yaml)
 
-FAN Studio API server shutdown on **2026-12-31 15:59:00 (UTC)**. After that time this service is no longer available. More info on https://api.fanstudio.tech/
 
 # Project Info
 This is a software that notify users EEW and earthquake information.  EEW don't have a map, and earthquake information are aligned at center

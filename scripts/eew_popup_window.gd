@@ -4,7 +4,9 @@ extends Window
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	pass # Replace with function body.
+	# Debug only below
 	#send_eew("Test EEW", "Just a test btw", "TESTING", Time.get_datetime_string_from_unix_time(Time.get_unix_time_from_system()), 750, IntensityServices.calculate_estimated_intensity(7.0, 750), 1, true)
+	#cancel_eew()
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -37,7 +39,7 @@ func send_eew(
 	if report > 0:
 		reportstr.append("#%s" % report)
 	if is_final:
-		reportstr.append("FINAL")
+		reportstr.append(tr("eew.final_report"))
 	var r = ''
 	if len(reportstr) > 0:
 		r = "(%s)" % ", ".join(reportstr)
@@ -50,6 +52,17 @@ func send_eew(
 	if is_final:
 		$final.play()
 
+func cancel_eew():
+	if not visible:
+		return
+	send_eew("", "", tr("eew.cancel_msg"), Time.get_datetime_string_from_unix_time(Time.get_unix_time_from_system()), 0, 0, 0, false)
+	$eew.stop()
+	$shakealert.stop()
+	$"../PWave".stop()
+	$"../SWave".stop()
+	$cancel.play()
+	$hidetimer.start(60)
+
 func _on_hidetimer_timeout() -> void:
 	hide()
 
@@ -57,10 +70,10 @@ func _on_hidetimer_timeout() -> void:
 func _on_visibility_changed() -> void:
 	if visible:
 		$eew.play()
-		$hidetimer.start()
+		$hidetimer.start(180)
 
 
 func _on_eew_popup_text_changed() -> void:
 	if visible:
-		$hidetimer.start()
+		$hidetimer.start(180)
 		$update.play()

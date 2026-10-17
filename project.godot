@@ -27,6 +27,7 @@ window/per_pixel_transparency/allowed=true
 
 folder_colors={
 "res://assets/": "yellow",
+"res://locale/": "green",
 "res://scenes/": "purple",
 "res://scripts/": "red",
 "res://scripts/utils/": "blue"
@@ -35,6 +36,10 @@ folder_colors={
 [gui]
 
 theme/custom_font="uid://dt2b0j7v7ehgo"
+
+[internationalization]
+
+locale/translations=PackedStringArray("res://locale/locale.en_US.translation", "res://locale/locale.ja_JP.translation", "res://locale/locale.zh_CN.translation")
 
 [physics]
 
