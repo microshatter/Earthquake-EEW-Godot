@@ -1,7 +1,7 @@
 extends VBoxContainer
 
 @onready var eqcard = preload("res://scenes/eqcard.tscn")
-var max_list = 50
+var max_list = 100
 
 func add_history(intensity, mode: int, location: String, datetime: String, magnitude: float, depth: float, source: String, offset: int = 0, id: String = ""):
 	var found = false
