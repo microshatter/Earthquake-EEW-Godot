@@ -1,3 +1,6 @@
+![GitHub Actions Workflow Status](https://img.shields.io/github/actions/workflow/status/microshatter/Earthquake-EEW-Godot/godot-build.yaml)
+
+
 # Project Info
 This is a software that notify users EEW and earthquake information.  EEW don't have a map, and earthquake information are aligned at center
 This project is currently made with Godot 4.7, may update engine later
