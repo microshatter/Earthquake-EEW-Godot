@@ -70,10 +70,10 @@ func _on_hidetimer_timeout() -> void:
 func _on_visibility_changed() -> void:
 	if visible:
 		$eew.play()
-		$hidetimer.start()
+		$hidetimer.start(180)
 
 
 func _on_eew_popup_text_changed() -> void:
 	if visible:
-		$hidetimer.start()
+		$hidetimer.start(180)
 		$update.play()
