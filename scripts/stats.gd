@@ -7,7 +7,7 @@ func add_history(intensity, mode: int, location: String, datetime: String, magni
 	var found = false
 	datetime = datetime.replace("/", "-")
 	if len(id) > 0:
-		for i in $ScrollContainer/eqlist.get_children():
+		for i in $HBox/eqHistory/ScrollContainer/eqlist.get_children():
 			if i.id == id:
 				found = true
 				i.location = location
@@ -30,7 +30,7 @@ func add_history(intensity, mode: int, location: String, datetime: String, magni
 		eqcard_inst.depth = depth
 		eqcard_inst.source = source.to_upper()
 		eqcard_inst.datetime_offset_hr = offset
-		$ScrollContainer/eqlist.add_child(eqcard_inst)
+		$HBox/eqHistory/ScrollContainer/eqlist.add_child(eqcard_inst)
 		sort_children()
 
 # Called when the node enters the scene tree for the first time.
@@ -38,7 +38,7 @@ func _ready() -> void:
 	pass
 
 func sort_children():
-	var children = $ScrollContainer/eqlist.get_children()
+	var children = $HBox/eqHistory/ScrollContainer/eqlist.get_children()
 	children.sort_custom(
 		func(a, b): 
 			var unix_a = Utils.to_unix_utc(a.datetime, a.datetime_offset_hr)
@@ -46,16 +46,16 @@ func sort_children():
 			return unix_a > unix_b
 	)
 	for i in range(children.size()):
-		$ScrollContainer/eqlist.move_child(children[i], i)
+		$HBox/eqHistory/ScrollContainer/eqlist.move_child(children[i], i)
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(_delta: float) -> void:
-	$"../..".custom_maximum_size = get_window().size
+	custom_maximum_size = get_window().size
 	sort_children()
-	var child_count = $ScrollContainer/eqlist.get_child_count()
+	var child_count = $HBox/eqHistory/ScrollContainer/eqlist.get_child_count()
 	if child_count > max_list:
 		for i in range(child_count - 1, max_list, -1):
-			var child = $ScrollContainer/eqlist.get_child(i)
+			var child = $HBox/eqHistory/ScrollContainer/eqlist.get_child(i)
 			child.queue_free()
 	
 # %07.3f

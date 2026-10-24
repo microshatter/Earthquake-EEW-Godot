@@ -14,7 +14,7 @@
 [ext_resource type="Script" uid="uid://c040ea5amhptl" path="res://scripts/shakealert.gd" id="8_choun"]
 [ext_resource type="AudioStream" uid="uid://cxwqjt2qe7b45" path="res://assets/audio/srev/final.mp3" id="8_trceg"]
 [ext_resource type="AudioStream" uid="uid://c3ka6bkucsep3" path="res://assets/audio/srev/cancel.mp3" id="10_jkv2x"]
-[ext_resource type="Script" uid="uid://xwwqt0ef7lwk" path="res://scripts/eq_history.gd" id="13_trceg"]
+[ext_resource type="Script" uid="uid://o7ntof1ui6xl" path="res://scripts/stats.gd" id="15_jkv2x"]
 
 [node name="Main" type="Node" unique_id=1409934259]
 script = ExtResource("1_0wfyh")
@@ -170,6 +170,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+script = ExtResource("15_jkv2x")
 
 [node name="HBox" type="HBoxContainer" parent="stats" unique_id=1169951978]
 layout_mode = 2
@@ -179,7 +180,6 @@ size_flags_vertical = 3
 custom_minimum_size = Vector2(550, 0)
 custom_maximum_size = Vector2(550, -1)
 layout_mode = 2
-script = ExtResource("13_trceg")
 
 [node name="Label" type="Label" parent="stats/HBox/eqHistory" unique_id=899431470]
 layout_mode = 2

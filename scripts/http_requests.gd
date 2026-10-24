@@ -23,7 +23,7 @@ func _on_wolfx_jma_eq_request_completed(_result: int, response_code: int, _heade
 		var depth = data.get("depth")
 		var magnitude = data.get("magnitude")
 		var intensity = data.get("shindo")
-		$"../stats/HBox/eqHistory".add_history(intensity, 0, location, eqtime_full, float(magnitude), float(depth), "JMA", 9, id)
+		$"../stats".add_history(intensity, 0, location, eqtime_full, float(magnitude), float(depth), "JMA", 9, id)
 	print("Wolfx JMA requested and analyze complete")
 	$Wolfx_JMA_EQ/Interval.start()
 
@@ -43,6 +43,6 @@ func _on_wolfx_cenc_eq_request_completed(_result: int, response_code: int, _head
 		var magnitude = data.magnitude
 		var depth = data.depth
 		var intensity = float(data.intensity)
-		$"../stats/HBox/eqHistory".add_history(intensity, 1, location, shocktime, float(magnitude), float(depth), "CENC", 8, id)
+		$"../stats".add_history(intensity, 1, location, shocktime, float(magnitude), float(depth), "CENC", 8, id)
 	print("Wolfx CENC requested and analyze complete")
 	$Wolfx_CENC_EQ/Interval.start()
