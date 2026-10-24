@@ -4,25 +4,19 @@ extends Control
 @onready var http_request = $HTTPRequest
 
 func load_settings():
-	if FileAccess.file_exists(Utils.config_path):
-		var f = FileAccess.open(Utils.config_path, FileAccess.READ)
-		var json = JSON.new()
-		var err = json.parse(f.get_as_text())
-		var options = {}
-		if err == OK:
-			options = json.data
-		else:
-			$"../../Websockets".add_notification("JSON load failed! Using default value. \nCheck config and reload again!")
-			$"..".show()
-			OS.shell_open(ProjectSettings.globalize_path(Utils.config_path))
-		$VBoxContainer/TabContainer/General/GeoLocation/LatitudeSpinBox.value = options.get("latitude", 0.0)
-		$VBoxContainer/TabContainer/General/GeoLocation/LongitudeSpinBox.value = options.get("longitude", 0.0)
-		$VBoxContainer/TabContainer/General/MagnitudeIntensity/MagSpinBox.value = options.get("minmagnitude", 0)
-		$VBoxContainer/TabContainer/General/MagnitudeIntensity/IntenSpinBox.value = options.get("minintensity", 5)
-		$"VBoxContainer/TabContainer/API Keys/WHEWSApi/LineEdit".text = options.get("whewsapi", "")
-		$"VBoxContainer/TabContainer/API Keys/WHEWSCEAID/LineEdit".text = options.get("whewsceaid", "")
-		$"VBoxContainer/TabContainer/API Keys/WHEWSCEASecret/LineEdit".text = options.get("whewsceasecret", "")
-		print("Config loaded!")
+	var options = Utils.load_json_file(Utils.config_path)
+	if options == null:
+		$"../../Websockets".add_notification("JSON load failed or file not found(first time run). Using default value.")
+		options = {}
+	
+	$VBoxContainer/TabContainer/General/GeoLocation/LatitudeSpinBox.value = options.get("latitude", 0.0)
+	$VBoxContainer/TabContainer/General/GeoLocation/LongitudeSpinBox.value = options.get("longitude", 0.0)
+	$VBoxContainer/TabContainer/General/MagnitudeIntensity/MagSpinBox.value = options.get("minmagnitude", 0)
+	$VBoxContainer/TabContainer/General/MagnitudeIntensity/IntenSpinBox.value = options.get("minintensity", 5)
+	$"VBoxContainer/TabContainer/API Keys/WHEWSApi/LineEdit".text = options.get("whewsapi", "")
+	$"VBoxContainer/TabContainer/API Keys/WHEWSCEAID/LineEdit".text = options.get("whewsceaid", "")
+	$"VBoxContainer/TabContainer/API Keys/WHEWSCEASecret/LineEdit".text = options.get("whewsceasecret", "")
+	print("Config loaded!")
 
 func save_settings():
 	var options = {
@@ -34,9 +28,7 @@ func save_settings():
 		"whewsceaid": $"VBoxContainer/TabContainer/API Keys/WHEWSCEAID/LineEdit".text,
 		"whewsceasecret": $"VBoxContainer/TabContainer/API Keys/WHEWSCEASecret/LineEdit".text
 	}
-	var f = FileAccess.open(Utils.config_path, FileAccess.WRITE)
-	f.store_string(JSON.stringify(options, "  "))
-	f.close()
+	Utils.save_json_file(Utils.config_path, options, 4)
 	print("Config saved")
 
 # Called when the node enters the scene tree for the first time.
