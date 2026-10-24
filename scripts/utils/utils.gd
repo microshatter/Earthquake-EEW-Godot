@@ -4,26 +4,54 @@ extends RefCounted
 static var config_path = "user://config.json"
 static var FAN_STUDIO_APP_ID = null
 
+# JSON file load and save
+static func save_json_file(path: String, object, indent: int = 0):
+	var f = FileAccess.open(path, FileAccess.WRITE)
+	if not f:
+		print("[EEW Util] Error: Could not open [%s] for writing. Error code: %s" % [path, FileAccess.get_open_error()])
+		return
+	if indent > 0:
+		f.store_string(JSON.stringify(object, " ".repeat(indent)))
+	else:
+		f.store_string(JSON.stringify(object))
+	f.close()
+	print("[EEW Util] File [%s] saved." % path)
+	
+static func load_json_file(path: String):
+	var object = null
+	if FileAccess.file_exists(path):
+		var f = FileAccess.open(path, FileAccess.READ)
+		var json = JSON.new()
+		var content = f.get_as_text()
+		var err = json.parse(content)
+		if err == OK:
+			object = json.data
+			print("[EEW Util] File [%s] loaded and JSON parse successfully." % path)
+		else:
+			print("[EEW Util] Can't phase [%s]. Reason: %s. Raw content: \n%s" % [path, json.get_error_message(), content])
+		f.close()
+	else:
+		print("[EEW Util] File [%s] not found." % path)
+	
+	return object
+
 # Functions
 static func load_option() -> Dictionary:
-	var options = {}
-	if FileAccess.file_exists(config_path):
-		var f = FileAccess.open(config_path, FileAccess.READ)
-		var json = JSON.new()
-		var err = json.parse(f.get_as_text())
-		if err == OK:
-			options = json.data
-
+	var options = load_json_file(config_path)
+	if options == null:
+		options = {}
+	
 	var fixed_options = {
-		"latitude": options.get("latitude", 0.0),
-		"longitude": options.get("longitude", 0.0),
-		"minmagnitude": options.get("minmagnitude", 0),
-		"minintensity": options.get("minintensity", 5),
-		"fanapi": options.get("fanapi", ""),
-		"whewsapi": options.get("whewsapi", ""),
-		"whewsceaid": options.get("whewsceaid", ""),
-		"whewsceasecret": options.get("whewsceasecret", "")
+		"latitude": 0.0,
+		"longitude": 0.0,
+		"minmagnitude": 0,
+		"minintensity": 5,
+		"fanapi": "",
+		"whewsapi": "",
+		"whewsceaid": "",
+		"whewsceasecret": ""
 	}
+	fixed_options.merge(options, true)
 	return fixed_options
 
 static func send_system_notification(title: String, body: String):

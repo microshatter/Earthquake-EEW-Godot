@@ -232,7 +232,7 @@ func poll_wolfx():
 						msg.add_text(tsunami_info)
 					msg.add_text("地震発生場所：%s | 緯度：%s | 経度：%s\nマグニチュード%s | 震源の深さ：%s" % [location, latitude, longitude, magnitude, depth])
 					$"../Flipping-Text-Window/VBoxContainer".add_child(msg)
-					$"../stats/HBox/eqHistory".add_history(intensity, 0, location, eqtime_full, float(magnitude), float(depth), "JMA", 9, id)
+					$"../stats".add_history(intensity, 0, location, eqtime_full, float(magnitude), float(depth), "JMA", 9, id)
 				"cenc_eew", "cq_eew", "fj_eew", "sc_eew":
 					var shocktime = json_message.OriginTime
 					var location = json_message.HypoCenter
@@ -288,7 +288,7 @@ func poll_wolfx():
 						"震源: %s | 纬度: %s | 经度: %s\nM%s | 深度: %s" % [location, latitude, longitude, magnitude, depth]
 					]))
 					$"../Flipping-Text-Window/VBoxContainer".add_child(msg)
-					$"../stats/HBox/eqHistory".add_history(intensity, 1, location, shocktime, float(magnitude), float(depth), "CENC", 8, id)
+					$"../stats".add_history(intensity, 1, location, shocktime, float(magnitude), float(depth), "CENC", 8, id)
 				_:
 					var msg = news_message_scene.instantiate()
 					msg.set_text(PackedStringArray([
@@ -360,7 +360,7 @@ func poll_fssn():
 							$"../Flipping-Text-Window/VBoxContainer".add_child(msg)
 						else:
 							print("Earthquake happaned in %s with magnitude %s. (FSSN)" % [location, magnitude])
-					$"../stats/HBox/eqHistory".add_history(intensity, 1, location, shocktime, magnitude, depth, "FSSN", 8, id)
+					$"../stats".add_history(intensity, 1, location, shocktime, magnitude, depth, "FSSN", 8, id)
 	
 	elif state == WebSocketPeer.STATE_CONNECTING:
 			pass
@@ -424,11 +424,11 @@ func poll_whews():
 							if data_source == "kma" and typeof(intensity) == TYPE_STRING:
 								intensity = IntensityServices.kma_scale_to_intensity(data.get("maxIntensity"))
 							if data_source == "jma" or data_source == "cwa":
-								$"../stats/HBox/eqHistory".add_history(intensity, 0, location, shocktime, magnitude, depth, data_source, (9 if data_source == "jma" else 8), id)
+								$"../stats".add_history(intensity, 0, location, shocktime, magnitude, depth, data_source, (9 if data_source == "jma" else 8), id)
 							elif data_source.ends_with("eew") or data_source.begins_with("cea"):
 								pass
 							else:
-								$"../stats/HBox/eqHistory".add_history(float(intensity), 1, location, shocktime, magnitude, depth, data_source, 8, id)
+								$"../stats".add_history(float(intensity), 1, location, shocktime, magnitude, depth, data_source, 8, id)
 			elif json_type == TYPE_DICTIONARY:
 				var message_type = json_message.get("type")
 				var data = json_message.get("Data", json_message.get("data", {}))
@@ -584,7 +584,7 @@ func poll_whews():
 								"震源: %s | 纬度: %s | 经度: %s\nM%s | 深度: %s km" % [location, latitude, longitude, magnitude, depth]
 							]))
 							$"../Flipping-Text-Window/VBoxContainer".add_child(msg)
-							$"../stats/HBox/eqHistory".add_history(intensity, 1, location, shocktime, magnitude, depth, data_source, 8, id)
+							$"../stats".add_history(intensity, 1, location, shocktime, magnitude, depth, data_source, 8, id)
 						"jma":
 							var id = data.get("id", "")
 							var title = data.title
@@ -602,7 +602,7 @@ func poll_whews():
 							]))
 							msg.add_text("地震発生場所：%s | 緯度：%s | 経度：%s\nマグニチュード%s | 震源の深さ：%s km" % [location, latitude, longitude, magnitude, depth])
 							$"../Flipping-Text-Window/VBoxContainer".add_child(msg)
-							$"../stats/HBox/eqHistory".add_history(intensity, 0, location, eqtime, magnitude, depth, data_source, 9, id)
+							$"../stats".add_history(intensity, 0, location, eqtime, magnitude, depth, data_source, 9, id)
 						"cwa":
 							var id = data.get("id", "")
 							var shocktime = data.shockTime
@@ -620,7 +620,7 @@ func poll_whews():
 								"震央：%s | 緯度：%s | 經度：%s\n規模：M%s | 深度：%s 公里" % [location, latitude, longitude, magnitude, depth]
 							]))
 							$"../Flipping-Text-Window/VBoxContainer".add_child(msg)
-							$"../stats/HBox/eqHistory".add_history(intensity, 0, location, shocktime, magnitude, depth, data_source, 8, id)
+							$"../stats".add_history(intensity, 0, location, shocktime, magnitude, depth, data_source, 8, id)
 						"kma": 
 							var id = data.get("id", "")
 							var shocktime = data.shockTime
@@ -646,7 +646,7 @@ func poll_whews():
 								$"../Flipping-Text-Window/VBoxContainer".add_child(msg)
 							else:
 								print("Earthquake happaned in %s with magnitude %s. (%s)" % [location, magnitude, data_source.to_upper()])
-							$"../stats/HBox/eqHistory".add_history(intensity, 1, location, shocktime, magnitude, depth, data_source, 8, id)
+							$"../stats".add_history(intensity, 1, location, shocktime, magnitude, depth, data_source, 8, id)
 						"usgs", "bmkg", "geonet", "tmd", "usp", "gfz", "ingv", "emsc", "hko", "bcsf", "nrcan", "mmd", "phivolcs", "sgc", "ga", "cenais", "gsras", "bgs", "ipma", "ssn", "afad", "sed", "noa", "scsn", "ssw", "iag", "igp", "nepal", "funvisis":
 							var id = data.get("id", "")
 							var shocktime = data.shockTime
@@ -666,7 +666,7 @@ func poll_whews():
 								$"../Flipping-Text-Window/VBoxContainer".add_child(msg)
 							else:
 								print("Earthquake happaned in %s with magnitude %s. (%s)" % [location, magnitude, data_source.to_upper()])
-							$"../stats/HBox/eqHistory".add_history(intensity, 1, location, shocktime, magnitude, depth, data_source, 8, id)
+							$"../stats".add_history(intensity, 1, location, shocktime, magnitude, depth, data_source, 8, id)
 						"va", "early_est":
 							print("%s don't recieve message but via print: %s" % [data_source.to_upper(), JSON.stringify(data)])
 						_:
@@ -778,7 +778,7 @@ func poll_p2pq():
 						"地震発生場所：%s | 緯度：%s | 経度：%s\nマグニチュード%s | 震源の深さ：%s" % [location, latitude, longitude, magnitude, depth]
 					]))
 					$"../Flipping-Text-Window/VBoxContainer".add_child(msg)
-					$"../stats/HBox/eqHistory".add_history(intensity, 0, location, eqtime, magnitude, depth, "JMA", 9, id)
+					$"../stats".add_history(intensity, 0, location, eqtime, magnitude, depth, "JMA", 9, id)
 				552:
 					var msg = news_message_scene.instantiate()
 					msg.set_text(PackedStringArray([
