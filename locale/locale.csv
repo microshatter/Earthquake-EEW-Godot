@@ -29,7 +29,7 @@ general.language,Language,语言,言語
 # General Tab
 config.general.locate,Locate Using IP,使用IP定位,IPで位置情報を取得
 config.general.receive_min_mag,Unknown Source Min Magnitude,"地震情报震级阈值(非CENC, JMA, CWA)",不明なソースの最小マグニチュード
-config.general.eew_local_min_intensity,EEW min intensity,本地烈度警报阈值(EEW),EEWの最小震度
+config.general.eew_local_min_intensity,Min local intensity for alert sound,本地强有感警报音阈值,警報音を鳴らす最小の推定震度
 
 # API keys tab
 config.api.get,Get a key,获取API密钥,APIキーを取得
