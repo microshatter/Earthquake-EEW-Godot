@@ -2,6 +2,8 @@ class_name Utils
 extends RefCounted
 
 static var config_path = "user://config.json"
+static var source_path = "user://source.json"
+static var provider_path = "user://provider.json"
 static var FAN_STUDIO_APP_ID = null
 
 # JSON file load and save

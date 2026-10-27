@@ -67,3 +67,39 @@ static var sources_enabled = {
 	"va": false,
 	"jma_tsunami": true,
 }
+
+static func load_provider():
+	var object = Utils.load_json_file(Utils.provider_path)
+	if object == null or typeof(object) != TYPE_DICTIONARY:
+		object = {}
+	
+	# validation
+	var validated := {}
+	for key in object:
+		var value = object[key]
+		if typeof(value) == TYPE_BOOL:
+			validated[key] = value
+		else:
+			push_warning("load_provider: dropping non-bool entry '%s' (%s)" % [key, typeof(value)])
+	api_enabled.merge(validated, true)
+
+static func save_provider():
+	Utils.save_json_file(Utils.provider_path, api_enabled)
+
+static func load_source():
+	var object = Utils.load_json_file(Utils.source_path)
+	if object == null or typeof(object) != TYPE_DICTIONARY:
+		object = {}
+		
+	# validation
+	var validated := {}
+	for key in object:
+		var value = object[key]
+		if typeof(value) == TYPE_BOOL:
+			validated[key] = value
+		else:
+			push_warning("load_source: dropping non-bool entry '%s' (%s)" % [key, typeof(value)])
+	sources_enabled.merge(validated, true)
+
+static func save_source():
+	Utils.save_json_file(Utils.source_path, sources_enabled)

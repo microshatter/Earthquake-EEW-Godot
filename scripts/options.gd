@@ -16,6 +16,15 @@ func load_settings():
 	$"VBoxContainer/TabContainer/API Keys/WHEWSApi/LineEdit".text = options.get("whewsapi", "")
 	$"VBoxContainer/TabContainer/API Keys/WHEWSCEAID/LineEdit".text = options.get("whewsceaid", "")
 	$"VBoxContainer/TabContainer/API Keys/WHEWSCEASecret/LineEdit".text = options.get("whewsceasecret", "")
+	
+	# Source and Providers
+	EQ_TOGGLES.load_provider()
+	$VBoxContainer/TabContainer/Providers/Wolfx.button_pressed = EQ_TOGGLES.api_enabled.get("wolfx")
+	$VBoxContainer/TabContainer/Providers/FSSN.button_pressed = EQ_TOGGLES.api_enabled.get("fssn")
+	$VBoxContainer/TabContainer/Providers/Whews.button_pressed = EQ_TOGGLES.api_enabled.get("whews")
+	$VBoxContainer/TabContainer/Providers/P2P.button_pressed = EQ_TOGGLES.api_enabled.get("p2p")
+	
+	EQ_TOGGLES.load_source() # [TODO] Load source
 	print("Config loaded!")
 
 func save_settings():
@@ -29,6 +38,12 @@ func save_settings():
 		"whewsceasecret": $"VBoxContainer/TabContainer/API Keys/WHEWSCEASecret/LineEdit".text
 	}
 	Utils.save_json_file(Utils.config_path, options, 4)
+
+	EQ_TOGGLES.api_enabled.set("wolfx", $VBoxContainer/TabContainer/Providers/Wolfx.button_pressed)
+	EQ_TOGGLES.api_enabled.set("fssn", $VBoxContainer/TabContainer/Providers/FSSN.button_pressed)
+	EQ_TOGGLES.api_enabled.set("whews", $VBoxContainer/TabContainer/Providers/Whews.button_pressed)
+	EQ_TOGGLES.api_enabled.set("p2p", $VBoxContainer/TabContainer/Providers/P2P.button_pressed)
+	EQ_TOGGLES.save_provider()
 	print("Config saved")
 
 # Called when the node enters the scene tree for the first time.
