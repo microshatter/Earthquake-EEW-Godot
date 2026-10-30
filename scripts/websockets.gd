@@ -82,6 +82,8 @@ func print_eew(header, title, desc, reportnum):
 	print("========================")
 
 func connect_wolfx():
+	if not EQ_TOGGLES.api_enabled.get("wolfx"):
+		return
 	wolfx.connect_to_url(API_URLs.eqUrls.wolfx_ws[0])
 	wolfx_pinged = false
 	$"../stats/HBox/StatContainer/sources/Wolfx".text = "Wolfx(Connecting)"
@@ -89,6 +91,8 @@ func connect_wolfx():
 	$"Wolfx-Ping".start()
 
 func connect_fssn():
+	if not EQ_TOGGLES.api_enabled.get("fssn"):
+		return
 	fssn.connect_to_url(API_URLs.eqUrls.fssn_ws[0])
 	fssn_pinged = false
 	$"../stats/HBox/StatContainer/sources/FSSN".text = "FSSN(Connecting)"
@@ -96,6 +100,8 @@ func connect_fssn():
 	$"FSSN-Ping".start()
 
 func connect_whews():
+	if not EQ_TOGGLES.api_enabled.get("whews"):
+		return
 	var key = Utils.load_option().get("whewsapi", "")
 	if len(key) <= 0:
 		whews_key_invalid = true
@@ -120,6 +126,8 @@ func connect_whews():
 	$"WHEWS-Ping".start()
 
 func connect_p2pq():
+	if not EQ_TOGGLES.api_enabled.get("p2p"):
+		return
 	p2pq.connect_to_url(API_URLs.eqUrls.p2pquake_ws[0])
 	p2p_pinged = false
 	#p2pq.connect_to_url("ws://localhost:3000/_ws")
@@ -154,6 +162,7 @@ func send_p2p_ping():
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
+	EQ_TOGGLES.load_provider()
 	connect_wolfx()
 	connect_fssn()
 	connect_p2pq()
@@ -831,10 +840,34 @@ func poll_p2pq():
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(_delta: float) -> void:
-	poll_wolfx()
-	poll_fssn()
-	poll_p2pq()
-	poll_whews()
+	if EQ_TOGGLES.api_enabled.get("wolfx"):
+		poll_wolfx()
+	else:
+		if wolfx.get_ready_state() == WebSocketPeer.STATE_OPEN:
+			wolfx.close()
+			$"../stats/HBox/StatContainer/sources/Wolfx".text = "Wolfx(Disabled)"
+			$"../stats/HBox/StatContainer/sources/Wolfx".remove_theme_color_override("font_color")
+	if EQ_TOGGLES.api_enabled.get("fssn"):
+		poll_fssn()
+	else:
+		if fssn.get_ready_state() == WebSocketPeer.STATE_OPEN:
+			fssn.close()
+			$"../stats/HBox/StatContainer/sources/FSSN".text = "FSSN(Disabled)"
+			$"../stats/HBox/StatContainer/sources/FSSN".remove_theme_color_override("font_color")
+	if EQ_TOGGLES.api_enabled.get("p2p"):
+		poll_p2pq()
+	else:
+		if p2pq.get_ready_state() == WebSocketPeer.STATE_OPEN:
+			p2pq.close()
+			$"../stats/HBox/StatContainer/sources/P2P".text = "P2P(Disabled)"
+			$"../stats/HBox/StatContainer/sources/P2P".remove_theme_color_override("font_color")
+	if EQ_TOGGLES.api_enabled.get("whews"):
+		poll_whews()
+	else:
+		if whews.get_ready_state() == WebSocketPeer.STATE_OPEN:
+			whews.close()
+			$"../stats/HBox/StatContainer/sources/WHEWS".text = "WHEWS(Disabled)"
+			$"../stats/HBox/StatContainer/sources/WHEWS".remove_theme_color_override("font_color")
 
 
 func _on_wolfx_timeout() -> void:
@@ -845,7 +878,6 @@ func _on_fssn_timeout() -> void:
 
 func _on_p2p_timeout() -> void:
 	connect_p2pq()
-
 
 func _on_whews_timeout() -> void:
 	connect_whews()
