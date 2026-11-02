@@ -142,7 +142,7 @@ func send_wolfx_ping():
 	$"Wolfx-Ping".start()
 
 func send_fssn_ping():
-	print("Sending ping")
+	print("[EEW WS] Sending ping")
 	fssn.send_text("ping")
 	pings.set("fssn", Time.get_ticks_msec())
 	recieved_pinged.set("fssn", false)
@@ -187,9 +187,9 @@ func poll_wolfx():
 			var message_type = json_message.type
 			match message_type:
 				"heartbeat":
-					print("Heartbeat recieved from wolfx.")
+					print("[EEW WS] Heartbeat recieved from wolfx.")
 				"pong":
-					print("Wolfx pong recieved!")
+					print("[EEW WS] Wolfx pong recieved!")
 					wolfx_pong.emit()
 				"jma_eew":
 					if json_message.get("isCancel", false):
@@ -305,7 +305,7 @@ func poll_wolfx():
 						message
 					]))
 					$"../Flipping-Text-Window/VBoxContainer".add_child(msg)
-					print("Received from wolfx: %s" % message) # placeholder for future wolfx websocket message handling
+					print("[EEW WS] Received from wolfx: %s" % message) # placeholder for future wolfx websocket message handling
 
 	elif state == WebSocketPeer.STATE_CLOSING:
 		$"../stats/HBox/StatContainer/sources/Wolfx".text = 'Wolfx(Closing)'
@@ -319,7 +319,7 @@ func poll_wolfx():
 		var code = wolfx.get_close_code()
 		var reason = wolfx.get_close_reason()
 		var text = "Wolfx WebSocket closed with code: %d, reason %s. Clean: %s" % [code, reason, code != -1]
-		print(text)
+		print("[EEW WS] %s" % text)
 		if code != -1:
 			add_notification("Connect to Wolfx Lost\n%s\nReconnect in 5s" % text, 5)
 		$"../Reconnect Timer/Wolfx".start(reconnection_timer[min(disconnects.get("wolfx") - 1, len(reconnection_timer) - 1)])
@@ -345,10 +345,10 @@ func poll_fssn():
 			var hash_value = json_message.get("md5", "")
 			match message_type:
 				"pong":
-					print("FSSN pong recieved!")
+					print("[EEW WS] FSSN pong recieved!")
 					fssn_pong.emit()
 				"heartbeat":
-					print("Heartbeat recieved from FSSN.")
+					print("[EEW WS] Heartbeat recieved from FSSN.")
 				"initial", "update", "query_response":
 					var id = data.get("id")
 					var shocktime = data.get("shockTime", "")
@@ -368,7 +368,7 @@ func poll_fssn():
 							]))
 							$"../Flipping-Text-Window/VBoxContainer".add_child(msg)
 						else:
-							print("Earthquake happaned in %s with magnitude %s. (FSSN)" % [location, magnitude])
+							print("[EEW WS] Earthquake happaned in %s with magnitude %s. (FSSN)" % [location, magnitude])
 					$"../stats".add_history(intensity, 1, location, shocktime, magnitude, depth, "FSSN", 8, id)
 	
 	elif state == WebSocketPeer.STATE_CONNECTING:
@@ -385,7 +385,7 @@ func poll_fssn():
 		var code = fssn.get_close_code()
 		var reason = fssn.get_close_reason()
 		var text = "FSSN WebSocket closed with code: %d, reason %s. Clean: %s" % [code, reason, code != -1]
-		print(text)
+		print("[EEW WS] %s" % text)
 		if code != -1:
 			add_notification("Connect to FSSN Lost\n%s\nReconnect in 5s" % text, 5)
 		$"../Reconnect Timer/FSSN".start(reconnection_timer[min(disconnects.get("fssn") - 1, len(reconnection_timer) - 1)])
@@ -416,7 +416,7 @@ func poll_whews():
 					var hash_value = d.get("md5", "")
 					if len(hash_value) > 0:
 						if Deduplicate.is_in_hash(hash_value):
-							print("Duplicate entry ignored for %s with hash %s" % [data_source, hash_value])
+							print("[EEW WS] Duplicate entry ignored for %s with hash %s" % [data_source, hash_value])
 							continue
 						Deduplicate.add_hash(hash_value)
 						var id = data.get("id", "")
@@ -445,7 +445,7 @@ func poll_whews():
 				var hash_value = json_message.get("md5", "")
 				if len(hash_value) > 0:
 					if Deduplicate.is_in_hash(hash_value):
-						print("Duplicate entry ignored")
+						print("[EEW WS] Duplicate entry ignored")
 						continue
 					Deduplicate.add_hash(hash_value)
 				if data_source != null:
@@ -654,7 +654,7 @@ func poll_whews():
 								]))
 								$"../Flipping-Text-Window/VBoxContainer".add_child(msg)
 							else:
-								print("Earthquake happaned in %s with magnitude %s. (%s)" % [location, magnitude, data_source.to_upper()])
+								print("[EEW WS] Earthquake happaned in %s with magnitude %s. (%s)" % [location, magnitude, data_source.to_upper()])
 							$"../stats".add_history(intensity, 1, location, shocktime, magnitude, depth, data_source, 8, id)
 						"usgs", "bmkg", "geonet", "tmd", "usp", "gfz", "ingv", "emsc", "hko", "bcsf", "nrcan", "mmd", "phivolcs", "sgc", "ga", "cenais", "gsras", "bgs", "ipma", "ssn", "afad", "sed", "noa", "scsn", "ssw", "iag", "igp", "nepal", "funvisis":
 							var id = data.get("id", "")
@@ -674,10 +674,10 @@ func poll_whews():
 								]))
 								$"../Flipping-Text-Window/VBoxContainer".add_child(msg)
 							else:
-								print("Earthquake happaned in %s with magnitude %s. (%s)" % [location, magnitude, data_source.to_upper()])
+								print("[EEW WS] Earthquake happaned in %s with magnitude %s. (%s)" % [location, magnitude, data_source.to_upper()])
 							$"../stats".add_history(intensity, 1, location, shocktime, magnitude, depth, data_source, 8, id)
 						"va", "early_est":
-							print("%s don't recieve message but via print: %s" % [data_source.to_upper(), JSON.stringify(data)])
+							print("[EEW WS] %s don't recieve message but via print: %s" % [data_source.to_upper(), JSON.stringify(data)])
 						_:
 							var msg = news_message_scene.instantiate()
 							msg.set_text(PackedStringArray([
@@ -685,7 +685,7 @@ func poll_whews():
 								JSON.stringify(data)
 							]))
 							$"../Flipping-Text-Window/VBoxContainer".add_child(msg)
-							print("Received from %s(WHEWS): %s" % [data_source, JSON.stringify(data)])
+							print("[EEW WS] Received from %s(WHEWS): %s" % [data_source, JSON.stringify(data)])
 				else:
 					match message_type:
 						"hello":
@@ -706,22 +706,22 @@ func poll_whews():
 						"auth_ok":
 							whews_cea_token = data.get("accessToken")
 							$"WHEWS-CEA-Auth".start(data.get("expiresIn", 600) - 60)
-							print("WHEWS CEA Auth success")
+							print("[EEW WS] WHEWS CEA Auth success")
 						"auth_fail":
 							var code = data.get("code")
 							var reason = data.get("message")
 							add_notification("Auth failed with code %s: %s" % [code, reason])
 						"error":
 							add_notification("WHEWS ERROR: %s" % message, 120)
-							print("WHEWS ERROR:  %s" % message)
+							print("[EEW WS] WHEWS ERROR:  %s" % message)
 						"pong":
-							print("WHEWS Server received ping")
+							print("[EEW WS] WHEWS Server received ping")
 							whews_pong.emit()
 						"heartbeat":
-							print("Heartbeat recieved from WHEWS.")
+							print("[EEW WS] Heartbeat recieved from WHEWS.")
 						_:
 							add_notification("Received from WHEWS\n%s" % message, 300)
-							print("Received from WHEWS: %s" % message)
+							print("[EEW WS] Received from WHEWS: %s" % message)
 	elif state == WebSocketPeer.STATE_CLOSING:
 		$"../stats/HBox/StatContainer/sources/WHEWS".text = 'WHEWS(Closing)'
 		$"../stats/HBox/StatContainer/sources/WHEWS".add_theme_color_override("font_color", Color("ff8000"))
@@ -733,7 +733,7 @@ func poll_whews():
 		$"../stats/HBox/StatContainer/sources/WHEWS".add_theme_color_override("font_color", Color("ff0000"))
 		var code = whews.get_close_code()
 		var reason = whews.get_close_reason()
-		print("WHEWS WebSocket closed with code: %d, reason %s. Clean: %s" % [code, reason, code != -1])
+		print("[EEW WS] WHEWS WebSocket closed with code: %d, reason %s. Clean: %s" % [code, reason, code != -1])
 		if code == 4401:
 			whews_last_invalid_key = whews_current_key
 			whews_key_invalid = true
@@ -795,7 +795,7 @@ func poll_p2pq():
 						message
 					]))
 					$"../Flipping-Text-Window/VBoxContainer".add_child(msg)
-					print("Received from p2pquake: %s" % message)
+					print("[EEW WS] Received from p2pquake: %s" % message)
 				555, 561, 9611:
 					pass
 				556:
@@ -822,7 +822,7 @@ func poll_p2pq():
 						message
 					]))
 					$"../Flipping-Text-Window/VBoxContainer".add_child(msg)
-					print("Received from p2pquake: %s" % message) # placeholder for future p2pquake websocket message handling
+					print("[EEW WS] Received from p2pquake: %s" % message) # placeholder for future p2pquake websocket message handling
 	elif state == WebSocketPeer.STATE_CLOSING:
 		add_notification("P2PQuake connection is closing!", 10)
 	elif state == WebSocketPeer.STATE_CLOSED:
@@ -833,7 +833,7 @@ func poll_p2pq():
 		$"../stats/HBox/StatContainer/sources/P2P".add_theme_color_override("font_color", Color("ff0000"))
 		var code = p2pq.get_close_code()
 		var reason = p2pq.get_close_reason()
-		print("P2PQuake WebSocket closed with code: %d, reason %s. Clean: %s" % [code, reason, code != -1])
+		print("[EEW WS] P2PQuake WebSocket closed with code: %d, reason %s. Clean: %s" % [code, reason, code != -1])
 		if code != -1:
 			add_notification("Connection to P2PQuake lost\n" + ("P2PQuake WebSocket closed with code: %d, reason: %s. Clean: %s" % [code, reason, code != -1]) + "\nReconnect in 5s", 5)
 		$"../Reconnect Timer/P2P".start(reconnection_timer[min(disconnects.get("p2p") - 1, len(reconnection_timer) - 1)])
