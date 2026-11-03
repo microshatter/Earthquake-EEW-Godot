@@ -25,6 +25,19 @@ func load_settings():
 	$VBoxContainer/TabContainer/Providers/P2P.button_pressed = EQ_TOGGLES.api_enabled.get("p2p")
 	
 	EQ_TOGGLES.load_source() # [TODO] Load source
+	var available_name = []
+	for i in $VBoxContainer/TabContainer/Sources/ScrollContainer/Toggles.get_children():
+		var source = i.name.to_lower()
+		available_name.append(source)
+		if EQ_TOGGLES.sources_enabled.has(source):
+			i.button_pressed = EQ_TOGGLES.sources_enabled[source]
+	for i in EQ_TOGGLES.sources_enabled:
+		if i not in available_name:
+			var new_toggle = CheckBox.new()
+			new_toggle.name = i
+			new_toggle.text = i
+			new_toggle.button_pressed = EQ_TOGGLES.sources_enabled[i]
+			$VBoxContainer/TabContainer/Sources/ScrollContainer/Toggles.add_child(new_toggle)
 	print("Config loaded!")
 
 func save_settings():
@@ -44,6 +57,11 @@ func save_settings():
 	EQ_TOGGLES.api_enabled.set("whews", $VBoxContainer/TabContainer/Providers/Whews.button_pressed)
 	EQ_TOGGLES.api_enabled.set("p2p", $VBoxContainer/TabContainer/Providers/P2P.button_pressed)
 	EQ_TOGGLES.save_provider()
+	
+	for i in $VBoxContainer/TabContainer/Sources/ScrollContainer/Toggles.get_children():
+		if i is CheckBox:
+			EQ_TOGGLES.sources_enabled[i.name.to_lower()] = i.button_pressed
+	EQ_TOGGLES.save_source()
 	print("Config saved")
 
 # Called when the node enters the scene tree for the first time.

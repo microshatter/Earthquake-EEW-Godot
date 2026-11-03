@@ -84,7 +84,7 @@ static func load_provider():
 	api_enabled.merge(validated, true)
 
 static func save_provider():
-	Utils.save_json_file(Utils.provider_path, api_enabled)
+	Utils.save_json_file(Utils.provider_path, api_enabled, 2)
 
 static func load_source():
 	var object = Utils.load_json_file(Utils.source_path)
@@ -102,4 +102,4 @@ static func load_source():
 	sources_enabled.merge(validated, true)
 
 static func save_source():
-	Utils.save_json_file(Utils.source_path, sources_enabled)
+	Utils.save_json_file(Utils.source_path, sources_enabled, 2)
