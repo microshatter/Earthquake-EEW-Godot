@@ -16,6 +16,7 @@ func initialize_window():
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
+	TravelTimeTable.load_tables()
 	#DisplayServer.tts_speak("Welcome to early warning app, using Godot 4.7!", DisplayServer.tts_get_voices()[0].id)
 	indicator_supported = DisplayServer.has_feature(DisplayServer.FEATURE_STATUS_INDICATOR)
 	if not indicator_supported:

@@ -10,6 +10,7 @@ context.clear_notification,Clear Notification,清除消息,______
 
 eew.info,%.2f km | Intensity %.1f,距震中 %.2f km | 本地烈度 %.1f,震源からの距離 %.2f km | 震度 %.1f
 eew.final_report,Final,最终报,最終報
+eew.cancel_title,EEW Cancelled,地震速报已取消,地震速報取り消し
 eew.cancel_msg,EEW has been cancelled by the provider,地震预警已被提供方取消,"提供元は\n先程の緊急地震速報を\n取り消しました"
 
 message.eqinfo.title,Earthquake Information From %s,来自%s的地震信息,%sからの地震情報
