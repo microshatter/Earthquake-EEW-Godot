@@ -194,14 +194,15 @@ static func linear_color(c: float):
 static func calculatePwaveCountdown(
 	distanceKm: float, 
 	originTimeMillis: int, 
-	pWaveSpeedKmPerSec: float = 6.0
+	pWaveSpeedKmPerSec: float = 6.0,
+	depthKm: float = 0.0
 ):
 	if (is_nan(distanceKm) or distanceKm < 0 or 
 		originTimeMillis <= 0 or pWaveSpeedKmPerSec <= 0):
 		push_warning("P-wave Countdown Calculator: Invalid argument, skipping")
 		return null
 
-	var travelTimeSec = distanceKm / pWaveSpeedKmPerSec
+	var travelTimeSec = travel_time_seconds(true, depthKm, distanceKm, pWaveSpeedKmPerSec)
 	var arrivalTimeMillis = (originTimeMillis + (travelTimeSec * 1000))
 
 	var remainingMs = arrivalTimeMillis - (Time.get_unix_time_from_system() * 1000)
@@ -213,14 +214,15 @@ static func calculatePwaveCountdown(
 static func calculateSwaveCountdown(
 	distanceKm: float, 
 	originTimeMillis: int, 
-	sWaveSpeedKmPerSec: float = 3.5
+	sWaveSpeedKmPerSec: float = 3.5,
+	depthKm: float = 0.0
 ):
 	if (is_nan(distanceKm) or distanceKm < 0 or 
 		originTimeMillis <= 0 or sWaveSpeedKmPerSec <= 0):
 		push_warning("S-wave Countdown Calculator: Invalid argument, skipping")
 		return null
 
-	var travelTimeSec = distanceKm / sWaveSpeedKmPerSec
+	var travelTimeSec = travel_time_seconds(false, depthKm, distanceKm, sWaveSpeedKmPerSec)
 	var arrivalTimeMillis = (originTimeMillis + (travelTimeSec * 1000))
 
 	var remainingMs = arrivalTimeMillis - (Time.get_unix_time_from_system() * 1000)
@@ -228,3 +230,13 @@ static func calculateSwaveCountdown(
 	
 	print("S-wave countdown result: distance=%.2fkm, Travel=%.3f, Remaining=%.3f" % [distanceKm, travelTimeSec, remainingSecs])
 	return [remainingSecs, travelTimeSec]
+
+
+## Travel time from the loaded travel-time tables, falling back to the flat
+## constant-velocity model when the tables are unavailable.
+static func travel_time_seconds(is_p: bool, depthKm: float, distanceKm: float, fallbackSpeedKmPerSec: float) -> float:
+	if not TravelTimeTable.is_ready() and not TravelTimeTable.load_tables():
+		return distanceKm / fallbackSpeedKmPerSec
+	var t := TravelTimeTable.travel_times(depthKm, distanceKm)
+	var seconds := t.x if is_p else t.y
+	return seconds if seconds >= 0.0 else distanceKm / fallbackSpeedKmPerSec

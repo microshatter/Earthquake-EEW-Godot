@@ -31,8 +31,8 @@ func send_eew(
 	if timestamp + 600 < current_time and not visible:
 		push_warning("Can't send EEW that was passed over 10 minutes: %s (UTC%s)" % [time, time_offset_hr])
 		return
-	var ptimer = IntensityServices.calculatePwaveCountdown(distance, timestamp * 1000)
-	var stimer = IntensityServices.calculateSwaveCountdown(distance, timestamp * 1000)
+	var ptimer = IntensityServices.calculatePwaveCountdown(distance, timestamp * 1000, 6.0, depth)
+	var stimer = IntensityServices.calculateSwaveCountdown(distance, timestamp * 1000, 3.5, depth)
 	$"../PWave".start(ptimer[0])
 	$"../SWave".start(stimer[0])
 	var reportstr = PackedStringArray()
