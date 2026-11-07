@@ -5,7 +5,7 @@ extends Window
 func _ready() -> void:
 	pass # Replace with function body.
 	# Debug only below
-	#send_eew("Test EEW", "Just a test btw", "TESTING", Time.get_datetime_string_from_unix_time(Time.get_unix_time_from_system()), 750, IntensityServices.calculate_estimated_intensity(7.0, 750), 1, true)
+	#send_eew("Test EEW", "Just a test btw", "TESTING", Time.get_datetime_string_from_unix_time(Time.get_unix_time_from_system()), 750, 10, IntensityServices.calculate_estimated_intensity(7.0, 750), 1, true)
 	#cancel_eew()
 
 
@@ -20,6 +20,7 @@ func send_eew(
 	desc: String, 
 	time: String,
 	distance: float = 0, 
+	depth: float = 0,
 	intensity: float = 0, 
 	report: int = 0, 
 	is_final: bool = false,
@@ -55,7 +56,7 @@ func send_eew(
 func cancel_eew():
 	if not visible:
 		return
-	send_eew("", "", tr("eew.cancel_msg"), Time.get_datetime_string_from_unix_time(Time.get_unix_time_from_system()), 0, 0, 0, false)
+	send_eew(tr("eew.cancel_title"), "", tr("eew.cancel_msg"), Time.get_datetime_string_from_unix_time(Time.get_unix_time_from_system()), 0, 0, 0, 0, false)
 	$eew.stop()
 	$shakealert.stop()
 	$"../PWave".stop()
