@@ -23,6 +23,9 @@ static func load_json_file(path: String):
 	var object = null
 	if FileAccess.file_exists(path):
 		var f = FileAccess.open(path, FileAccess.READ)
+		if not f:
+			print("[EEW Util] Error: Could not open [%s]. Error code: %s" % [path, FileAccess.get_open_error()])
+			return
 		var json = JSON.new()
 		var content = f.get_as_text()
 		var err = json.parse(content)
