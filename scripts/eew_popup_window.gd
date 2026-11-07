@@ -35,7 +35,6 @@ func send_eew(
 	var stimer = IntensityServices.calculateSwaveCountdown(distance, timestamp * 1000)
 	$"../PWave".start(ptimer[0])
 	$"../SWave".start(stimer[0])
-	IntensityServices.calculateSwaveCountdown(distance, timestamp * 1000)
 	var reportstr = PackedStringArray()
 	if report > 0:
 		reportstr.append("#%s" % report)
