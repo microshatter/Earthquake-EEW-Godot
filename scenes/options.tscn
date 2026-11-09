@@ -235,7 +235,7 @@ text = "Early EST"
 layout_mode = 2
 size_flags_horizontal = 3
 tooltip_text = "中国地震局地震预警
-Available on Wolfx, FAN Studio and WHEWS"
+Available on Wolfx and WHEWS"
 button_pressed = true
 text = "CEA (EEW)"
 

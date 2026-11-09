@@ -55,7 +55,6 @@ static var sources_enabled = {
 	"beijing": false,
 	"yunnan": false,
 	"ningxia": false,
-	"fssn": true,
 	"funvisis": false,
 	# Tsunami and Other alerts
 	"tsunami": true,

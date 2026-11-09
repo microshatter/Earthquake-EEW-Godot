@@ -10,6 +10,10 @@ func add_history(intensity, mode: int, location: String, datetime: String, magni
 		for i in $HBox/eqHistory/ScrollContainer/eqlist.get_children():
 			if i.id == id:
 				found = true
+				if mode == 0:
+					i.set_Shindo(intensity)
+				else:
+					i.set_Intensity(intensity)
 				i.location = location
 				i.datetime = datetime
 				i.magnitude = magnitude
