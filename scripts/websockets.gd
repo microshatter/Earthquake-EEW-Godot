@@ -412,6 +412,9 @@ func poll_whews():
 				for d in json_message:
 					var data = d.get("Data", {})
 					var data_source = d.get("source", data.get("source"))
+					if not EQ_TOGGLES.sources_enabled.get(data_source, false):
+						print("[EEW WS] Ignore disabled source: " + data_source)
+						continue
 					var hash_value = d.get("md5", "")
 					if len(hash_value) > 0:
 						if Deduplicate.is_in_hash(hash_value):
@@ -432,7 +435,7 @@ func poll_whews():
 							if data_source == "kma" and typeof(intensity) == TYPE_STRING:
 								intensity = IntensityServices.kma_scale_to_intensity(data.get("maxIntensity"))
 							if data_source == "jma" or data_source == "cwa":
-								$"../stats".add_history(intensity, 0, location, shocktime, magnitude, depth, data_source, (9 if data_source == "jma" else 8), id)
+								$"../stats".add_history(intensity, 0, location, shocktime, float(magnitude), float(depth), data_source, (9 if data_source == "jma" else 8), id)
 							elif data_source.ends_with("eew") or data_source.begins_with("cea"):
 								pass
 							else:
@@ -441,6 +444,9 @@ func poll_whews():
 				var message_type = json_message.get("type")
 				var data = json_message.get("Data", json_message.get("data", {}))
 				var data_source = json_message.get("source", data.get("source"))
+				if data_source != null and not EQ_TOGGLES.sources_enabled.get(data_source, false):
+					print("[EEW WS] Ignore disabled source: " + data_source)
+					continue
 				var hash_value = json_message.get("md5", "")
 				if len(hash_value) > 0:
 					if Deduplicate.is_in_hash(hash_value):
@@ -613,7 +619,7 @@ func poll_whews():
 								msg.add_text(info)
 							msg.add_text("地震発生場所：%s | 緯度：%s | 経度：%s\nマグニチュード%s | 震源の深さ：%s km" % [location, latitude, longitude, magnitude, depth])
 							$"../Flipping-Text-Window/VBoxContainer".add_child(msg)
-							$"../stats".add_history(intensity, 0, location, eqtime, magnitude, depth, data_source, 9, id)
+							$"../stats".add_history(intensity, 0, location, eqtime, float(magnitude), float(depth), data_source, 9, id)
 						"cwa":
 							var id = data.get("id", "")
 							var shocktime = data.shockTime
