@@ -603,11 +603,14 @@ func poll_whews():
 							var depth = data.depth
 							var magnitude = data.magnitude
 							var intensity = data.maxIntensity
+							var info = data.get("comments", {}).get("forecast", "")
 							var msg = news_message_scene.instantiate()
 							msg.set_text(PackedStringArray([
 								"日本地震%s" % title,
 								"%s\n%sに地震が発生しました。" % [eqtime, location]
 							]))
+							if len(info) > 0:
+								msg.add_text(info)
 							msg.add_text("地震発生場所：%s | 緯度：%s | 経度：%s\nマグニチュード%s | 震源の深さ：%s km" % [location, latitude, longitude, magnitude, depth])
 							$"../Flipping-Text-Window/VBoxContainer".add_child(msg)
 							$"../stats".add_history(intensity, 0, location, eqtime, magnitude, depth, data_source, 9, id)
