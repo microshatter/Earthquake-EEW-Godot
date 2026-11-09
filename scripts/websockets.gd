@@ -410,7 +410,6 @@ func poll_whews():
 			var json_type = typeof(json_message)
 			if json_type == TYPE_ARRAY:
 				for d in json_message:
-					var message_type = d.get("type")
 					var data = d.get("Data", {})
 					var data_source = d.get("source", data.get("source"))
 					var hash_value = d.get("md5", "")
