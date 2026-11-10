@@ -239,7 +239,7 @@ Available on Wolfx and WHEWS"
 button_pressed = true
 text = "CEA (EEW)"
 
-[node name="cea_pr" type="CheckBox" parent="VBoxContainer/TabContainer/Sources/ScrollContainer/Toggles" unique_id=164284716]
+[node name="cea-pr" type="CheckBox" parent="VBoxContainer/TabContainer/Sources/ScrollContainer/Toggles" unique_id=164284716]
 layout_mode = 2
 size_flags_horizontal = 3
 button_pressed = true
