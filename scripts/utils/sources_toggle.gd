@@ -17,7 +17,7 @@ static var sources_enabled = {
 	"sa_eew": false,
 	"kma_eew": true,
 	"cea": true,
-	"cea_pr": true,
+	"cea-pr": true,
 	"early_est": false,
 	# Information
 	"jma": true,
