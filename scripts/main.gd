@@ -29,11 +29,13 @@ func _process(_delta: float) -> void:
 
 func _on_button_pressed() -> void:
 	$Options.visible = not $Options.visible
-	$Options.move_to_center()
+	if $Options.visible:
+		$Options.move_to_center()
 
 
 func _on_options_visibility_changed() -> void:
-	$Options.move_to_center()
+	if $Options.visible:
+		$Options.move_to_center()
 
 
 func _on_popup_menu_id_pressed(id: int) -> void:

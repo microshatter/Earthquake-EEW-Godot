@@ -6,7 +6,7 @@ main_window.stats,Status,服务状态,サービス状態
 main_window.settings,Open Settings,打开设置,設定を開く
 
 context.settings,Settings,设置,設定
-context.clear_notification,Clear Notification,清除消息,______
+context.clear_notification,Clear Notification,清除消息,通知を消去
 
 eew.info,%.2f km | Intensity %.1f,距震中 %.2f km | 本地烈度 %.1f,震源からの距離 %.2f km | 震度 %.1f
 eew.final_report,Final,最终报,最終報
